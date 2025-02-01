@@ -1,12 +1,12 @@
-# Projektin nimi
+# TicketGuru
 
-Tiimi: Etunimi Sukunimi, Etunimi Sukunimi
+Tiimi: Liisa Davydov, Max Lindqvist, Mikko Vitikka, Ossi Lukkarinen, Marjo Ek
 
 ## Johdanto
 
-Johdantoon kirjoitetaan lyhyt, ytimekäs kuvaus siitä, mikä on projektin aihe,
+Johdantoon kirjoitetaan lyhyt, ytimekäs kuvaus siitä, **mikä on projektin aihe,
 kuka on asiakas (käyttäjä), mitä hän haluaa ja saa järjestelmältä, mitä
-tekniikoita käytetään ja mitä konkreettisesti on valmiina, kun projekti päättyy.
+tekniikoita käytetään ja mitä konkreettisesti on valmiina**, kun projekti päättyy.
 
 -   Järjestelmän tarkoitus ja tiivis kuvaus siitä, mistä on kyse ja kenelle järjestelmä on tarkoitettu.
 -   Toteutus- ja toimintaympäristö lyhyesti:  
