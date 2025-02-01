@@ -34,6 +34,37 @@ Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden v�
 
 Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
 
+
+### Lipunmyynti
+
+Sivu jolla pystytään asettamaan lippuja myyntiin eri tapahtumille. Myyntiin asetetuille lipuille tulisi lähtökohtaisesti saada perustiedot aina alkuun.
+
+- Päivämäärä, kellonaika
+- Tapahtuman nimi
+- Hintaluokat (Aikuiset, lapset . . .)
+- Myyntien summa
+
+
+### Tapahtumien hallinta
+
+Sivu jolla nähdään aikaisemmin luodut tapahtumat. Jokaiselle hallinta toiminnallisuudet (Uuden luonti, muokkaus).
+
+Toiminnallisuudet
+- Tapahtumien listaus
+- Uuden tapahtuman lisäys
+- Tapahtumien muokkaus
+- Lipputyyppien hallinnointi (Ikäluokat, alennukset . . .)
+- Tapahtumaraportti (siirtää sivulle Myyntiraportti)
+
+### Myyntiraportti
+
+Sivu jolla nähdään tapahtumien kaikki myyntitapahtumat listattuna.
+
+Tapahtumakohtainen raportti jossa näkyy heti alkuun:
+- Myydyt liput lipputyyppien mukaan ("Aikuiset", Kpl: . . ., Yhteensä: . . .)
+- Totaalinen tuotto lipuista
+- Listaus kaikista myyntitapahtumista (Avaa uuden näkymän)
+
 ## Tietokanta
 
 Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
