@@ -37,7 +37,7 @@ Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
 
 ### Lipunmyynti
 
-Sivu jolla pystytään asettamaan lippuja myyntiin eri tapahtumille. Myyntiin asetetuille lipuille tulisi lähtökohtaisesti saada perustiedot aina alkuun.
+Sivu jolla myyjä pystyy myymään asiakkaalle lippuja ja tulostamaan asiakkaalle liput heti maksun jälkeen. Myyntiin asetetuille lipuilla tulisi lähtökohtaisesti olla perustiedot tallennettuna järjestelmässä.
 
 - Päivämäärä, kellonaika
 - Tapahtuman nimi
