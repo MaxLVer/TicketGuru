@@ -14,6 +14,12 @@ tekniikoita käytetään ja mitä konkreettisesti on valmiina**, kun projekti p�
     -   Käyttöliittymäratkaisut ja teknologiat (esim. päätelaitteet: puhelin,
     täppäri, desktop)
 
+Projektin tarkoituksena on tuottaa asiakkaan tilaama lipunmyyntijärjestelmä. Kyseistä järjestelmää hyödynnetään asiakkaan myyntipisteissä, joissa lipunmyyjä myy ja tulostaa asiakkaalle liput.
+
+Sovelluksen Backend tullaan toteuttamaan Spring Boot projektina, jossa kielenä käytetään Javaa. Sovelluksen Frontendissa tullaan hyödyntämään React Javascript-kirjastoa.
+
+Projekti toteutetaan hyödyntämällä Scrum-mentelmää, minkä avulla tiimi pystyy tuottamaan tasasin väliajoin uusia toiminnallisuuksia sovellukseen. Viikottaisten sprinttien avulla tiimi pystyy hyvin kartoittamaan työn etenemistä, ja tunnistamaan mahdolliset ongelmakohdat tuotteen kehittämisessä.
+
 ## Järjestelmän määrittely
 
 Määrittelyssä järjestelmää tarkastellaan käyttäjän näkökulmasta. Järjestelmän
