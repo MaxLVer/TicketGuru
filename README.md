@@ -21,7 +21,7 @@ Projekti toteutetaan hyödyntämällä Scrum-mentelmää, minkä avulla tiimi py
 -   Järjestelmävalvoja
 -   Asiakas
 
-![User case diagram](.file)
+![User case diagram](./kuvat/user_case_diagram.jpg)
 
 ## Käyttöliittymä
 
