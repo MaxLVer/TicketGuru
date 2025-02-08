@@ -15,7 +15,7 @@ Projekti toteutetaan hyödyntämällä Scrum-mentelmää, minkä avulla tiimi py
 
 ## Järjestelmän määrittely
 
-###Käyttäjäroolit
+### Käyttäjäroolit
 -   Lipunmyyjä
 -   Tapahtuman järjestäjä
 -   Järjestelmävalvoja
