@@ -19,7 +19,6 @@ Projekti toteutetaan hyödyntämällä Scrum-mentelmää, minkä avulla tiimi py
 -   Lipunmyyjä
 -   Tapahtuman järjestäjä
 -   Järjestelmävalvoja
--   Asiakas
 
 ![User case diagram](./kuvat/user_case_diagram.jpg)
 
