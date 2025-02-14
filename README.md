@@ -7,13 +7,16 @@ Tiimi: Liisa Davydov, Max Lindqvist, Mikko Vitikka, Ossi Lukkarinen, Marjo Ek
 Projektin tarkoituksena on tuottaa asiakkaan tilaama lipunmyyntijärjestelmä.
  Kyseistä järjestelmää hyödynnetään asiakkaan myyntipisteissä, joissa lipunmyyjä myy ja tulostaa asiakkaalle liput.
 
-Sovelluksen Backend tullaan toteuttamaan Spring Boot projektina, jossa kielenä käytetään Javaa.
- Sovelluksen Frontendissa tullaan hyödyntämään React Javascript-kirjastoa.
-
 Projekti toteutetaan hyödyntämällä Scrum-mentelmää, minkä avulla tiimi pystyy tuottamaan tasasin väliajoin uusia toiminnallisuuksia sovellukseen.
  Viikottaisten sprinttien avulla tiimi pystyy hyvin kartoittamaan työn etenemistä, ja tunnistamaan mahdolliset ongelmakohdat tuotteen kehittämisessä.
 
 ## Järjestelmän määrittely
+
+### Käytettävät teknologiat
+- Frontend:React
+- Backend: Spring Boot
+- Tietokanat: PostreSQL/MySql
+- Päälaitteet: Tietokone, tabletti, älypuhelin
 
 ### Käyttäjäroolit
 -   Lipunmyyjä
