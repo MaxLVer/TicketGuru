@@ -18,10 +18,15 @@ Projekti toteutetaan hyödyntämällä Scrum-mentelmää, minkä avulla tiimi py
 - Tietokanat: PostreSQL/MySql
 - Päälaitteet: Tietokone, tabletti, älypuhelin
 
-### Käyttäjäroolit
+### Järjestelmän keskeiset käyttäjät
 -   Lipunmyyjä
 -   Tapahtuman järjestäjä
 -   Järjestelmävalvoja
+
+### Järjestelmän perustoiminnot
+-   Tapahtumien hallinta
+-   Lippujen myynti ja tulostus
+-   Myyntiraporttien tarkastelu
 
 ![User case diagram](./kuvat/user_case_diagram.jpg)
 
