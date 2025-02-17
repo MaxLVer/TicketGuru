@@ -72,38 +72,88 @@ Lisäksi kukin järjestelmän tietoelementti ja sen attribuutit kuvataan
 tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elementin (taulun) ja niiden
 attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
 
-> ### _Käyttäjä_
+> ### _Käyttäjät_
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > käyttäjä_id | int PK | Käyttäjän id
-> Käyttäjänimi | varchar(50) |  Käyttäjän nimi
+> käyttäjänimi | varchar(50) |  Käyttäjän nimi
 > salasana | varchar(50) | Salasana
 > etunimi | varchar(30) | etunimi
 > sukunimi | varchar(50) | Sukunimi
+> rooli_id | int fk | Rooli, viittaus[Roolit](#Roolit)-tauluun
 
-
-
-### _Tapahtuma_
+> ### _Roolit_
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> Tapahtuma_id | int PK | Tapahtuman id
-> paikka_id | int FK |  Tapahtumapaikka, viittaus [Tapahtumapaikka](#Tapahtumapaikka)-tauluun
-> Tapahtuman aika | Date | Tapahtuman päivämäärä ja kellonaika
+> rooli_id | int PK | Roolin id
+> nimike | varchar(50) |  Roolin nimi
+> rooli_selite | varchar(100) | Roolin kuvaus
+
+
+> ### _Tapahtumat_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> tapahtuma_id | int PK | Tapahtuman id
+> paikka_id | int FK |  Tapahtumapaikka, viittaus [Tapahtumapaikat](#Tapahtumapaikat)-tauluun
+> tapahtuma_aika | Date | Tapahtuman päivämäärä ja kellonaika
 > 
 
- ### _Tapahtumapaikka_
+> ### _Tapahtumapaikat_
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > paikka_id | int PK | Tapahtumapaikan id
-> nimi | varchar(50) |  Käyttäjän nimi
-> salasana | varchar(50) | Salasana
+> lahiosoite | varchar(100) |  Tapahtumapaikan lähiosoite
+> kaupunki | varchar(50) | Tapahtumapaikan kaupunki
+> tapahtumapaikan_nimi | varchar (50) | Tapahtumapaikan nimi
+
+> ### _Ostotapahtumat_
 > 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> ostotapahtuma_id | int PK | Ostotapahtuman id
+> tapahtuma_id | int FK |  Tapahtuma, viittaus[Tapahtumat](#Tapahtumat)-tauluun
+> myyntiaika | DATE | Ostotapahtuman aika
+> kayttaja_id | int FK | Käyttäjä, viittaus [Käyttäjät](#Käyttäjät)-tauluun
+
+> ### _Ostotapahtuma_Lippu_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> ostotapahtuma_id | int PK | Ostotapahtuma, viittaus [Ostotapahtumat](#ostotapahtumat)-tauluun
+> lippu_id | int PK |  Lippu, viittaus[Liput](#Liput)-tauluun
+> ostotapahtuma_lippu_hinta | double | Ostotapahtuman kokonaishinta
+
+> ### _Liput_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> lippu_id | int PK | Lipun id
+> lippu_hinta | double |  Lipun hinta
+> tunniste | varchar(20) | Lipuntarkastus tunniste
+> voimassaoloaika | DATE | Lipun voimassaoloaika
+> lipputyyppi_id | int FK | Lipputyyppi, viittaus [Lipputyyppit](#Lipputyyppit)-tauluun
+
+> ### _Lipputyypit_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> lipputyyppi_id | int PK | Lipputyypin id
+> alennusprosentti | double |  Lipputyypin alennusprosentti
+> lipputyyppi_selite | varchar(100) | Lipputyypin kuvaus
+
+
 
 ## Tekninen kuvaus
 
