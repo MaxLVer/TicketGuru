@@ -14,7 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tapahtumatyyppi")
+@Table(name = "tapahtumapaikka")
 
 
 public class Tapahtumapaikka {
@@ -29,7 +29,10 @@ public class Tapahtumapaikka {
     @Column(name = "kaupunki")
     private String kaupunki;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtumatyyppi")
+    @Column(name = "tapahtumapaikan_nimi")
+    private String tapahtumapaikan_nimi;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtumapaikka")
     @JsonIgnore
     private List<Tapahtuma> tapahtumat;
 
@@ -37,10 +40,11 @@ public class Tapahtumapaikka {
         super();
     }
 
-    public Tapahtumapaikka(String lahiosoite, String kaupunki) {
+    public Tapahtumapaikka(String lahiosoite, String kaupunki, String tapahtumapaikan_nimi) {
         super();
         this.kaupunki = kaupunki;
         this.lahiosoite = lahiosoite;
+        this.tapahtumapaikan_nimi = tapahtumapaikan_nimi;
     }
 
     public long getId() {
@@ -65,6 +69,14 @@ public class Tapahtumapaikka {
 
     public void setKaupunki(String kaupunki){
         this.kaupunki = kaupunki;
+    }
+
+    public String getTapahtumapaikan_nimi() {
+        return tapahtumapaikan_nimi;
+    }
+
+    public void setTapahtumapaikan_nimi(String tapahtumapaikan_nimi){
+        this.tapahtumapaikan_nimi = tapahtumapaikan_nimi;
     }
 
     public List<Tapahtuma> getTapahtumat(){
