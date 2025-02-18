@@ -1,7 +1,11 @@
 package com.melkeinkood.ticket_guru.model;
 
 import java.util.Date;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,6 +31,10 @@ public class Tapahtuma {
     @ManyToOne
     @JoinColumn(name = "paikka_id")
     private Tapahtumapaikka tapahtumapaikka;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtuma")
+    @JsonIgnore
+    private List<Tapahtuma> ostotapahtumat;
 
     public Tapahtuma() {
         super();
