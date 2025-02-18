@@ -1,5 +1,7 @@
 package com.melkeinkood.ticket_guru.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +21,7 @@ public class Tapahtuma {
     private long tapahtuma_id;
 
     @Column(name = "tapahtuma_aika")
-    private String tapahtuma_aika;   /// Tämä pitäänee vaihtaa date tyyppiseksi
+    private Date tapahtuma_aika;
 
     @ManyToOne
     @JoinColumn(name = "paikka_id")
@@ -29,7 +31,7 @@ public class Tapahtuma {
         super();
     }
 
-    public Tapahtuma(String tapahtuma_aika, Tapahtumapaikka tapahtumapaikka) {
+    public Tapahtuma(Date tapahtuma_aika, Tapahtumapaikka tapahtumapaikka) {
         super();
         this.tapahtuma_aika = tapahtuma_aika;
         this.tapahtumapaikka = tapahtumapaikka;
@@ -43,11 +45,11 @@ public class Tapahtuma {
         this.tapahtuma_id = tapahtuma_id;
     }
 
-    public String getTapahtuma_aika() {
+    public Date getTapahtuma_aika() {
         return tapahtuma_aika;
     }
 
-    public void setTapahtuma_aika(String tapahtuma_aika){
+    public void setTapahtuma_aika(Date tapahtuma_aika){
         this.tapahtuma_aika = tapahtuma_aika;
     }
 
