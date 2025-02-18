@@ -7,18 +7,26 @@ Tiimi: Liisa Davydov, Max Lindqvist, Mikko Vitikka, Ossi Lukkarinen, Marjo Ek
 Projektin tarkoituksena on tuottaa asiakkaan tilaama lipunmyyntijärjestelmä.
  Kyseistä järjestelmää hyödynnetään asiakkaan myyntipisteissä, joissa lipunmyyjä myy ja tulostaa asiakkaalle liput.
 
-Sovelluksen Backend tullaan toteuttamaan Spring Boot projektina, jossa kielenä käytetään Javaa.
- Sovelluksen Frontendissa tullaan hyödyntämään React Javascript-kirjastoa.
-
 Projekti toteutetaan hyödyntämällä Scrum-mentelmää, minkä avulla tiimi pystyy tuottamaan tasasin väliajoin uusia toiminnallisuuksia sovellukseen.
  Viikottaisten sprinttien avulla tiimi pystyy hyvin kartoittamaan työn etenemistä, ja tunnistamaan mahdolliset ongelmakohdat tuotteen kehittämisessä.
 
 ## Järjestelmän määrittely
 
-### Käyttäjäroolit
+### Käytettävät teknologiat
+- Frontend:React
+- Backend: Spring Boot
+- Tietokanat: PostreSQL/MySql
+- Päälaitteet: Tietokone, tabletti, älypuhelin
+
+### Järjestelmän keskeiset käyttäjät
 -   Lipunmyyjä
 -   Tapahtuman järjestäjä
 -   Järjestelmävalvoja
+
+### Järjestelmän perustoiminnot
+-   Tapahtumien hallinta
+-   Lippujen myynti ja tulostus
+-   Myyntiraporttien tarkastelu
 
 ![User case diagram](./kuvat/user_case_diagram.jpg)
 
@@ -64,15 +72,88 @@ Lisäksi kukin järjestelmän tietoelementti ja sen attribuutit kuvataan
 tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elementin (taulun) ja niiden
 attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
 
-> ### _Tilit_
-> _Tilit-taulu sisältää käyttäjätilit. Käyttäjällä voi olla monta tiliä. Tili kuuluu aina vain yhdelle käyttäjälle._
+> ### _Käyttäjät_
+> 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> id | int PK | Tilin id
-> nimimerkki | varchar(30) |  Tilin nimimerkki
-> avatar | int FK | Tilin avatar, viittaus [avatar](#Avatar)-tauluun
-> kayttaja | int FK | Viittaus käyttäjään [käyttäjä](#Kayttaja)-taulussa
+> käyttäjä_id | int PK | Käyttäjän id
+> käyttäjänimi | varchar(50) |  Käyttäjän nimi
+> salasana | varchar(50) | Salasana
+> etunimi | varchar(30) | etunimi
+> sukunimi | varchar(50) | Sukunimi
+> rooli_id | int fk | Rooli, viittaus[Roolit](#Roolit)-tauluun
+
+> ### _Roolit_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> rooli_id | int PK | Roolin id
+> nimike | varchar(50) |  Roolin nimi
+> rooli_selite | varchar(100) | Roolin kuvaus
+
+
+> ### _Tapahtumat_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> tapahtuma_id | int PK | Tapahtuman id
+> paikka_id | int FK |  Tapahtumapaikka, viittaus [Tapahtumapaikat](#Tapahtumapaikat)-tauluun
+> tapahtuma_aika | Date | Tapahtuman päivämäärä ja kellonaika
+> 
+
+> ### _Tapahtumapaikat_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> paikka_id | int PK | Tapahtumapaikan id
+> lahiosoite | varchar(100) |  Tapahtumapaikan lähiosoite
+> kaupunki | varchar(50) | Tapahtumapaikan kaupunki
+> tapahtumapaikan_nimi | varchar (50) | Tapahtumapaikan nimi
+
+> ### _Ostotapahtumat_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> ostotapahtuma_id | int PK | Ostotapahtuman id
+> tapahtuma_id | int FK |  Tapahtuma, viittaus[Tapahtumat](#Tapahtumat)-tauluun
+> myyntiaika | DATE | Ostotapahtuman aika
+> kayttaja_id | int FK | Käyttäjä, viittaus [Käyttäjät](#Käyttäjät)-tauluun
+
+> ### _Ostotapahtuma_Lippu_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> ostotapahtuma_id | int PK | Ostotapahtuma, viittaus [Ostotapahtumat](#ostotapahtumat)-tauluun
+> lippu_id | int PK |  Lippu, viittaus[Liput](#Liput)-tauluun
+> ostotapahtuma_lippu_hinta | double | Ostotapahtuman kokonaishinta
+
+> ### _Liput_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> lippu_id | int PK | Lipun id
+> lippu_hinta | double |  Lipun hinta
+> tunniste | varchar(20) | Lipuntarkastus tunniste
+> voimassaoloaika | DATE | Lipun voimassaoloaika
+> lipputyyppi_id | int FK | Lipputyyppi, viittaus [Lipputyyppit](#Lipputyyppit)-tauluun
+
+> ### _Lipputyypit_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> lipputyyppi_id | int PK | Lipputyypin id
+> alennusprosentti | double |  Lipputyypin alennusprosentti
+> lipputyyppi_selite | varchar(100) | Lipputyypin kuvaus
+
+
 
 ## Tekninen kuvaus
 
