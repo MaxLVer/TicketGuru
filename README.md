@@ -80,9 +80,9 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > käyttäjä_id | int PK | Käyttäjän id
 > käyttäjänimi | varchar(50) |  Käyttäjän nimi
 > salasana | varchar(50) | Salasana
-> etunimi | varchar(30) | etunimi
+> etunimi | varchar(30) | Etunimi
 > sukunimi | varchar(50) | Sukunimi
-> rooli_id | int fk | Rooli, viittaus[Roolit](#Roolit)-tauluun
+> rooli_id | int fk | Rooli, viittaus [Roolit](#Roolit)-tauluun
 
 > ### _Roolit_
 > 
@@ -102,7 +102,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > tapahtuma_id | int PK | Tapahtuman id
 > paikka_id | int FK |  Tapahtumapaikka, viittaus [Tapahtumapaikat](#Tapahtumapaikat)-tauluun
 > tapahtuma_aika | Date | Tapahtuman päivämäärä ja kellonaika
-> 
+> tapahtuma_nimi | varchar(50) | Tapahtuman nimi
 
 > ### _Tapahtumapaikat_
 > 
@@ -120,7 +120,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > ostotapahtuma_id | int PK | Ostotapahtuman id
-> tapahtuma_id | int FK |  Tapahtuma, viittaus[Tapahtumat](#Tapahtumat)-tauluun
+> tapahtuma_id | int FK |  Tapahtuma, viittaus [Tapahtumat](#Tapahtumat)-tauluun
 > myyntiaika | DATE | Ostotapahtuman aika
 > kayttaja_id | int FK | Käyttäjä, viittaus [Käyttäjät](#Käyttäjät)-tauluun
 
@@ -130,7 +130,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > ostotapahtuma_id | int PK | Ostotapahtuma, viittaus [Ostotapahtumat](#ostotapahtumat)-tauluun
-> lippu_id | int PK |  Lippu, viittaus[Liput](#Liput)-tauluun
+> lippu_id | int PK |  Lippu, viittaus [Liput](#Liput)-tauluun
 > ostotapahtuma_lippu_hinta | double | Ostotapahtuman kokonaishinta
 
 > ### _Liput_
@@ -143,6 +143,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > tunniste | varchar(20) | Lipuntarkastus tunniste
 > voimassaoloaika | DATE | Lipun voimassaoloaika
 > lipputyyppi_id | int FK | Lipputyyppi, viittaus [Lipputyyppit](#Lipputyyppit)-tauluun
+> status | varchar(10) | Lipun status (myytävänä, myyty, myytävänä ovella)
 
 > ### _Lipputyypit_
 > 
