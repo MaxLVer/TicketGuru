@@ -131,7 +131,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > ------ | ------ | ------
 > ostotapahtuma_id | int PK | Ostotapahtuma, viittaus [Ostotapahtumat](#ostotapahtumat)-tauluun
 > lippu_id | int PK |  Lippu, viittaus [Liput](#Liput)-tauluun
-> ostotapahtuma_lippu_hinta | double | Ostotapahtuman kokonaishinta
+> ostotapahtuma_lippu_hinta | DECIMAL(10,2) | Ostotapahtuman kokonaishinta
 
 > ### _Liput_
 > 
