@@ -15,6 +15,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tapahtuma")
@@ -32,6 +34,12 @@ public class Tapahtuma {
     @JoinColumn(name = "paikka_id")
     private Tapahtumapaikka tapahtumapaikka;
 
+    @NotNull
+    @Size(min=1 , max=100)
+    @Column(name = "tapahtuma_nimi")
+    private String tapahtuma_nimi;
+
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtuma")
     @JsonIgnore
     private List<Tapahtuma> ostotapahtumat;
@@ -40,10 +48,11 @@ public class Tapahtuma {
         super();
     }
 
-    public Tapahtuma(LocalDateTime tapahtuma_aika, Tapahtumapaikka tapahtumapaikka) {
+    public Tapahtuma(LocalDateTime tapahtuma_aika, Tapahtumapaikka tapahtumapaikka, String tapahtuma_nimi) {
         super();
         this.tapahtuma_aika = tapahtuma_aika;
         this.tapahtumapaikka = tapahtumapaikka;
+        this.tapahtuma_nimi = tapahtuma_nimi;
     }
 
     public long getId() {
@@ -66,7 +75,15 @@ public class Tapahtuma {
         return tapahtumapaikka;
     }
 
-    public void setapahtumapaikka(Tapahtumapaikka tapahtumapaikka){
+    public void setTapahtumapaikka(Tapahtumapaikka tapahtumapaikka){
         this.tapahtumapaikka = tapahtumapaikka;
+    }
+
+    public String getTapahtuma_nimi() {
+        return tapahtuma_nimi;
+    }
+
+    public void setTapahtuma_nimi(String tapahtuma_nimi){
+        this.tapahtuma_nimi = tapahtuma_nimi;
     }
 }
