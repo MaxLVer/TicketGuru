@@ -13,7 +13,7 @@ public class Kayttaja {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "kayttaja_id")
     private long kayttaja_id;
-te
+    
     @ManyToOne
     @JoinColumn(name = "rooli_id", nullable = false)
     private Rooli rooli;
