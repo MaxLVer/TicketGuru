@@ -1,6 +1,6 @@
 package com.melkeinkood.ticket_guru.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,7 +26,7 @@ public class Tapahtuma {
     private long tapahtuma_id;
 
     @Column(name = "tapahtuma_aika")
-    private Date tapahtuma_aika;
+    private LocalDateTime tapahtuma_aika;
 
     @ManyToOne
     @JoinColumn(name = "paikka_id")
@@ -40,7 +40,7 @@ public class Tapahtuma {
         super();
     }
 
-    public Tapahtuma(Date tapahtuma_aika, Tapahtumapaikka tapahtumapaikka) {
+    public Tapahtuma(LocalDateTime tapahtuma_aika, Tapahtumapaikka tapahtumapaikka) {
         super();
         this.tapahtuma_aika = tapahtuma_aika;
         this.tapahtumapaikka = tapahtumapaikka;
@@ -54,11 +54,11 @@ public class Tapahtuma {
         this.tapahtuma_id = tapahtuma_id;
     }
 
-    public Date getTapahtuma_aika() {
+    public LocalDateTime getTapahtuma_aika() {
         return tapahtuma_aika;
     }
 
-    public void setTapahtuma_aika(Date tapahtuma_aika){
+    public void setTapahtuma_aika(LocalDateTime tapahtuma_aika){
         this.tapahtuma_aika = tapahtuma_aika;
     }
 
