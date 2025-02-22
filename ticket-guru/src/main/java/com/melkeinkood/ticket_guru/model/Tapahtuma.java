@@ -35,7 +35,7 @@ public class Tapahtuma {
     private Tapahtumapaikka tapahtumapaikka;
 
     @NotNull
-    @Size(min=1 , max=100)
+    @Size(min=1 , max=50)
     @Column(name = "tapahtuma_nimi")
     private String tapahtuma_nimi;
 

@@ -12,6 +12,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tapahtumapaikka")
@@ -23,12 +25,18 @@ public class Tapahtumapaikka {
     @Column(name = "paikka_id")
     private long paikka_id;
 
+    @NotNull
+    @Size(min=1 , max=100)
     @Column(name = "lahiosoite")
     private String lahiosoite;
     
+    @NotNull
+    @Size(min=1 , max=50)
     @Column(name = "kaupunki")
     private String kaupunki;
 
+    @NotNull
+    @Size(min=1 , max=50)
     @Column(name = "tapahtumapaikan_nimi")
     private String tapahtumapaikan_nimi;
 
