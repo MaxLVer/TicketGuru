@@ -48,7 +48,7 @@ public class Tapahtumapaikka {
         super();
     }
 
-    public Tapahtumapaikka(String lahiosoite, String kaupunki, String tapahtumapaikan_nimi) {
+    public Tapahtumapaikka(@NotNull @Size(min = 1, max = 100) String lahiosoite, @NotNull @Size(min = 1, max = 50) String kaupunki, @NotNull @Size(min = 1, max = 50) String tapahtumapaikan_nimi) {
         super();
         this.kaupunki = kaupunki;
         this.lahiosoite = lahiosoite;

@@ -48,7 +48,7 @@ public class Tapahtuma {
         super();
     }
 
-    public Tapahtuma(LocalDateTime tapahtuma_aika, Tapahtumapaikka tapahtumapaikka, String tapahtuma_nimi) {
+    public Tapahtuma(LocalDateTime tapahtuma_aika, Tapahtumapaikka tapahtumapaikka, @NotNull @Size(min = 1, max = 50) String tapahtuma_nimi) {
         super();
         this.tapahtuma_aika = tapahtuma_aika;
         this.tapahtumapaikka = tapahtumapaikka;
