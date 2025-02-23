@@ -64,13 +64,7 @@ Tapahtumakohtainen raportti jossa näkyy heti alkuun:
 
 ## Tietokanta
 
-Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
-kuvataan käsitekaaviolla. Käsitemalliin sisältyy myös taulujen välisten viiteyhteyksien ja avainten
-määritykset. Tietokanta kuvataan käyttäen jotain kuvausmenetelmää, joko ER-kaaviota ja UML-luokkakaaviota.
-
-Lisäksi kukin järjestelmän tietoelementti ja sen attribuutit kuvataan
-tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elementin (taulun) ja niiden
-attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
+![tietokantakaavio](./kuvat/tietokantakaavio.jpg)
 
 > ### _Käyttäjät_
 > 
@@ -114,22 +108,22 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > kaupunki | varchar(50) | Tapahtumapaikan kaupunki
 > tapahtumapaikan_nimi | varchar (50) | Tapahtumapaikan nimi
 
-> ### _Ostotapahtumat_
+> ### _Ostostapahtumat_
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> ostotapahtuma_id | int PK | Ostotapahtuman id
+> ostostapahtuma_id | int PK | Ostotapahtuman id
 > tapahtuma_id | int FK |  Tapahtuma, viittaus [Tapahtumat](#Tapahtumat)-tauluun
 > myyntiaika | Date | Ostotapahtuman aika
 > kayttaja_id | int FK | Käyttäjä, viittaus [Käyttäjät](#Käyttäjät)-tauluun
 
-> ### _Ostotapahtuma_Lippu_
+> ### _Ostostapahtuma_Lippu_
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> ostotapahtuma_id | int PK | Ostotapahtuma, viittaus [Ostotapahtumat](#ostotapahtumat)-tauluun
+> ostostapahtuma_id | int PK | Ostotapahtuma, viittaus [Ostostapahtumat](#ostotapahtumat)-tauluun
 > lippu_id | int PK |  Lippu, viittaus [Liput](#Liput)-tauluun
 > ostotapahtuma_lippu_hinta | DECIMAL(10,2) | Ostotapahtuman kokonaishinta
 
