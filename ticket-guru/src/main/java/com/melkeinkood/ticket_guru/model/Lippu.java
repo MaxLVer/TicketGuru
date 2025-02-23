@@ -12,7 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 
-
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -26,11 +26,11 @@ public class Lippu {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "lippu_id")
-    private Long lippu_id;
+    private Long lippuId;
 
     @NotNull
     @Column(name = "lippuhinta")
-    private double lippuHinta;
+    private BigDecimal lippuHinta;
 
     @NotNull
     @Size(min=1, max=20)
@@ -47,9 +47,9 @@ public class Lippu {
     @JoinColumn(name = "lipputyyppiid")
     private Lipputyyppi lipputyyppi;
 
-    public Lippu(Long lippu_id, @NotNull double lippuHinta, @NotNull @Size(min = 1, max = 20) String tunniste,
+    public Lippu(Long lippuId, @NotNull BigDecimal lippuHinta, @NotNull @Size(min = 1, max = 20) String tunniste,
             LocalDateTime voimassaoloaika, LippuStatus status, Lipputyyppi lipputyyppi) {
-        this.lippu_id = lippu_id;
+        this.lippuId = lippuId;
         this.lippuHinta = lippuHinta;
         this.tunniste = tunniste;
         this.voimassaoloaika = voimassaoloaika;
@@ -57,7 +57,7 @@ public class Lippu {
         this.lipputyyppi = lipputyyppi;
     }
 
-    public Lippu(@NotNull double lippuHinta, @NotNull @Size(min = 1, max = 20) String tunniste,
+    public Lippu(@NotNull BigDecimal lippuHinta, @NotNull @Size(min = 1, max = 20) String tunniste,
             LocalDateTime voimassaoloaika, LippuStatus status, Lipputyyppi lipputyyppi) {
         this.lippuHinta = lippuHinta;
         this.tunniste = tunniste;
@@ -70,19 +70,19 @@ public class Lippu {
         super();
     }
 
-    public Long getLippu_id() {
-        return lippu_id;
+    public Long getLippuId() {
+        return lippuId;
     }
 
-    public void setLippu_id(Long lippu_id) {
-        this.lippu_id = lippu_id;
+    public void setLippuId(Long lippuId) {
+        this.lippuId = lippuId;
     }
 
-    public double getLippuHinta() {
+    public BigDecimal getLippuHinta() {
         return lippuHinta;
     }
 
-    public void setLippuHinta(double lippuHinta) {
+    public void setLippuHinta(BigDecimal lippuHinta) {
         this.lippuHinta = lippuHinta;
     }
 
