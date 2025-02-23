@@ -7,32 +7,30 @@ Tiimi: Liisa Davydov, Max Lindqvist, Mikko Vitikka, Ossi Lukkarinen, Marjo Ek
 Projektin tarkoituksena on tuottaa asiakkaan tilaama lipunmyyntijärjestelmä.
  Kyseistä järjestelmää hyödynnetään asiakkaan myyntipisteissä, joissa lipunmyyjä myy ja tulostaa asiakkaalle liput.
 
-Sovelluksen Backend tullaan toteuttamaan Spring Boot projektina, jossa kielenä käytetään Javaa.
- Sovelluksen Frontendissa tullaan hyödyntämään React Javascript-kirjastoa.
-
 Projekti toteutetaan hyödyntämällä Scrum-mentelmää, minkä avulla tiimi pystyy tuottamaan tasasin väliajoin uusia toiminnallisuuksia sovellukseen.
  Viikottaisten sprinttien avulla tiimi pystyy hyvin kartoittamaan työn etenemistä, ja tunnistamaan mahdolliset ongelmakohdat tuotteen kehittämisessä.
 
 ## Järjestelmän määrittely
 
-Määrittelyssä järjestelmää tarkastellaan käyttäjän näkökulmasta. Järjestelmän
-toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, ja kuvataan järjestelmän
-käyttäjäryhmät.
+### Käytettävät teknologiat
+- Frontend:React
+- Backend: Spring Boot
+- Tietokanat: PostreSQL/MySql
+- Päälaitteet: Tietokone, tabletti, älypuhelin
 
--   Lyhyt kuvaus käyttäjäryhmistä (rooleista)
--   Käyttäjäroolit ja roolien tarvitsemat toiminnot, esim. käyttötapauskaaviona
-    (use case diagram) tai käyttäjätarinoina.
--   Lyhyt kuvaus käyttötapauksista tai käyttäjätarinat
+### Järjestelmän keskeiset käyttäjät
+-   Lipunmyyjä
+-   Tapahtuman järjestäjä
+-   Järjestelmävalvoja
 
-Kuvauksissa kannattaa harkita, mikä on toteuttajalle ja asiakkaalle oleellista
-tietoa ja keskittyä siihen.
+### Järjestelmän perustoiminnot
+-   Tapahtumien hallinta
+-   Lippujen myynti ja tulostus
+-   Myyntiraporttien tarkastelu
+
+![User case diagram](./kuvat/user_case_diagram.jpg)
 
 ## Käyttöliittymä
-
-Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona. 
-
-Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
-
 
 ### Lipunmyynti
 
@@ -74,12 +72,17 @@ Lisäksi kukin järjestelmän tietoelementti ja sen attribuutit kuvataan
 tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elementin (taulun) ja niiden
 attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
 
+<<<<<<< HEAD
 >### _Käyttäjä_
+=======
+> ### _Käyttäjät_
+>>>>>>> develop
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > käyttäjä_id | int PK | Käyttäjän id
+<<<<<<< HEAD
 > käyttäjänimi | LISÄÄ |  Käyttäjän nimi
 > salasana | LISÄÄ | Salasana
 > etunimi | LISÄÄ | etunimi
@@ -96,10 +99,20 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > rooli_selite | LISÄÄ | Roolin kuvaus
 
 >### _Lipputyypit_
+=======
+> käyttäjänimi | varchar(50) |  Käyttäjän nimi
+> salasana | varchar(50) | Salasana
+> etunimi | varchar(30) | Etunimi
+> sukunimi | varchar(50) | Sukunimi
+> rooli_id | int fk | Rooli, viittaus [Roolit](#Roolit)-tauluun
+
+> ### _Roolit_
+>>>>>>> develop
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
+<<<<<<< HEAD
 > lipputyyppi_id | int PK | Lipputyypin id
 > alennusprosentti | LISÄÄ |  Hinnalle laskettava alennus
 > lipputyyppi_selite | LISÄÄ | Lipputyypin kuvaus
@@ -126,33 +139,94 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > 
 
 >### _Tapahtumapaikka_
+=======
+> rooli_id | int PK | Roolin id
+> nimike | varchar(50) |  Roolin nimi
+> rooli_selite | varchar(100) | Roolin kuvaus
+
+
+> ### _Tapahtumat_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> tapahtuma_id | int PK | Tapahtuman id
+> paikka_id | int FK |  Tapahtumapaikka, viittaus [Tapahtumapaikat](#Tapahtumapaikat)-tauluun
+> tapahtuma_aika | Date | Tapahtuman päivämäärä ja kellonaika
+> tapahtuma_nimi | varchar(50) | Tapahtuman nimi
+
+> ### _Tapahtumapaikat_
+>>>>>>> develop
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > paikka_id | int PK | Tapahtumapaikan id
+<<<<<<< HEAD
 > tapahtumapaikan_nimi | LISÄÄ |  Tapahtumapaikan nimi
 > lähiosoite | LISÄÄ | Paikan lähiosoite
 > kaupunki | LISÄÄ | Kaupunki
 
 >### _Ostotapahtuma_
+=======
+> lahiosoite | varchar(100) |  Tapahtumapaikan lähiosoite
+> kaupunki | varchar(50) | Tapahtumapaikan kaupunki
+> tapahtumapaikan_nimi | varchar (50) | Tapahtumapaikan nimi
+
+> ### _Ostotapahtumat_
+>>>>>>> develop
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > ostotapahtuma_id | int PK | Ostotapahtuman id
+<<<<<<< HEAD
 > tapahtuma_id | LISÄÄ |  Tapahtuma, viittaus [Tapahtuma](#Tapahtuma)-tauluun
 > myyntiaika | DATE | Oston myyntiaika
 > käyttäjä_id | in FK | Käyttäjä viittaus [Käyttäjä](#Käyttäjä)-tauluun
+=======
+> tapahtuma_id | int FK |  Tapahtuma, viittaus [Tapahtumat](#Tapahtumat)-tauluun
+> myyntiaika | DATE | Ostotapahtuman aika
+> kayttaja_id | int FK | Käyttäjä, viittaus [Käyttäjät](#Käyttäjät)-tauluun
+>>>>>>> develop
 
 > ### _Ostotapahtuma_Lippu_
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
+<<<<<<< HEAD
 > Ostotapahtuma_id | int PK | Ostotapahtuman id viittaus [Ostoapahtuma](#Ostoapahtuma)-tauluun
 > Lippu_id | int PK |  Lipun id viittaus [Lippu](#Lippu)-tauluun
 > Ostotapahtuma_lippu_hinta | LISÄÄ | Kokonaishinta
+=======
+> ostotapahtuma_id | int PK | Ostotapahtuma, viittaus [Ostotapahtumat](#ostotapahtumat)-tauluun
+> lippu_id | int PK |  Lippu, viittaus [Liput](#Liput)-tauluun
+> ostotapahtuma_lippu_hinta | DECIMAL(10,2) | Ostotapahtuman kokonaishinta
+
+> ### _Liput_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> lippu_id | int PK | Lipun id
+> lippu_hinta | double |  Lipun hinta
+> tunniste | varchar(20) | Lipuntarkastus tunniste
+> voimassaoloaika | DATE | Lipun voimassaoloaika
+> lipputyyppi_id | int FK | Lipputyyppi, viittaus [Lipputyyppit](#Lipputyyppit)-tauluun
+> status | varchar(10) | Lipun status (myytävänä, myyty, myytävänä ovella)
+
+> ### _Lipputyypit_
+> 
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> lipputyyppi_id | int PK | Lipputyypin id
+> alennusprosentti | double |  Lipputyypin alennusprosentti
+> lipputyyppi_selite | varchar(100) | Lipputyypin kuvaus
+
+
+>>>>>>> develop
 
 ## Tekninen kuvaus
 
