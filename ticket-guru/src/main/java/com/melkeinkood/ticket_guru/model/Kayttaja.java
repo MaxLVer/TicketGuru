@@ -18,12 +18,12 @@ public class Kayttaja {
     @JoinColumn(name = "rooli_id", nullable = false)
     private Rooli rooli;
 
-    @Column(name = "user_name", nullable = false, unique = true)
-    private String userName;
+    @Column(name = "kayttajanimi", nullable = false, unique = true)
+    private String kayttajanimi;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "salasana", nullable = false)
     @JsonIgnore
-    private String password;
+    private String salasana;
 
     @Column(name = "etunimi")
     private String etunimi;
@@ -34,10 +34,9 @@ public class Kayttaja {
     public Kayttaja() {
     }
 
-    public Kayttaja(Rooli rooli, String userName, String password, String etunimi, String sukunimi) {
+    public Kayttaja(Rooli rooli, String kayttajanimi, String salasana, String etunimi, String sukunimi) {
         this.rooli = rooli;
-        this.userName = userName;
-        this.password = password;
+        this.kayttajanimi = kayttajanimi;
         this.etunimi = etunimi;
         this.sukunimi = sukunimi;
     }
@@ -58,20 +57,20 @@ public class Kayttaja {
         this.rooli = rooli;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getKayttajanimi() {
+        return kayttajanimi;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setKayttajanimi(String kayttajanimi) {
+        this.kayttajanimi = kayttajanimi;
     }
 
-    public String getPassword() {
-        return password;
+    public String getSalasana() {
+        return salasana;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSalasana(String salasana) {
+        this.salasana = salasana;
     }
 
     public String getEtunimi() {

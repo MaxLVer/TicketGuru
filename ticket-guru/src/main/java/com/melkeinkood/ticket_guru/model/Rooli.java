@@ -10,13 +10,17 @@ public class Rooli {
     @Column(name = "rooli_id")
     private long rooli_id;
 
+    @Column(name = "nimike", nullable = false)
+    private String nimike;
+
     @Column(name = "rooli_selite", nullable = false)
     private String rooli_selite;
 
     public Rooli() {
     }
 
-    public Rooli(String rooliSelite) {
+    public Rooli(String nimike, String rooliSelite) {
+        this.nimike = nimike;
         this.rooli_selite = rooliSelite;
     }
 
@@ -26,6 +30,14 @@ public class Rooli {
 
     public void setRooli_id(long rooli_id) {
         this.rooli_id = rooli_id;
+    }
+
+    public String getNimike() {
+        return nimike;
+    }
+
+    public void setNimike(String nimike) {
+        this.nimike = nimike;
     }
 
     public String getRooli_selite() {
