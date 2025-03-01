@@ -8,7 +8,7 @@ import com.melkeinkood.ticket_guru.model.Ostostapahtuma;
 
 @Repository
 public interface OstostapahtumaRepository extends JpaRepository<Ostostapahtuma, Long> {
-    List<Ostostapahtuma> findByOstostapahtumaId (long ostostapahtuma_id);
+    List<Ostostapahtuma> findByOstostapahtumaId (long ostostapahtumaId);
 
     
 } 

@@ -22,8 +22,8 @@ import jakarta.validation.constraints.Size;
 public class Tapahtumapaikka {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "paikka_id")
-    private long paikka_id;
+    @Column(name = "tapahtumapaikkaId")
+    private long tapahtumapaikkaId;
 
     @NotNull
     @Size(min=1 , max=100)
@@ -56,11 +56,11 @@ public class Tapahtumapaikka {
     }
 
     public long getId() {
-        return paikka_id;
+        return tapahtumapaikkaId;
     }
 
-    public void setId(long paikka_id){
-        this.paikka_id = paikka_id;
+    public void setId(long tapahtumapaikkaId){
+        this.tapahtumapaikkaId = tapahtumapaikkaId;
     }
 
     public String getLahiosoite() {

@@ -17,18 +17,18 @@ import jakarta.persistence.Table;
 public class Ostostapahtuma {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name="ostostapahtuma_id")
-    private long ostostapahtuma_id;
+    @Column(name="ostostapahtumaId")
+    private long ostostapahtumaId;
 
     @ManyToOne
-    @JoinColumn(name="tapahtuma_id")
+    @JoinColumn(name="tapahtumaId")
     private Tapahtuma tapahtuma;
 
     @Column(name="myyntiaika")
     private LocalDateTime myyntiaika;
 
     @ManyToOne
-    @JoinColumn(name="kayttaja_id")
+    @JoinColumn(name="kayttajaId")
     private Kayttaja kayttaja;
 
     public Ostostapahtuma(){
@@ -42,11 +42,11 @@ public class Ostostapahtuma {
     }
 
     public long getId() {
-        return ostostapahtuma_id;
+        return ostostapahtumaId;
     }
 
     public void setId(long ostotapahtuma_id){
-        this.ostostapahtuma_id = ostotapahtuma_id;
+        this.ostostapahtumaId = ostotapahtuma_id;
     }
 
     public LocalDateTime getMyyntiaika() {

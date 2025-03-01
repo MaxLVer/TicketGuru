@@ -25,7 +25,7 @@ public class Lippu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "lippu_id")
+    @Column(name = "lippuId")
     private Long lippuId;
 
     @NotNull

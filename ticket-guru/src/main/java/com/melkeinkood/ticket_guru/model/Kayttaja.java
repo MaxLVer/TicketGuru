@@ -11,11 +11,11 @@ import jakarta.persistence.*;
 public class Kayttaja {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "kayttaja_id")
-    private long kayttaja_id;
+    @Column(name = "kayttajaId")
+    private long kayttajaId;
     
     @ManyToOne
-    @JoinColumn(name = "rooli_id", nullable = false)
+    @JoinColumn(name = "rooliId", nullable = false)
     private Rooli rooli;
 
     @Column(name = "kayttajanimi", nullable = false, unique = true)
@@ -41,12 +41,12 @@ public class Kayttaja {
         this.sukunimi = sukunimi;
     }
 
-    public long getKayttaja_id() {
-        return kayttaja_id;
+    public long getkayttajaId() {
+        return kayttajaId;
     }
 
-    public void setKayttaja_id(long kayttaja_id) {
-        this.kayttaja_id = kayttaja_id;
+    public void setkayttajaId(long kayttajaId) {
+        this.kayttajaId = kayttajaId;
     }
 
     public Rooli getRooli() {

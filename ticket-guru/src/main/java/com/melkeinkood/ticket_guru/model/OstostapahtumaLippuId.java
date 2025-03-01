@@ -9,23 +9,23 @@ import jakarta.persistence.Embeddable;
 
 public class OstostapahtumaLippuId implements Serializable {
 
-    private Long ostostapoahtumaId;
+    private Long ostostapahtumaId;
     private Long lippuId;
 
     public OstostapahtumaLippuId() {
     }
 
     public OstostapahtumaLippuId(Long ostostapahtumaId, Long lippuId) {
-        this.ostostapoahtumaId = ostostapahtumaId;
+        this.ostostapahtumaId = ostostapahtumaId;
         this.lippuId = lippuId;
     }
 
-    public Long getOstostapoahtumaId() {
-        return ostostapoahtumaId;
+    public Long getOstostapahtumaId() {
+        return ostostapahtumaId;
     }
 
-    public void setOstostapoahtumaId(Long ostostapoahtumaId) {
-        this.ostostapoahtumaId = ostostapoahtumaId;
+    public void setOstostapahtumaId(Long ostostapoahtumaId) {
+        this.ostostapahtumaId = ostostapoahtumaId;
     }
 
     public Long getLippuId() {

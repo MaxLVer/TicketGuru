@@ -29,14 +29,14 @@ public class OstostapahtumaLippu {
     @NotNull
     @ManyToOne
     @MapsId("ostostapahtumaId")
-    @JoinColumn(name = "ostostapahtuma_id")
+    @JoinColumn(name = "ostostapahtumaId")
     // Toimii kun ostostapahtuma entity lisätään
     private Ostostapahtuma ostostapahtuma;
 
     @NotNull
     @ManyToOne
     @MapsId("lippuId")
-    @JoinColumn(name = "lippu_id")
+    @JoinColumn(name = "lippuId")
     private Lippu lippu;
 
     public OstostapahtumaLippuId getId() {
