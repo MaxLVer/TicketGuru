@@ -23,10 +23,10 @@ public class TGController {
         return "etusivu";
     }
 
-    @GetMapping("/tapahtumat")
+    @GetMapping("/tapahtumaLista")
     public String kaikkiTapahtumat(Model model){
         model.addAttribute("tapahtumat", tapahtumaRepository.findAll());
-        return "tapahtumat";
+        return "tapahtumaLista";
     }
 
     
