@@ -118,14 +118,15 @@ Tapahtumakohtainen raportti jossa näkyy heti alkuun:
 > myyntiaika | Date | Ostotapahtuman aika
 > kayttaja_id | int FK | Käyttäjä, viittaus [Käyttäjät](#Käyttäjät)-tauluun
 
-> ### _Ostostapahtuma_Lippu_
+> ### _Tapahtuma_Lipputyypit_
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> ostostapahtuma_id | int PK | Ostotapahtuma, viittaus [Ostostapahtumat](#ostotapahtumat)-tauluun
-> lippu_id | int PK |  Lippu, viittaus [Liput](#Liput)-tauluun
-> ostotapahtuma_lippu_hinta | DECIMAL(10,2) | Ostotapahtuman kokonaishinta
+> tapahtuma_lipputyyppi_id | int PK | Tapahtuma lipputyypin id
+> tapahtuma_id | int PK |  Tapahtuma, viittaus [Tapahtumat](#Tapahtumat)-tauluun
+> asiakastyyppi | varchar(30) | Asiakastyyppi, viittaus [Asiakastyypit](#Asiakastyypit)-tauluun
+> hinta | DECIMAL(10,2) | hinta
 
 > ### _Liput_
 > 
