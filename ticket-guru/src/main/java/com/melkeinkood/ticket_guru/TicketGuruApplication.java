@@ -29,12 +29,22 @@ public class TicketGuruApplication {
 			Tapahtumapaikka korjaamo = new Tapahtumapaikka("Töölönkatu 51 B", "Helsinki", "Kulttuuritehdas Korjaamo");
 			tapahtumapaikkaRepository.save(korjaamo);
 
-			tapahtumaRepository.save(new Tapahtuma(
+			Tapahtuma tapahtuma1 = new Tapahtuma(
 				LocalDateTime.of(2025, 2, 28, 20, 0),
 				korjaamo,
 				"Rock-konsertti"
 
+			);
+			tapahtumaRepository.save(tapahtuma1);	
+
+			Tapahtuma tapahtuma2 = (new Tapahtuma(
+				LocalDateTime.of(2025, 2, 27, 20, 0),
+				korjaamo,
+				"Pop-konsertti"
+
 			));
+			tapahtumaRepository.save(tapahtuma2);	
+
 		};
 	}
 }
