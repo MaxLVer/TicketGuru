@@ -19,13 +19,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "tapahtuma")
-
+@Table(name="tapahtuma")
 public class Tapahtuma {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tapahtuma_id")
-    private long tapahtuma_id;
+    @Column(name = "tapahtumaId")
+    private long tapahtumaId;
 
     @Column(name = "tapahtuma_aika")
     private LocalDateTime tapahtuma_aika;
@@ -42,7 +41,7 @@ public class Tapahtuma {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtuma")
     @JsonIgnore
-    private List<Tapahtuma> ostotapahtumat;
+    private List<Ostostapahtuma> ostotapahtumat;
 
     public Tapahtuma() {
         super();
@@ -56,11 +55,11 @@ public class Tapahtuma {
     }
 
     public long getId() {
-        return tapahtuma_id;
+        return tapahtumaId;
     }
 
-    public void setId(long tapahtuma_id){
-        this.tapahtuma_id = tapahtuma_id;
+    public void setId(long tapahtumaId){
+        this.tapahtumaId = tapahtumaId;
     }
 
     public LocalDateTime getTapahtuma_aika() {

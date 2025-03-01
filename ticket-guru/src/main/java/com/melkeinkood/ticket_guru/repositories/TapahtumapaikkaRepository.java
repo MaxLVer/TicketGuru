@@ -9,5 +9,5 @@ import com.melkeinkood.ticket_guru.model.Tapahtumapaikka;
 
 @Repository
 public interface TapahtumapaikkaRepository extends JpaRepository<Tapahtumapaikka, Long>  {
-    List<Tapahtumapaikka> findByTapahtumapaikka_id(long tapahtumapaikka_id); 
+    List<Tapahtumapaikka> findByTapahtumapaikkaId(long tapahtumapaikkaId); 
 }

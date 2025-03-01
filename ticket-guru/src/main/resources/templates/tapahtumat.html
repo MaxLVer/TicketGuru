@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    
+
+<head>
+    <title>Tapahtumat</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+</head>
+<h1>Tapahtumat</h1>
+<div class="col-md-4">
+    
+
+</div>
+
+
+<table>
+    <table class="table table-striped">
+        <tr>
+            <th>Tapahtuman nimi</th>
+            <th>Tapahtumapaikka</th>
+            <th>Päivämäärä ja kellonaika</th>
+        </tr>
+        <tr th:each="tapahtuma : ${tapahtumat}">
+            <td th:text="${tapahtuma.tapahtuma_nimi}"></td>
+            <td th:text="${tapahtuma.tapahtumapaikka.tapahtumapaikan_nimi}"></td>
+            <td th:text="${tapahtuma.tapahtuma_aika}"></td>
+        </tr>
+</table>
+</body>
+</html>

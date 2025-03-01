@@ -12,6 +12,8 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "lipputyyppi")
 public class Lipputyyppi {
@@ -19,8 +21,8 @@ public class Lipputyyppi {
         
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "lipputyyppiid")
-    private Long lipputyyppi_id;
+    @Column(name = "lipputyyppiId")
+    private Long lipputyyppiId;
 
     @Column(name = "alennusprosentti")
     private double alennusprosentti;
@@ -31,6 +33,7 @@ public class Lipputyyppi {
     private String lipputyyppiSelite;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "lipputyyppi")
+    @JsonIgnore
     private List<Lippu> liput;
 
     public Lipputyyppi(double alennusprosentti, @NotNull @Size(min = 1, max = 100) String lipputyyppiSelite,
@@ -42,9 +45,9 @@ public class Lipputyyppi {
 
 
 
-    public Lipputyyppi(Long lipputyyppi_id, double alennusprosentti,
+    public Lipputyyppi(Long lipputyyppiId, double alennusprosentti,
             @NotNull @Size(min = 1, max = 100) String lipputyyppiSelite) {
-        this.lipputyyppi_id = lipputyyppi_id;
+        this.lipputyyppiId = lipputyyppiId;
         this.alennusprosentti = alennusprosentti;
         this.lipputyyppiSelite = lipputyyppiSelite;
     }
@@ -64,12 +67,12 @@ public class Lipputyyppi {
 
     
 
-    public Long getLipputyyppi_id() {
-        return lipputyyppi_id;
+    public Long getlipputyyppiId() {
+        return lipputyyppiId;
     }
 
-    public void setLipputyyppi_id(Long lipputyyppi_id) {
-        this.lipputyyppi_id = lipputyyppi_id;
+    public void setlipputyyppiId(Long lipputyyppiId) {
+        this.lipputyyppiId = lipputyyppiId;
     }
 
     public double getAlennusprosentti() {
@@ -90,7 +93,7 @@ public class Lipputyyppi {
 
     @Override
     public String toString() {
-        return "Lipputyyppi [lipputyyppi_id=" + lipputyyppi_id + ", alennusprosentti=" + alennusprosentti
+        return "Lipputyyppi [lipputyyppiId=" + lipputyyppiId + ", alennusprosentti=" + alennusprosentti
                 + ", lipputyyppiSelite=" + lipputyyppiSelite + "]";
     }
     

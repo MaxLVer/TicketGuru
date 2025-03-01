@@ -7,8 +7,8 @@ import jakarta.persistence.*;
 public class Rooli {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rooli_id")
-    private long rooli_id;
+    @Column(name = "rooliId")
+    private long rooliId;
 
     @Column(name = "nimike", nullable = false)
     private String nimike;
@@ -24,12 +24,12 @@ public class Rooli {
         this.rooli_selite = rooliSelite;
     }
 
-    public long getRooli_id() {
-        return rooli_id;
+    public long getrooliId() {
+        return rooliId;
     }
 
-    public void setRooli_id(long rooli_id) {
-        this.rooli_id = rooli_id;
+    public void setrooliId(long rooliId) {
+        this.rooliId = rooliId;
     }
 
     public String getNimike() {
