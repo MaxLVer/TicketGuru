@@ -41,7 +41,6 @@ public class TapahtumaLipputyypit {
     @Column(name = "hinta")
     private BigDecimal hinta;
 
-
     public long getTapahtumaLipputyyppiId() {
         return tapahtumaLipputyyppiId;
     }
