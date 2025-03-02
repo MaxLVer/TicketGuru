@@ -14,6 +14,8 @@ import com.melkeinkood.ticket_guru.model.Tapahtuma;
 import com.melkeinkood.ticket_guru.repositories.TapahtumaRepository;
 import com.melkeinkood.ticket_guru.model.Tapahtumapaikka;
 import com.melkeinkood.ticket_guru.repositories.TapahtumapaikkaRepository;
+import com.melkeinkood.ticket_guru.model.Postinumero;
+import com.melkeinkood.ticket_guru.repositories.PostinumeroRepository;
 
 @SpringBootApplication
 public class TicketGuruApplication {
@@ -23,27 +25,35 @@ public class TicketGuruApplication {
 	}
 
 	@Bean
-	public CommandLineRunner tapahtumaData(TapahtumaRepository tapahtumaRepository, TapahtumapaikkaRepository tapahtumapaikkaRepository){
-		
+	public CommandLineRunner tapahtumaData(TapahtumaRepository tapahtumaRepository,
+			TapahtumapaikkaRepository tapahtumapaikkaRepository, PostinumeroRepository postinumeroRepository) {
+
 		return (args) -> {
-			Tapahtumapaikka korjaamo = new Tapahtumapaikka("Töölönkatu 51 B", "Helsinki", "Kulttuuritehdas Korjaamo");
+			Postinumero testinumero = new Postinumero("00500", "Helsinki");
+			postinumeroRepository.save(testinumero);
+
+			Tapahtumapaikka korjaamo = new Tapahtumapaikka("Töölönkatu 51 B", testinumero, "Kulttuuritehdas Korjaamo",
+					500);
 			tapahtumapaikkaRepository.save(korjaamo);
 
-			Tapahtuma tapahtuma1 = new Tapahtuma(
-				LocalDateTime.of(2025, 2, 28, 20, 0),
+			Tapahtuma tapahtuma1 = new Tapahtuma(korjaamo,
+					LocalDateTime.of(2025, 2, 28, 20, 0),
+					"Rock-konsertti",
+					"Rokkia Korjaamolla",
+					300,
+					300);
+			tapahtumaRepository.save(tapahtuma1);
+
+			Tapahtuma tapahtuma2 = new Tapahtuma(
 				korjaamo,
-				"Rock-konsertti"
+				LocalDateTime.of(2025, 2, 27, 20, 0),
+				"Pop-konsertti",
+				"Poppia Korjaamolla",
+				300,
+				300
 
 			);
-			tapahtumaRepository.save(tapahtuma1);	
-
-			Tapahtuma tapahtuma2 = (new Tapahtuma(
-				LocalDateTime.of(2025, 2, 27, 20, 0),
-				korjaamo,
-				"Pop-konsertti"
-
-			));
-			tapahtumaRepository.save(tapahtuma2);	
+			tapahtumaRepository.save(tapahtuma2);
 
 		};
 	}
