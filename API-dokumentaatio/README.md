@@ -11,6 +11,6 @@ Määräaikaisesti julkiset
 
 - [Näytä tapahtumat](): GET
 - [Luo tapahtuma](): POST
-- [Poista tapahtuma](delete.md): DELETE 
+- [Poista tapahtuma](tapahtumat/delete.md):DELETE 
 - [Hae tapahtumaa](): GET
 - [Muokkaa tapahtumaa](): PUT
