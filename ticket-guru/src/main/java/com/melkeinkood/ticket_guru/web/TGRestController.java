@@ -25,10 +25,16 @@ public class TGRestController {
     }
     
 
+    //Palauttaa koodin 204 jos tapahtuma löytyy ja poistetaan onnistuneesti, tai koodin 404 jos tapahtumaa ei löydy
     @DeleteMapping("/tapahtumat/{id}")
-    public Iterable<Tapahtuma> poistaTapahtuma(@PathVariable("id") Long tapahtumaId){
-        tapahtumaRepository.deleteById(tapahtumaId);
-        return tapahtumaRepository.findAll();
+    public ResponseEntity<Void> poistaTapahtuma(@PathVariable("id") Long tapahtumaId){
+        if (tapahtumaRepository.existsById(tapahtumaId)) {
+            tapahtumaRepository.deleteById(tapahtumaId);
+            return ResponseEntity.noContent().build();
+                    
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     
