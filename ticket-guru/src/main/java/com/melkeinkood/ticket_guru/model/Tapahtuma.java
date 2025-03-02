@@ -49,7 +49,7 @@ public class Tapahtuma {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtuma")
     @JsonIgnore
-    private List<TapahtumaLipputyyppi> tapahtumaLipputyypit;
+    private List<TapahtumaLipputyypit> tapahtumaLipputyypit;
 
     public Tapahtuma() {
         super();
@@ -121,11 +121,11 @@ public class Tapahtuma {
         this.jaljellaOlevaLippumaara = jaljellaOlevaLippumaara;
     }
 
-    public List<TapahtumaLipputyyppi> getTapahtumatLipputyypit(){
+    public List<TapahtumaLipputyypit> getTapahtumatLipputyypit(){
         return tapahtumaLipputyypit;
     }
 
-    public void setTapahtumaLipputyypit(List<TapahtumaLipputyyppi> tapahtumaLipputyypit) {
+    public void setTapahtumaLipputyypit(List<TapahtumaLipputyypit> tapahtumaLipputyypit) {
         this.tapahtumaLipputyypit = tapahtumaLipputyypit;
     }
 }

@@ -18,13 +18,17 @@
     <table class="table table-striped">
         <tr>
             <th>Tapahtuman nimi</th>
+            <th>Tapahtuman kuvaus</th>
             <th>Tapahtumapaikka</th>
             <th>Päivämäärä ja kellonaika</th>
+            <th>Lippuja jäljellä</th>
         </tr>
         <tr th:each="tapahtuma : ${tapahtumat}">
-            <td th:text="${tapahtuma.tapahtuma_nimi}"></td>
-            <td th:text="${tapahtuma.tapahtumapaikka.tapahtumapaikan_nimi}"></td>
-            <td th:text="${tapahtuma.tapahtuma_aika}"></td>
+            <td th:text="${tapahtuma.tapahtumaNimi}"></td>
+            <td th:text="${tapahtuma.kuvaus}"></td>
+            <td th:text="${tapahtuma.tapahtumapaikka.tapahtumapaikanNimi}"></td>
+            <td th:text="${tapahtuma.tapahtumaAika}"></td>
+            <td th:text="${tapahtuma.jaljellaOlevaLippumaara}"></td>
         </tr>
 </table>
 </body>

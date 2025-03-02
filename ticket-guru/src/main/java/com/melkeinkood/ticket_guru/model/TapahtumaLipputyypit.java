@@ -30,7 +30,7 @@ public class TapahtumaLipputyypit {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "tapahtumaId")
-    private Tapahtuma tapahtumaId;
+    private Tapahtuma tapahtuma;
 
     @NotNull
     @ManyToOne
@@ -41,10 +41,10 @@ public class TapahtumaLipputyypit {
     @Column(name = "hinta")
     private BigDecimal hinta;
 
-    public TapahtumaLipputyypit(long tapahtumaLipputyyppiId, @NotNull Tapahtuma tapahtumaId,
+    public TapahtumaLipputyypit(long tapahtumaLipputyyppiId, @NotNull Tapahtuma tapahtuma,
             @NotNull Asiakastyypit asiakastyyppi, @NotNull BigDecimal hinta) {
         this.tapahtumaLipputyyppiId = tapahtumaLipputyyppiId;
-        this.tapahtumaId = tapahtumaId;
+        this.tapahtuma = tapahtuma;
         this.asiakastyyppi = asiakastyyppi;
         this.hinta = hinta;
     }
@@ -57,12 +57,12 @@ public class TapahtumaLipputyypit {
         this.tapahtumaLipputyyppiId = tapahtumaLipputyyppiId;
     }
 
-    public Tapahtuma getTapahtumaId() {
-        return tapahtumaId;
+    public Tapahtuma gettapahtuma() {
+        return tapahtuma;
     }
 
-    public void setTapahtumaId(Tapahtuma tapahtumaId) {
-        this.tapahtumaId = tapahtumaId;
+    public void settapahtuma(Tapahtuma tapahtuma) {
+        this.tapahtuma = tapahtuma;
     }
 
     public Asiakastyypit getAsiakastyyppi() {
