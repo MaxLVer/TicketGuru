@@ -20,10 +20,6 @@ public class Ostostapahtuma {
     @Column(name="ostostapahtumaId")
     private long ostostapahtumaId;
 
-    @ManyToOne
-    @JoinColumn(name="tapahtumaId")
-    private Tapahtuma tapahtuma;
-
     @Column(name="myyntiaika")
     private LocalDateTime myyntiaika;
 
@@ -35,10 +31,9 @@ public class Ostostapahtuma {
         super();
     } 
 
-    public Ostostapahtuma(LocalDateTime myyntiaika, Tapahtuma tapahtuma) {
+    public Ostostapahtuma(LocalDateTime myyntiaika) {
         super();
         this.myyntiaika = myyntiaika;
-        this.tapahtuma = tapahtuma;
     }
 
     public long getId() {
@@ -56,14 +51,5 @@ public class Ostostapahtuma {
     public void setMyyntiaika(LocalDateTime myyntiaika){
         this.myyntiaika = myyntiaika;
     }
-
-    public Tapahtuma getTapahtuma() {
-        return tapahtuma;
-    }
-
-    public void setTapahtuma(Tapahtuma tapahtuma){
-        this.tapahtuma = tapahtuma;
-    }
-
-    
 }
+
