@@ -81,7 +81,7 @@ public class Tapahtumapaikka {
         return postinumero;
     }
 
-    public void setPostinumero(String postinumero){
+    public void setPostinumero(Postinumero postinumero){
         this.postinumero = postinumero;
     }
 
