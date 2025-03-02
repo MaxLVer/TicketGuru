@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.melkeinkood.ticket_guru.model.*;
+import com.melkeinkood.ticket_guru.repositories.PostinumeroRepository;
 import com.melkeinkood.ticket_guru.repositories.TapahtumaRepository;
+import com.melkeinkood.ticket_guru.repositories.TapahtumapaikkaRepository;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -21,6 +24,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class TGRestController {
     @Autowired
     TapahtumaRepository tapahtumaRepository;
+
+    @Autowired
+    TapahtumapaikkaRepository tapahtumapaikkaRepository;
+
+    @Autowired
+    PostinumeroRepository postinumeroRepository;
 
     @GetMapping("/tapahtumat")
     public Iterable<Tapahtuma> haeKaikkiTapahtumat(){
@@ -34,8 +43,14 @@ public class TGRestController {
 
     @PostMapping("/tapahtumat/lisaa")
     public ResponseEntity<Tapahtuma> lisaaTapahtuma(@RequestBody Tapahtuma tapahtuma) {
-        Tapahtuma tallennettuTapahtuma = tapahtumaRepository.save(tapahtuma);
-        return ResponseEntity.status(HttpStatus.CREATED).body(tallennettuTapahtuma);
+        Postinumero postinumero = tapahtuma.getTapahtumapaikka().getPostinumero();
+        Postinumero savedPostinumero = postinumeroRepository.save(postinumero); 
+        Tapahtumapaikka tapahtumapaikka = tapahtuma.getTapahtumapaikka();
+        tapahtumapaikka.setPostinumero(savedPostinumero); 
+        Tapahtumapaikka savedTapahtumapaikka = tapahtumapaikkaRepository.save(tapahtumapaikka);
+        tapahtuma.setTapahtumapaikka(savedTapahtumapaikka);
+        Tapahtuma savedTapahtuma = tapahtumaRepository.save(tapahtuma);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedTapahtuma);
     }
     
     @PutMapping("/tapahtumat/{id}")
