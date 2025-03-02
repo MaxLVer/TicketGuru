@@ -16,6 +16,8 @@ import com.melkeinkood.ticket_guru.model.Tapahtuma;
 import com.melkeinkood.ticket_guru.repositories.TapahtumaRepository;
 import com.melkeinkood.ticket_guru.model.Tapahtumapaikka;
 import com.melkeinkood.ticket_guru.repositories.TapahtumapaikkaRepository;
+import com.melkeinkood.ticket_guru.model.Postinumero;
+import com.melkeinkood.ticket_guru.repositories.PostinumeroRepository;
 
 @SpringBootApplication
 public class TicketGuruApplication {

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,11 +26,18 @@ public class TGRestController {
     }
     
 
+    //Palauttaa koodin 204 jos tapahtuma löytyy ja poistetaan onnistuneesti, tai koodin 404 jos tapahtumaa ei löydy
     @DeleteMapping("/tapahtumat/{id}")
-    public Iterable<Tapahtuma> poistaTapahtuma(@PathVariable("id") Long tapahtumaId){
-        tapahtumaRepository.deleteById(tapahtumaId);
-        return tapahtumaRepository.findAll();
+    public ResponseEntity<Void> poistaTapahtuma(@PathVariable("id") Long tapahtumaId){
+        if (tapahtumaRepository.existsById(tapahtumaId)) {
+            tapahtumaRepository.deleteById(tapahtumaId);
+            return ResponseEntity.noContent().build();
+                    
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 
     
     

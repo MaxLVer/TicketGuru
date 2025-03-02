@@ -7,5 +7,5 @@ import com.melkeinkood.ticket_guru.model.TapahtumaLipputyypit;
 
 @Repository
 public interface TapahtumaLipputyypitRepository extends JpaRepository<TapahtumaLipputyypit, Long> {
-    List<TapahtumaLipputyypit> findByTapahtumaLipputyypitId(Long tapahtumalipputyyppiId);
+    List<TapahtumaLipputyypit> findByTapahtumaLipputyyppiId(Long tapahtumalipputyyppiId);
 }
