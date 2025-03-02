@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -31,14 +33,17 @@ public class Tapahtumapaikka {
     private String lahiosoite;
     
     @NotNull
-    @Size(min=1 , max=50)
-    @Column(name = "kaupunki")
-    private String kaupunki;
+    @ManyToOne
+    @JoinColumn(name = "postinumero")
+    private Postinumero postinumero;
 
     @NotNull
     @Size(min=1 , max=50)
     @Column(name = "tapahtumapaikan_nimi")
-    private String tapahtumapaikan_nimi;
+    private String tapahtumapaikanNimi;
+
+    @Column(name = "kapasiteetti")
+    private int kapasiteetti;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtumapaikka")
     @JsonIgnore
@@ -48,11 +53,12 @@ public class Tapahtumapaikka {
         super();
     }
 
-    public Tapahtumapaikka(@NotNull @Size(min = 1, max = 100) String lahiosoite, @NotNull @Size(min = 1, max = 50) String kaupunki, @NotNull @Size(min = 1, max = 50) String tapahtumapaikan_nimi) {
+    public Tapahtumapaikka(@NotNull @Size(min = 1, max = 100) String lahiosoite, Postinumero postinumero, @NotNull @Size(min = 1, max = 50) String tapahtumapaikanNimi, int kapasiteetti) {
         super();
-        this.kaupunki = kaupunki;
+        this.postinumero = postinumero;
         this.lahiosoite = lahiosoite;
-        this.tapahtumapaikan_nimi = tapahtumapaikan_nimi;
+        this.tapahtumapaikanNimi = tapahtumapaikanNimi;
+        this.kapasiteetti = kapasiteetti;
     }
 
     public long getId() {
@@ -71,20 +77,28 @@ public class Tapahtumapaikka {
         this.lahiosoite = lahiosoite;
     }
 
-    public String getKaupunki() {
-        return kaupunki;
+    public Postinumero getPostinumero() {
+        return postinumero;
     }
 
-    public void setKaupunki(String kaupunki){
-        this.kaupunki = kaupunki;
+    public void setPostinumero(String postinumero){
+        this.postinumero = postinumero;
     }
 
-    public String getTapahtumapaikan_nimi() {
-        return tapahtumapaikan_nimi;
+    public String getTapahtumapaikanNimi() {
+        return tapahtumapaikanNimi;
     }
 
-    public void setTapahtumapaikan_nimi(String tapahtumapaikan_nimi){
-        this.tapahtumapaikan_nimi = tapahtumapaikan_nimi;
+    public void setTapahtumapaikanNimi(String tapahtumapaikanNimi){
+        this.tapahtumapaikanNimi = tapahtumapaikanNimi;
+    }
+
+    public int getKapasiteetti() {
+        return kapasiteetti;
+    }
+
+    public void setKapasiteetti(int kapasiteetti){
+        this.kapasiteetti = kapasiteetti;
     }
 
     public List<Tapahtuma> getTapahtumat(){
