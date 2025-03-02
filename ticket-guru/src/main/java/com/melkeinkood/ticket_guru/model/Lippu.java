@@ -12,7 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 
-import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,14 +28,19 @@ public class Lippu {
     @Column(name = "lippuId")
     private Long lippuId;
 
-    @NotNull
-    @Column(name = "lippuhinta")
-    private BigDecimal lippuHinta;
 
     @NotNull
     @Size(min=1, max=20)
     @Column(name = "tunniste")
     private String tunniste;
+
+    @ManyToOne
+    @JoinColumn(name = "ostostapahtumaId")
+    private Ostostapahtuma ostostapahtuma;
+
+    @ManyToOne
+    @JoinColumn(name = "tapahtumaLipputyyppiId")
+    private TapahtumaLipputyypit tapahtumalipputyyppi;
 
     @Column(name = "voimassaoloaika")
     private LocalDateTime voimassaoloaika;
@@ -43,29 +48,45 @@ public class Lippu {
     @Enumerated(EnumType.STRING)
     private LippuStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "lipputyyppiid")
-    private Lipputyyppi lipputyyppi;
+    
 
-    public Lippu(Long lippuId, @NotNull BigDecimal lippuHinta, @NotNull @Size(min = 1, max = 20) String tunniste,
-            LocalDateTime voimassaoloaika, LippuStatus status, Lipputyyppi lipputyyppi) {
+
+    public Lippu(Long lippuId, @NotNull @Size(min = 1, max = 20) String tunniste, Ostostapahtuma ostostapahtuma,
+            TapahtumaLipputyypit tapahtumalipputyyppi, LocalDateTime voimassaoloaika, LippuStatus status) {
         this.lippuId = lippuId;
-        this.lippuHinta = lippuHinta;
+        this.tunniste = tunniste;
+        this.ostostapahtuma = ostostapahtuma;
+        this.tapahtumalipputyyppi = tapahtumalipputyyppi;
+        this.voimassaoloaika = voimassaoloaika;
+        this.status = status;
+    }
+
+
+
+
+
+    public Lippu(@NotNull @Size(min = 1, max = 20) String tunniste, LocalDateTime voimassaoloaika, LippuStatus status) {
         this.tunniste = tunniste;
         this.voimassaoloaika = voimassaoloaika;
         this.status = status;
-        this.lipputyyppi = lipputyyppi;
     }
 
-    public Lippu(@NotNull BigDecimal lippuHinta, @NotNull @Size(min = 1, max = 20) String tunniste,
-            LocalDateTime voimassaoloaika, LippuStatus status, Lipputyyppi lipputyyppi) {
-        this.lippuHinta = lippuHinta;
+
+
+
+
+    public Lippu(Long lippuId, @NotNull @Size(min = 1, max = 20) String tunniste, LocalDateTime voimassaoloaika,
+            LippuStatus status) {
+        this.lippuId = lippuId;
         this.tunniste = tunniste;
         this.voimassaoloaika = voimassaoloaika;
         this.status = status;
-        this.lipputyyppi = lipputyyppi;
     }
 
+
+
+
+    
     public Lippu() {
         super();
     }
@@ -78,13 +99,6 @@ public class Lippu {
         this.lippuId = lippuId;
     }
 
-    public BigDecimal getLippuHinta() {
-        return lippuHinta;
-    }
-
-    public void setLippuHinta(BigDecimal lippuHinta) {
-        this.lippuHinta = lippuHinta;
-    }
 
     public String getTunniste() {
         return tunniste;
@@ -110,13 +124,23 @@ public class Lippu {
         this.status = status;
     }
 
-    public Lipputyyppi getLipputyyppi() {
-        return lipputyyppi;
+    public Ostostapahtuma getOstostapahtuma() {
+        return ostostapahtuma;
     }
 
-    public void setLipputyyppi(Lipputyyppi lipputyyppi) {
-        this.lipputyyppi = lipputyyppi;
+    public void setOstostapahtuma(Ostostapahtuma ostostapahtuma) {
+        this.ostostapahtuma = ostostapahtuma;
     }
+
+    public TapahtumaLipputyypit getTapahtumalipputyyppi() {
+        return tapahtumalipputyyppi;
+    }
+
+    public void setTapahtumalipputyyppi(TapahtumaLipputyypit tapahtumalipputyyppi) {
+        this.tapahtumalipputyyppi = tapahtumalipputyyppi;
+    }
+
+    
 
     
 
