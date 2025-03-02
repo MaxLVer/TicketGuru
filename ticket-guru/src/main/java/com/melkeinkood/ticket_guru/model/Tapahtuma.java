@@ -26,32 +26,43 @@ public class Tapahtuma {
     @Column(name = "tapahtumaId")
     private long tapahtumaId;
 
-    @Column(name = "tapahtuma_aika")
-    private LocalDateTime tapahtuma_aika;
-
     @ManyToOne
-    @JoinColumn(name = "paikka_id")
+    @JoinColumn(name = "tapahtumapaikka_id")
     private Tapahtumapaikka tapahtumapaikka;
+
+    @Column(name = "tapahtuma_aika")
+    private LocalDateTime tapahtumaAika;
 
     @NotNull
     @Size(min=1 , max=50)
     @Column(name = "tapahtuma_nimi")
-    private String tapahtuma_nimi;
+    private String tapahtumaNimi;
 
+    @Column(name = "kuvaus")
+    private String kuvaus;
+
+    @Column(name = "kokonaislippumaara")
+    private int kokonaislippumaara;
+
+    @Column(name = "jaljella_oleva_lippumaara")
+    private int jaljellaOlevaLippumaara;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtuma")
     @JsonIgnore
-    private List<Ostostapahtuma> ostotapahtumat;
+    private List<TapahtumaLipputyyppi> tapahtumaLipputyypit;
 
     public Tapahtuma() {
         super();
     }
 
-    public Tapahtuma(LocalDateTime tapahtuma_aika, Tapahtumapaikka tapahtumapaikka, @NotNull @Size(min = 1, max = 50) String tapahtuma_nimi) {
+    public Tapahtuma(Tapahtumapaikka tapahtumapaikka,LocalDateTime tapahtumaAika,  @NotNull @Size(min = 1, max = 50) String tapahtumaNimi, String kuvaus, int kokonaislippumaara, int jaljellaOlevaLippumaara) {
         super();
-        this.tapahtuma_aika = tapahtuma_aika;
         this.tapahtumapaikka = tapahtumapaikka;
-        this.tapahtuma_nimi = tapahtuma_nimi;
+        this.tapahtumaAika = tapahtumaAika;
+        this.tapahtumaNimi = tapahtumaNimi;
+        this.kuvaus = kuvaus;
+        this.kokonaislippumaara = kokonaislippumaara;
+        this.jaljellaOlevaLippumaara = jaljellaOlevaLippumaara;
     }
 
     public long getId() {
@@ -62,14 +73,6 @@ public class Tapahtuma {
         this.tapahtumaId = tapahtumaId;
     }
 
-    public LocalDateTime getTapahtuma_aika() {
-        return tapahtuma_aika;
-    }
-
-    public void setTapahtuma_aika(LocalDateTime tapahtuma_aika){
-        this.tapahtuma_aika = tapahtuma_aika;
-    }
-
     public Tapahtumapaikka getTapahtumapaikka() {
         return tapahtumapaikka;
     }
@@ -78,11 +81,43 @@ public class Tapahtuma {
         this.tapahtumapaikka = tapahtumapaikka;
     }
 
-    public String getTapahtuma_nimi() {
-        return tapahtuma_nimi;
+    public LocalDateTime getTapahtumaAika() {
+        return tapahtumaAika;
     }
 
-    public void setTapahtuma_nimi(String tapahtuma_nimi){
-        this.tapahtuma_nimi = tapahtuma_nimi;
+    public void setTapahtumaAika(LocalDateTime tapahtumaAika){
+        this.tapahtumaAika = tapahtumaAika;
+    }
+
+    public String getTapahtumaNimi() {
+        return tapahtumaNimi;
+    }
+
+    public void setTapahtumaNimi(String tapahtumaNimi){
+        this.tapahtumaNimi = tapahtumaNimi;
+    }
+    
+    public String getKuvaus() {
+        return kuvaus;
+    }
+
+    public void setKuvaus(String kuvaus){
+        this.kuvaus = kuvaus;
+    }
+    
+    public int getKokonaislippumaara() {
+        return kokonaislippumaara;
+    }
+
+    public void setKokonaislippumaara(int kokonaislippumaara){
+        this.kokonaislippumaara = kokonaislippumaara;
+    }
+    
+    public int getJaljellaOlevaLippumaara() {
+        return jaljellaOlevaLippumaara;
+    }
+
+    public void setJaljellaOlevaLippumaara(int jaljellaOlevaLippumaara){
+        this.jaljellaOlevaLippumaara = jaljellaOlevaLippumaara;
     }
 }
