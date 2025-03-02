@@ -37,8 +37,8 @@ public class TGRestController {
     }
 
     @GetMapping("/tapahtumat/{id}")
-    public Optional<Tapahtuma> haeTapahtuma(@PathVariable("tapahtumaId") Long id) {
-        return tapahtumaRepository.findById(id);
+    public ResponseEntity<Tapahtuma> haeTapahtuma(@PathVariable Long id) {
+        return ResponseEntity.of(tapahtumaRepository.findById(id));
     }
 
     @PostMapping("/tapahtumat/lisaa")
