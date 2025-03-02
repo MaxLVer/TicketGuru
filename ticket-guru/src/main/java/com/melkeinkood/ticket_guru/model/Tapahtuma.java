@@ -27,7 +27,7 @@ public class Tapahtuma {
     private long tapahtumaId;
 
     @ManyToOne
-    @JoinColumn(name = "tapahtumapaikka_id")
+    @JoinColumn(name = "tapahtumapaikkaId")
     private Tapahtumapaikka tapahtumapaikka;
 
     @Column(name = "tapahtuma_aika")
@@ -119,5 +119,13 @@ public class Tapahtuma {
 
     public void setJaljellaOlevaLippumaara(int jaljellaOlevaLippumaara){
         this.jaljellaOlevaLippumaara = jaljellaOlevaLippumaara;
+    }
+
+    public List<TapahtumaLipputyyppi> getTapahtumatLipputyypit(){
+        return tapahtumaLipputyypit;
+    }
+
+    public void setTapahtumaLipputyypit(List<TapahtumaLipputyyppi> tapahtumaLipputyypit) {
+        this.tapahtumaLipputyypit = tapahtumaLipputyypit;
     }
 }
