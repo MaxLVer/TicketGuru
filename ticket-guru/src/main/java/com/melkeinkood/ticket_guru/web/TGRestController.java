@@ -1,11 +1,14 @@
 package com.melkeinkood.ticket_guru.web;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.melkeinkood.ticket_guru.model.*;
@@ -19,12 +22,28 @@ public class TGRestController {
     @Autowired
     TapahtumaRepository tapahtumaRepository;
 
+    @GetMapping("/tapahtumat")
+    public Iterable<Tapahtuma> haeKaikkiTapahtumat(){
+        return tapahtumaRepository.findAll();
+    }
+
+    @GetMapping("/tapahtumat/{id}")
+    public Optional<Tapahtuma> haeTapahtuma(@PathVariable("tapahtumaId") Long id) {
+        return tapahtumaRepository.findById(id);
+    }
+
     @PostMapping("/tapahtumat/lisaa")
     public ResponseEntity<Tapahtuma> lisaaTapahtuma(@RequestBody Tapahtuma tapahtuma) {
         Tapahtuma tallennettuTapahtuma = tapahtumaRepository.save(tapahtuma);
         return ResponseEntity.status(HttpStatus.CREATED).body(tallennettuTapahtuma);
     }
     
+    @PutMapping("/tapahtumat/{id}")
+    Tapahtuma muokkaaTapahtuma(@RequestBody Tapahtuma tapahtuma, @PathVariable Long id) {
+        tapahtuma.setId(id);
+        return tapahtumaRepository.save(tapahtuma);
+    }
+
 
     //Palauttaa koodin 204 jos tapahtuma löytyy ja poistetaan onnistuneesti, tai koodin 404 jos tapahtumaa ei löydy
     @DeleteMapping("/tapahtumat/{id}")
