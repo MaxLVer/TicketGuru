@@ -55,9 +55,15 @@ public class TGRestController {
     }
     
     @PutMapping("/tapahtumat/{id}")
-    Tapahtuma muokkaaTapahtuma(@RequestBody Tapahtuma tapahtuma, @PathVariable Long id) {
-        tapahtuma.setId(id);
-        return tapahtumaRepository.save(tapahtuma);
+    public ResponseEntity<Tapahtuma> muokkaaTapahtuma(@RequestBody Tapahtuma tapahtuma, @PathVariable Long id) {
+        if (tapahtumaRepository.existsById(id)) {
+            tapahtuma.setId(id);
+            Tapahtuma savedTapahtuma = tapahtumaRepository.save(tapahtuma);
+            return ResponseEntity.status(HttpStatus.OK).body(savedTapahtuma);
+            
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

@@ -149,6 +149,9 @@ Tapahtumakohtainen raportti jossa näkyy heti alkuun:
 > alennusprosentti | DECIMAL(10,2) |  Lipputyypin alennusprosentti
 > lipputyyppi_selite | varchar(100) | Lipputyypin kuvaus
 
+## API-dokumentaatio
+Kaikki endpointit on kuvattu erillisessä dokumentaatiossa:
+- [API-dokumentaatio](API-dokumentaatio/README.md)
 
 ## Tekninen kuvaus
 
