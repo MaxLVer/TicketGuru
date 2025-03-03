@@ -3,12 +3,18 @@
 Toiminto listaa kaikki tapahtumat tai näyttää yhden tapahtuman
 
 **Listaa kaikki tapahtumat**
+
 **URL** : `/tapahtumat/` 
 
+---
+
 **Hakee Tapahtumat-taulun ID:n avulla tietyn tapahtuman**
+
 **URL** : `/tapahtumat/{id}`
 
 **URL Parameters** : `id` vastaa tietokannassa Tapahtumat-taulun primary keytä.
+
+---
 
 **Metodi**: `GET`
 
