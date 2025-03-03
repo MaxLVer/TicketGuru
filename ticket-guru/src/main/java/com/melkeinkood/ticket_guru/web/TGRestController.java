@@ -1,6 +1,6 @@
 package com.melkeinkood.ticket_guru.web;
 
-import java.util.Optional;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,10 +35,11 @@ public class TGRestController {
     public Iterable<Tapahtuma> haeKaikkiTapahtumat(){
         return tapahtumaRepository.findAll();
     }
-
+    
     @GetMapping("/tapahtumat/{id}")
-    public ResponseEntity<Tapahtuma> haeTapahtuma(@PathVariable Long id) {
-        return ResponseEntity.of(tapahtumaRepository.findById(id));
+    public ResponseEntity<Object> haeTapahtuma(@PathVariable Long id) {
+        Tapahtuma tapahtuma = tapahtumaRepository.findById(id).orElse(null);
+        return ResponseEntity.ok(tapahtuma != null ? tapahtuma : Collections.emptyMap());
     }
 
     @PostMapping("/tapahtumat/lisaa")
