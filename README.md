@@ -134,20 +134,20 @@ Tapahtumakohtainen raportti jossa näkyy heti alkuun:
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > lippu_id | int PK | Lipun id
-> lippu_hinta | DECIMAL(10,2) |  Lipun hinta
+> ostostapahtuma_id | int fk |  Ostostapahtuma, viittaus [Ostostapahtumat](#Ostostapahtumat)-tauluun
 > tunniste | varchar(20) | Lipuntarkastus tunniste
 > voimassaoloaika | Date | Lipun voimassaoloaika
-> lipputyyppi_id | int FK | Lipputyyppi, viittaus [Lipputyyppit](#Lipputyyppit)-tauluun
+> tapahtuma_lipputyyppi_id | int FK | Tapahtuma Lipputyyppi, viittaus [Tapahtuma Lipputyyppit](#Tapahtuma_Lipputyypit)-tauluun
 > status | varchar(10) | Lipun status (myytävänä, myyty, myytävänä ovella)
 
-> ### _Lipputyypit_
+> ### _Asiakastyypit_
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> lipputyyppi_id | int PK | Lipputyypin id
-> alennusprosentti | DECIMAL(10,2) |  Lipputyypin alennusprosentti
-> lipputyyppi_selite | varchar(100) | Lipputyypin kuvaus
+> asiakastyyppi_id | int PK | Asiakastyypin id
+> asiakastyyppi | varchar(20) |  Asikastyypin selite
+
 
 ## API-dokumentaatio
 Kaikki endpointit on kuvattu erillisessä dokumentaatiossa:
