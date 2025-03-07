@@ -72,11 +72,12 @@ Tapahtumakohtainen raportti jossa näkyy heti alkuun:
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > käyttäjä_id | int PK | Käyttäjän id
+> rooli_id | int FK | Rooli, viittaus [Roolit](#Roolit)-tauluun
 > käyttäjänimi | varchar(50) |  Käyttäjän nimi
 > salasana | varchar(50) | Salasana
 > etunimi | varchar(30) | Etunimi
 > sukunimi | varchar(50) | Sukunimi
-> rooli_id | int FK | Rooli, viittaus [Roolit](#Roolit)-tauluun
+
 
 > ### _Roolit_
 > 
@@ -94,19 +95,31 @@ Tapahtumakohtainen raportti jossa näkyy heti alkuun:
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > tapahtuma_id | int PK | Tapahtuman id
-> paikka_id | int FK |  Tapahtumapaikka, viittaus [Tapahtumapaikat](#Tapahtumapaikat)-tauluun
+> tapahtumapaikka_id | int FK |  Tapahtumapaikka, viittaus [Tapahtumapaikat](#Tapahtumapaikat)-tauluun
 > tapahtuma_aika | Date | Tapahtuman päivämäärä ja kellonaika
 > tapahtuma_nimi | varchar(50) | Tapahtuman nimi
+> kuvaus | varchar(500) | Lyhyt kuvaus tapahtuman sisällöstä
+> kokonaislippumaara | int | Tapahtumaan asetettu lippujen kokonaismäärä. Oltava pienempi kuin tapahtumapaikan maksimikapasiteetti.
+> jaljella_oleva_lippumaara | int | Jäljellä olevien lippujen määrä
 
 > ### _Tapahtumapaikat_
 > 
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> paikka_id | int PK | Tapahtumapaikan id
+> tapahtumapaikka_id | int PK | Tapahtumapaikan id
 > lahiosoite | varchar(100) |  Tapahtumapaikan lähiosoite
-> kaupunki | varchar(50) | Tapahtumapaikan kaupunki
+> postinumero | varchar(50) FK |  Postinumero, viittaus [Postinumerot](#Postinumerot)-tauluun
 > tapahtumapaikan_nimi | varchar (50) | Tapahtumapaikan nimi
+> kapasiteetti | int | Tapahtumapaikan maksimikapasiteetti
+
+> ### _Postinumerot_
+>
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> postinumero | varchar(50) PK | Postinumero
+> kaupunki | varchar(50) | Kaupunki, johon postinumero sijoittuu.
 
 > ### _Ostostapahtumat_
 > 
@@ -114,7 +127,6 @@ Tapahtumakohtainen raportti jossa näkyy heti alkuun:
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > ostostapahtuma_id | int PK | Ostotapahtuman id
-> tapahtuma_id | int FK |  Tapahtuma, viittaus [Tapahtumat](#Tapahtumat)-tauluun
 > myyntiaika | Date | Ostotapahtuman aika
 > kayttaja_id | int FK | Käyttäjä, viittaus [Käyttäjät](#Käyttäjät)-tauluun
 
