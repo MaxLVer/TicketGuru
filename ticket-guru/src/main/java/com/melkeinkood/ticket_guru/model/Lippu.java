@@ -42,6 +42,12 @@ public class Lippu {
     @JoinColumn(name = "tapahtumaLipputyyppiId")
     private TapahtumaLipputyypit tapahtumalipputyyppi;
 
+    @ManyToOne
+    @JoinColumn(name = "tapahtumaId")
+    private Tapahtuma tapahtuma;
+
+    
+
     @Column(name = "voimassaoloaika")
     private LocalDateTime voimassaoloaika;
 
@@ -52,13 +58,14 @@ public class Lippu {
 
 
     public Lippu(Long lippuId, @NotNull @Size(min = 1, max = 20) String tunniste, Ostostapahtuma ostostapahtuma,
-            TapahtumaLipputyypit tapahtumalipputyyppi, LocalDateTime voimassaoloaika, LippuStatus status) {
+            TapahtumaLipputyypit tapahtumalipputyyppi, LocalDateTime voimassaoloaika, LippuStatus status, Tapahtuma tapahtuma) {
         this.lippuId = lippuId;
         this.tunniste = tunniste;
         this.ostostapahtuma = ostostapahtuma;
         this.tapahtumalipputyyppi = tapahtumalipputyyppi;
         this.voimassaoloaika = voimassaoloaika;
         this.status = status;
+        this.tapahtuma = tapahtuma;
     }
 
 
@@ -140,7 +147,15 @@ public class Lippu {
         this.tapahtumalipputyyppi = tapahtumalipputyyppi;
     }
 
-    
+    public Tapahtuma getTapahtuma() {
+        return tapahtuma;
+    }
+
+
+
+    public void setTapahtuma(Tapahtuma tapahtuma) {
+        this.tapahtuma = tapahtuma;
+    }
 
     
 
