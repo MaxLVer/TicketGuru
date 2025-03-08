@@ -43,6 +43,14 @@ public class Ostostapahtuma {
         this.myyntiaika = myyntiaika;
     }
 
+    public long getOstostapahtumaId() {  //Pitäisikö olla näin? Jätin tuohon alas aikaisemman joka on getId. Vai pitäisikö muihinkin tauluihin lisätä muoto getId?
+        return ostostapahtumaId;
+    }
+
+    public void setOstostapahtumaId(long ostotapahtuma_id){
+        this.ostostapahtumaId = ostotapahtuma_id;
+    }
+
     public long getId() {
         return ostostapahtumaId;
     }

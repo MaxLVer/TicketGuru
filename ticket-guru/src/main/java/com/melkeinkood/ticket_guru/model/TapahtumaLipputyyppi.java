@@ -52,11 +52,11 @@ public class TapahtumaLipputyyppi {
         this.tapahtumaLipputyyppiId = tapahtumaLipputyyppiId;
     }
 
-    public Tapahtuma gettapahtuma() {
+    public Tapahtuma getTapahtuma() {
         return tapahtuma;
     }
 
-    public void settapahtuma(Tapahtuma tapahtuma) {
+    public void setTapahtuma(Tapahtuma tapahtuma) {
         this.tapahtuma = tapahtuma;
     }
 

@@ -13,8 +13,8 @@ public class Rooli {
     @Column(name = "nimike", nullable = false)
     private String nimike;
 
-    @Column(name = "rooli_selite", nullable = false)
-    private String rooli_selite;
+    @Column(name = "rooli_selite", nullable = false) 
+    private String rooli_selite;    //Pitäisikö tämän kentän olla muodossa rooliSelite? Vai riittäisikö jopa pelkkä selite?
 
     public Rooli() {
     }
@@ -24,11 +24,11 @@ public class Rooli {
         this.rooli_selite = rooliSelite;
     }
 
-    public long getrooliId() {
+    public long getRooliId() {
         return rooliId;
     }
 
-    public void setrooliId(long rooliId) {
+    public void setRooliId(long rooliId) {
         this.rooliId = rooliId;
     }
 

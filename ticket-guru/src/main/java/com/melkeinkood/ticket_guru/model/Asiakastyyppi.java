@@ -67,11 +67,11 @@ public class Asiakastyyppi {
 
     
 
-    public Long getasiakastyyppiId() {
+    public Long getAsiakastyyppiId() {
         return asiakastyyppiId;
     }
 
-    public void setasiakastyyppiId(Long asiakastyyppiId) {
+    public void setAsiakastyyppiId(Long asiakastyyppiId) {
         this.asiakastyyppiId = asiakastyyppiId;
     }
     public String getAsiakastyyppi() {

@@ -42,11 +42,11 @@ public class Kayttaja {
         this.sukunimi = sukunimi;
     }
 
-    public long getkayttajaId() {
+    public long getKayttajaId() {
         return kayttajaId;
     }
 
-    public void setkayttajaId(long kayttajaId) {
+    public void setKayttajaId(long kayttajaId) {
         this.kayttajaId = kayttajaId;
     }
 

@@ -30,7 +30,7 @@ public class Tapahtuma {
     @JoinColumn(name = "tapahtumapaikkaId")
     private Tapahtumapaikka tapahtumapaikka;
 
-    @Column(name = "tapahtuma_aika")
+    @Column(name = "tapahtuma_aika") // Pitäisikö kaikki columnien nimet olla selkiyden vuoksi samassa muodossa ts. tapahtumaAika? Vaikuttaako johonkin?
     private LocalDateTime tapahtumaAika;
 
     @NotNull
@@ -49,7 +49,7 @@ public class Tapahtuma {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtuma")
     @JsonIgnore
-    private List<TapahtumaLipputyypit> tapahtumaLipputyypit;
+    private List<TapahtumaLipputyyppi> tapahtumaLipputyyppi;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtuma")
     @JsonIgnore
@@ -127,12 +127,12 @@ public class Tapahtuma {
         this.jaljellaOlevaLippumaara = jaljellaOlevaLippumaara;
     }
 
-    public List<TapahtumaLipputyypit> getTapahtumatLipputyypit(){
-        return tapahtumaLipputyypit;
+    public List<TapahtumaLipputyyppi> getTapahtumatLipputyyppi(){
+        return tapahtumaLipputyyppi;
     }
 
-    public void setTapahtumaLipputyypit(List<TapahtumaLipputyypit> tapahtumaLipputyypit) {
-        this.tapahtumaLipputyypit = tapahtumaLipputyypit;
+    public void setTapahtumaLipputyyppi(List<TapahtumaLipputyyppi> tapahtumaLipputyyppi) {
+        this.tapahtumaLipputyyppi = tapahtumaLipputyyppi;
     }
 
     public List<Lippu> getLiput() {
