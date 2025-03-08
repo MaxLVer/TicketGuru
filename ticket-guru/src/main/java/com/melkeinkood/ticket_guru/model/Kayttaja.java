@@ -37,6 +37,7 @@ public class Kayttaja {
     public Kayttaja(Rooli rooli, String kayttajanimi, String salasana, String etunimi, String sukunimi) {
         this.rooli = rooli;
         this.kayttajanimi = kayttajanimi;
+        this.salasana = salasana;
         this.etunimi = etunimi;
         this.sukunimi = sukunimi;
     }

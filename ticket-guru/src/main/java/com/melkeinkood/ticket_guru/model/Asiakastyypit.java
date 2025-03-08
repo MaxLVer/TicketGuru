@@ -36,7 +36,9 @@ public class Asiakastyypit {
     @JsonIgnore
     private List<TapahtumaLipputyypit> tapahtumaLipputyypit;
 
-    
+    public Asiakastyypit(@NotNull @Size(min = 1, max = 100) String asiakastyyppi) {
+        this.asiakastyyppi = asiakastyyppi;
+    }  
 
 
 
@@ -82,4 +84,8 @@ public class Asiakastyypit {
         this.asiakastyyppi = asiakastyyppi;
     }
     
+    public List<TapahtumaLipputyypit> getTapahtumaLipputyypit() {
+        return tapahtumaLipputyypit;
+    }
+
 }

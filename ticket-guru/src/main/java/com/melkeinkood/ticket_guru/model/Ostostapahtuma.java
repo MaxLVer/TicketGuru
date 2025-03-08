@@ -31,6 +31,13 @@ public class Ostostapahtuma {
         super();
     } 
 
+    
+    public Ostostapahtuma(Kayttaja kayttaja, LocalDateTime myyntiaika) {
+        super();
+        this.kayttaja = kayttaja;
+        this.myyntiaika = myyntiaika;
+    }
+
     public Ostostapahtuma(LocalDateTime myyntiaika) {
         super();
         this.myyntiaika = myyntiaika;
