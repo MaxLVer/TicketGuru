@@ -82,4 +82,8 @@ public class Asiakastyypit {
         this.asiakastyyppi = asiakastyyppi;
     }
     
+    public List<TapahtumaLipputyypit> getTapahtumaLipputyypit() {
+        return tapahtumaLipputyypit;
+    }
+
 }
