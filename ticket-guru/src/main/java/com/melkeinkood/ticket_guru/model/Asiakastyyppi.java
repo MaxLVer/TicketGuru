@@ -15,8 +15,8 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "asiakastyypit")
-public class Asiakastyypit {
+@Table(name = "asiakastyyppi")
+public class Asiakastyyppi {
 
         
     @Id
@@ -34,34 +34,34 @@ public class Asiakastyypit {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "asiakastyyppi")
     @JsonIgnore
-    private List<TapahtumaLipputyypit> tapahtumaLipputyypit;
+    private List<TapahtumaLipputyyppi> tapahtumaLipputyyppi;
 
-    public Asiakastyypit(@NotNull @Size(min = 1, max = 100) String asiakastyyppi) {
+    public Asiakastyyppi(@NotNull @Size(min = 1, max = 100) String asiakastyyppi) {
         this.asiakastyyppi = asiakastyyppi;
     }  
 
 
 
-    public Asiakastyypit(Long asiakastyyppiId, @NotNull @Size(min = 1, max = 100) String asiakastyyppi,
-            List<TapahtumaLipputyypit> tapahtumaLipputyypit) {
+    public Asiakastyyppi(Long asiakastyyppiId, @NotNull @Size(min = 1, max = 100) String asiakastyyppi,
+            List<TapahtumaLipputyyppi> tapahtumaLipputyyppi) {
         this.asiakastyyppiId = asiakastyyppiId;
         this.asiakastyyppi = asiakastyyppi;
-        this.tapahtumaLipputyypit = tapahtumaLipputyypit;
+        this.tapahtumaLipputyyppi = tapahtumaLipputyyppi;
     }
 
 
 
 
-    public Asiakastyypit(@NotNull @Size(min = 1, max = 100) String asiakastyyppi,
-            List<TapahtumaLipputyypit> tapahtumaLipputyypit) {
+    public Asiakastyyppi(@NotNull @Size(min = 1, max = 100) String asiakastyyppi,
+            List<TapahtumaLipputyyppi> tapahtumaLipputyyppi) {
         this.asiakastyyppi = asiakastyyppi;
-        this.tapahtumaLipputyypit = tapahtumaLipputyypit;
+        this.tapahtumaLipputyyppi = tapahtumaLipputyyppi;
     }
 
 
 
 
-    public Asiakastyypit() {
+    public Asiakastyyppi() {
         super();
     }
 
@@ -84,8 +84,8 @@ public class Asiakastyypit {
         this.asiakastyyppi = asiakastyyppi;
     }
     
-    public List<TapahtumaLipputyypit> getTapahtumaLipputyypit() {
-        return tapahtumaLipputyypit;
+    public List<TapahtumaLipputyyppi> getTapahtumaLipputyyppi() {
+        return tapahtumaLipputyyppi;
     }
 
 }

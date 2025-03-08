@@ -13,8 +13,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "tapahtuma_lipputyypit")
-public class TapahtumaLipputyypit {
+@Table(name = "tapahtuma_lipputyyppi")
+public class TapahtumaLipputyyppi {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,16 +29,16 @@ public class TapahtumaLipputyypit {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "asiakastyyppiId")
-    private Asiakastyypit asiakastyyppi;
+    private Asiakastyyppi asiakastyyppi;
 
     @NotNull
     @Column(name = "hinta")
     private BigDecimal hinta;
 
-    public TapahtumaLipputyypit() {}
+    public TapahtumaLipputyyppi() {}
 
-    public TapahtumaLipputyypit(@NotNull Tapahtuma tapahtuma,
-            @NotNull Asiakastyypit asiakastyyppi, @NotNull BigDecimal hinta) {
+    public TapahtumaLipputyyppi(@NotNull Tapahtuma tapahtuma,
+            @NotNull Asiakastyyppi asiakastyyppi, @NotNull BigDecimal hinta) {
         this.tapahtuma = tapahtuma;
         this.asiakastyyppi = asiakastyyppi;
         this.hinta = hinta;
@@ -60,11 +60,11 @@ public class TapahtumaLipputyypit {
         this.tapahtuma = tapahtuma;
     }
 
-    public Asiakastyypit getAsiakastyyppi() {
+    public Asiakastyyppi getAsiakastyyppi() {
         return asiakastyyppi;
     }
 
-    public void setAsiakastyyppi(Asiakastyypit asiakastyyppi) {
+    public void setAsiakastyyppi(Asiakastyyppi asiakastyyppi) {
         this.asiakastyyppi = asiakastyyppi;
     }
 
