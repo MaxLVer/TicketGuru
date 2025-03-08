@@ -32,7 +32,28 @@ Toiminto listaa kaikki tapahtumat tai näyttää yhden tapahtuman
 
 **Koodi** : `200 OK`
 
-**Sisältö** : `{}`
+**Sisältö** : 
+```json
+{
+  "tapahtumapaikka": {
+    "lahiosoite": STRING,
+    "postinumero": {
+      "postinumero": STRING,
+      "kaupunki": STRING
+    },
+    "tapahtumapaikanNimi": STRING,
+    "kapasiteetti": INTEGER,
+    "id": INTEGER
+  },
+  "tapahtumaAika": DATETIME,
+  "tapahtumaNimi": STRING,
+  "kuvaus": STRING,
+  "kokonaislippumaara": INTEGER,
+  "jaljellaOlevaLippumaara": INTEGER,
+  "id": INTEGER,
+  "tapahtumatLipputyypit": []
+}
+```
 
 ## TAI
 
