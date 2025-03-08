@@ -67,13 +67,14 @@ public class TicketGuruApplication {
 			tapahtumaRepository.save(tapahtuma2);
 
 			Asiakastyypit peruslippu = (new Asiakastyypit (
-				"peruslippu",
-				new ArrayList<>()
+				"peruslippu"
 			));
+			asiakastyypitRepository.save(peruslippu);
+
 			Asiakastyypit lastenlippu = (new Asiakastyypit (
-				"lastenlippu",
-				new ArrayList<>()
+				"lastenlippu"
 			));
+			asiakastyypitRepository.save(lastenlippu);
 
 			TapahtumaLipputyypit lipputyyppi1 = (new TapahtumaLipputyypit(
 				tapahtuma1,
@@ -90,19 +91,16 @@ public class TicketGuruApplication {
 //			peruslippu.getTapahtumaLipputyypit().add(lipputyyppi1);
 //			lastenlippu.getTapahtumaLipputyypit().add(lipputyyppi2);
 
-//			asiakastyypitRepository.save(peruslippu);
-//			asiakastyypitRepository.save(lastenlippu);
-
 			Rooli rooli1 = (new Rooli ("yllapito", "Ylläpitäjät hallitsevat järjestelmää."));
 			rooliRepository.save(rooli1);
 
 			Kayttaja kayttaja1 = (new Kayttaja(rooli1, "test1", "test1234", "Teppo", "Testaaja"));
 			kayttajaRepository.save(kayttaja1);
 
-			Ostostapahtuma ostostapahtuma1 = (new Ostostapahtuma(null));
+			Ostostapahtuma ostostapahtuma1 = (new Ostostapahtuma(kayttaja1, null));
 			ostostapahtumaRepository.save(ostostapahtuma1);
 
-			Lippu lippu1 = (new Lippu((long) 1, "xxx", ostostapahtuma1, lipputyyppi1, LocalDateTime.of(2025, 6, 1, 20, 0), LippuStatus.MYYTAVANA, tapahtuma1));
+			Lippu lippu1 = (new Lippu("xxx", ostostapahtuma1, lipputyyppi1, LocalDateTime.of(2025, 6, 1, 20, 0), LippuStatus.MYYTAVANA, tapahtuma1));
 			lippuRepository.save(lippu1);
 
 		};

@@ -68,7 +68,15 @@ public class Lippu {
         this.tapahtuma = tapahtuma;
     }
 
-
+    public Lippu(@NotNull @Size(min = 1, max = 20) String tunniste, Ostostapahtuma ostostapahtuma,
+            TapahtumaLipputyypit tapahtumalipputyyppi, LocalDateTime voimassaoloaika, LippuStatus status, Tapahtuma tapahtuma) {
+        this.tunniste = tunniste;
+        this.ostostapahtuma = ostostapahtuma;
+        this.tapahtumalipputyyppi = tapahtumalipputyyppi;
+        this.voimassaoloaika = voimassaoloaika;
+        this.status = status;
+        this.tapahtuma = tapahtuma;
+    }
 
 
 
