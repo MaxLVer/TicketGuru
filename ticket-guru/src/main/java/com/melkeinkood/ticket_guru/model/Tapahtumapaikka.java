@@ -33,7 +33,7 @@ public class Tapahtumapaikka {
     private String lahiosoite;
     
     @ManyToOne
-    @JoinColumn(name = "postinumero", referencedColumnName = "postinumero")
+    @JoinColumn(name = "postinumeroId", referencedColumnName = "postinumeroId")
     private Postinumero postinumero;
 
     @NotNull

@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -18,6 +20,11 @@ import jakarta.validation.constraints.Size;
 
 public class Postinumero {
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name="postinumeroId")
+    private long postinumeroId;
+
+    @NotNull
     @Column(name = "postinumero")
     private String postinumero;
     
@@ -34,12 +41,16 @@ public class Postinumero {
         super();
     }
 
-    public Postinumero(String postinumero, @NotNull @Size(min = 1, max = 50) String kaupunki) {
+    public Postinumero(@NotNull String postinumero, @NotNull @Size(min = 1, max = 50) String kaupunki) {
         super();
         this.postinumero = postinumero;
         this.kaupunki = kaupunki;
     }
 
+    public long getPostinumeroID() {
+        return postinumeroId;
+    }
+    
     public String getPostinumero() {
         return postinumero;
     }
