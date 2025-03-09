@@ -12,7 +12,7 @@ public class Kayttaja {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "kayttajaId")
-    private long kayttajaId;
+    private Long kayttajaId;
     
     @ManyToOne
     @JoinColumn(name = "rooliId", nullable = false)
@@ -42,7 +42,7 @@ public class Kayttaja {
         this.sukunimi = sukunimi;
     }
 
-    public long getKayttajaId() {
+    public Long getKayttajaId() {
         return kayttajaId;
     }
 

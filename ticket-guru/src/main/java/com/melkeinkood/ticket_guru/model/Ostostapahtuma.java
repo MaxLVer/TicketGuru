@@ -59,6 +59,14 @@ public class Ostostapahtuma {
         this.ostostapahtumaId = ostotapahtuma_id;
     }
 
+    public Kayttaja getKayttaja() {
+        return kayttaja;
+    }
+
+    public void setKayttaja(Kayttaja kayttaja){
+        this.kayttaja = kayttaja;
+    }
+
     public LocalDateTime getMyyntiaika() {
         return myyntiaika;
     }
