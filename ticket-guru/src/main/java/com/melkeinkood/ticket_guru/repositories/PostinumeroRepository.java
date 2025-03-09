@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.melkeinkood.ticket_guru.model.Postinumero;
 
 @Repository
-public interface PostinumeroRepository extends JpaRepository<Postinumero, String>{
+public interface PostinumeroRepository extends JpaRepository<Postinumero, Long>{
     List<Postinumero> findByPostinumero (String postinumero);
 
 }
