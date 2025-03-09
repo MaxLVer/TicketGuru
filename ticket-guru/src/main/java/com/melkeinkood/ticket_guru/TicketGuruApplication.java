@@ -9,8 +9,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.melkeinkood.ticket_guru.model.Asiakastyypit;
-import com.melkeinkood.ticket_guru.repositories.AsiakastyypitRepository;
+import com.melkeinkood.ticket_guru.model.Asiakastyyppi;
+import com.melkeinkood.ticket_guru.repositories.AsiakastyyppiRepository;
 import com.melkeinkood.ticket_guru.model.Kayttaja;
 import com.melkeinkood.ticket_guru.repositories.KayttajaRepository;
 import com.melkeinkood.ticket_guru.model.Lippu;
@@ -22,8 +22,8 @@ import com.melkeinkood.ticket_guru.model.Postinumero;
 import com.melkeinkood.ticket_guru.repositories.PostinumeroRepository;
 import com.melkeinkood.ticket_guru.model.Rooli;
 import com.melkeinkood.ticket_guru.repositories.RooliRepository;
-import com.melkeinkood.ticket_guru.model.TapahtumaLipputyypit;
-import com.melkeinkood.ticket_guru.repositories.TapahtumaLipputyypitRepository;
+import com.melkeinkood.ticket_guru.model.TapahtumaLipputyyppi;
+import com.melkeinkood.ticket_guru.repositories.TapahtumaLipputyyppiRepository;
 import com.melkeinkood.ticket_guru.model.Tapahtuma;
 import com.melkeinkood.ticket_guru.repositories.TapahtumaRepository;
 import com.melkeinkood.ticket_guru.model.Tapahtumapaikka;
@@ -37,7 +37,7 @@ public class TicketGuruApplication {
 	}
 
 	@Bean
-	public CommandLineRunner tapahtumaData(TapahtumaRepository tapahtumaRepository, TapahtumapaikkaRepository tapahtumapaikkaRepository, PostinumeroRepository postinumeroRepository, AsiakastyypitRepository asiakastyypitRepository, KayttajaRepository kayttajaRepository, LippuRepository lippuRepository, OstostapahtumaRepository ostostapahtumaRepository, RooliRepository rooliRepository, TapahtumaLipputyypitRepository tapahtumaLipputyypitRepository){
+	public CommandLineRunner tapahtumaData(TapahtumaRepository tapahtumaRepository, TapahtumapaikkaRepository tapahtumapaikkaRepository, PostinumeroRepository postinumeroRepository, AsiakastyyppiRepository asiakastyyppiRepository, KayttajaRepository kayttajaRepository, LippuRepository lippuRepository, OstostapahtumaRepository ostostapahtumaRepository, RooliRepository rooliRepository, TapahtumaLipputyyppiRepository tapahtumaLipputyyppiRepository){
 		
 		return (args) -> {
 			Postinumero p00250 = new Postinumero("00250", "Helsinki");
@@ -66,30 +66,30 @@ public class TicketGuruApplication {
 			));
 			tapahtumaRepository.save(tapahtuma2);
 
-			Asiakastyypit peruslippu = (new Asiakastyypit (
+			Asiakastyyppi peruslippu = (new Asiakastyyppi (
 				"peruslippu"
 			));
-			asiakastyypitRepository.save(peruslippu);
+			asiakastyyppiRepository.save(peruslippu);
 
-			Asiakastyypit lastenlippu = (new Asiakastyypit (
+			Asiakastyyppi lastenlippu = (new Asiakastyyppi (
 				"lastenlippu"
 			));
-			asiakastyypitRepository.save(lastenlippu);
+			asiakastyyppiRepository.save(lastenlippu);
 
-			TapahtumaLipputyypit lipputyyppi1 = (new TapahtumaLipputyypit(
+			TapahtumaLipputyyppi lipputyyppi1 = (new TapahtumaLipputyyppi(
 				tapahtuma1,
 				peruslippu,
 				new BigDecimal("10.50")));
-			tapahtumaLipputyypitRepository.save(lipputyyppi1);
+			tapahtumaLipputyyppiRepository.save(lipputyyppi1);
 
-			TapahtumaLipputyypit lipputyyppi2 = (new TapahtumaLipputyypit(
+			TapahtumaLipputyyppi lipputyyppi2 = (new TapahtumaLipputyyppi(
 				tapahtuma1,
 				lastenlippu, 
 				new BigDecimal("7.50")));
-			tapahtumaLipputyypitRepository.save(lipputyyppi2);
+			tapahtumaLipputyyppiRepository.save(lipputyyppi2);
 
-//			peruslippu.getTapahtumaLipputyypit().add(lipputyyppi1);
-//			lastenlippu.getTapahtumaLipputyypit().add(lipputyyppi2);
+//			peruslippu.getTapahtumaLipputyyppi().add(lipputyyppi1);
+//			lastenlippu.getTapahtumaLipputyyppi().add(lipputyyppi2);
 
 			Rooli rooli1 = (new Rooli ("yllapito", "Ylläpitäjät hallitsevat järjestelmää."));
 			rooliRepository.save(rooli1);

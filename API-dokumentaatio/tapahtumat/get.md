@@ -51,7 +51,7 @@ Toiminto listaa kaikki tapahtumat tai näyttää yhden tapahtuman
   "kokonaislippumaara": INTEGER,
   "jaljellaOlevaLippumaara": INTEGER,
   "id": INTEGER,
-  "tapahtumatLipputyypit": []
+  "tapahtumatLipputyyppi": []
 }
 ```
 

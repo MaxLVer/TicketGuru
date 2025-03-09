@@ -40,7 +40,7 @@ Toiminnon avulla voidaan muokata yhtä tietokannassa olevaa tapahtumaa
   "kokonaislippumaara": int,
   "jaljellaOlevaLippumaara": int,
   "id": 3,
-  "tapahtumatLipputyypit": []
+  "tapahtumatLipputyyppi": []
 }
 ```
 
