@@ -102,11 +102,10 @@ public class TGRestController {
     }
 
     @GetMapping("/ostostapahtumat/{id}")
-    public ResponseEntity<Object> haeOstostapahtuma(@PathVariable Long ostostapahtumaId) {
-    Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(ostostapahtumaId).orElse(null);
+    public ResponseEntity<Object> haeOstostapahtuma(@PathVariable Long id) {
+    Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id).orElse(null);
     return ostostapahtuma != null ? ResponseEntity.ok(ostostapahtuma) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", "Ostostapahtumaa ei löytynyt"));
     }
-
 
 
     @PostMapping("/ostostapahtumat")
