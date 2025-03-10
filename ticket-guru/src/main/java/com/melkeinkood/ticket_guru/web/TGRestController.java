@@ -116,17 +116,17 @@ public class TGRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOstostapahtuma);
     }
 
-@PutMapping("/ostostapahtumat/{id}/myyntiaika")
-public ResponseEntity<Ostostapahtuma> paivitaMyyntiaika(@PathVariable Long id, @RequestBody Map<String, LocalDateTime> haeMyyntiaika) {
-    Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id).orElse(null);
-    if (ostostapahtuma == null) {
-        return ResponseEntity.notFound().build();
+    @PutMapping("/ostostapahtumat/{id}/myyntiaika")
+    public ResponseEntity<Ostostapahtuma> paivitaMyyntiaika(@PathVariable Long id, @RequestBody Map<String, LocalDateTime> haeMyyntiaika) {
+        Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id).orElse(null);
+        if (ostostapahtuma == null) {
+            return ResponseEntity.notFound().build();
+        }
+        LocalDateTime myyntiaika = haeMyyntiaika.get("myyntiaika");
+        ostostapahtuma.setMyyntiaika(myyntiaika);
+        Ostostapahtuma savedOstostapahtuma = ostostapahtumaRepository.save(ostostapahtuma);
+        return ResponseEntity.ok(savedOstostapahtuma);
     }
-    LocalDateTime myyntiaika = haeMyyntiaika.get("myyntiaika"); //Bad request olisi mahdollinen lisä
-    ostostapahtuma.setMyyntiaika(myyntiaika);
-    Ostostapahtuma savedOstostapahtuma = ostostapahtumaRepository.save(ostostapahtuma);
-    return ResponseEntity.ok(savedOstostapahtuma);
-}
 
     @PostMapping("/liput")
     public ResponseEntity<LippuDTO> luoLippu(@RequestBody Lippu uusiLippu) {
