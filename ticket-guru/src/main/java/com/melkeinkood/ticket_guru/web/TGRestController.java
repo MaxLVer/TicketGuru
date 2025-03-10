@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.melkeinkood.ticket_guru.model.*;
+import com.melkeinkood.ticket_guru.model.dto.TapahtumaDTO;
 import com.melkeinkood.ticket_guru.repositories.*;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,15 +47,19 @@ public class TGRestController {
         return ResponseEntity.ok(tapahtuma != null ? tapahtuma : Collections.emptyMap());
     }
 
-    @PostMapping("/tapahtumat/lisaa")
-    public ResponseEntity<Tapahtuma> lisaaTapahtuma(@RequestBody Tapahtuma tapahtuma) {
-        Postinumero postinumero = tapahtuma.getTapahtumapaikka().getPostinumero();
-        Postinumero savedPostinumero = postinumeroRepository.save(postinumero); 
-        Tapahtumapaikka tapahtumapaikka = tapahtuma.getTapahtumapaikka();
-        tapahtumapaikka.setPostinumero(savedPostinumero); 
-        Tapahtumapaikka savedTapahtumapaikka = tapahtumapaikkaRepository.save(tapahtumapaikka);
-        tapahtuma.setTapahtumapaikka(savedTapahtumapaikka);
-        Tapahtuma savedTapahtuma = tapahtumaRepository.save(tapahtuma);
+    @PostMapping("/tapahtumat")
+    public ResponseEntity<Tapahtuma> lisaaTapahtuma(@RequestBody TapahtumaDTO tapahtumaDTO) {
+        Tapahtumapaikka tapahtumapaikka = tapahtumapaikkaRepository.findByTapahtumapaikkaId(tapahtumaDTO.getTapahtumapaikkaId());
+        
+        Tapahtuma uusiTapahtuma = new Tapahtuma(
+            tapahtumapaikka,
+            tapahtumaDTO.getTapahtumaAika(),
+            tapahtumaDTO.getTapahtumaNimi(),
+            tapahtumaDTO.getKuvaus(),
+            tapahtumaDTO.getKokonaislippumaara(),
+            tapahtumaDTO.getJaljellaOlevaLippumaara()
+        );
+        Tapahtuma savedTapahtuma = tapahtumaRepository.save(uusiTapahtuma);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTapahtuma);
     }
     
