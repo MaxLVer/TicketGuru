@@ -2,7 +2,7 @@
 
 Toiminto lisää uuden lipun.
 
-**URL** : `/liput/`
+**URL** : `/ostostapahtumat`
 
 **Metodi**: `POST`
 
@@ -11,20 +11,11 @@ Toiminto lisää uuden lipun.
 **Vaatii hyväksyntää** : TBD
 
 **Data ehdot**
-Lisää lipun tunniste, voimassaoloaika, status ostostapahtuman id, tapahtuman id ja tapahtumalipputyypin id
+Lisää käyttäjän id
 ```json
 {
-  "tunniste": STRING,
-  "voimassaoloaika": DATETIME,
-  "status": STRING,
-  "ostostapahtuma": {
-    "ostostapahtumaId": INTEGER
-  },
-  "tapahtuma": {
-    "id": INTEGER
-  },
-  "tapahtumaLipputyyppi": {
-    "tapahtumaLipputyyppiId": INTEGER
+  "kayttaja":{
+    "kayttajaId":INTEGER
   }
 }
 ```
@@ -39,24 +30,25 @@ Lisää lipun tunniste, voimassaoloaika, status ostostapahtuman id, tapahtuman i
 **Sisältö esimerkki**
 ```json
 {
-    "lippuId": 2,
-    "tunniste": "LIPPU123",
-    "voimassaoloaika": "2023-10-11T12:00:00",
-    "status": "MYYTY",
-    "tapahtumaId": 1,
-    "ostostapahtumaId": 1,
-    "tapahtumaLipputyyppiId": 1
+  "ostostapahtumaId": 2,
+  "myyntiaika": null,
+  "kayttaja": {
+    "kayttajaId": 1,
+    "rooli": {
+      "rooliId": 1,
+      "nimike": "yllapito",
+      "rooli_selite": "Ylläpitäjät hallitsevat järjestelmää."
+    },
+    "kayttajanimi": "test1",
+    "etunimi": "Teppo",
+    "sukunimi": "Testaaja"
+  },
+  "id": 2
 }
 ```
 
 ## Virhe Response
 
-**Tila** : Jos sama tapahtuma on jo olemassa.
-
-**Koodi** : `303 SEE OTHER`
-
-### Tai
-
-**Tila** : Jos kenttiä puuttuu.
+**Tila** : Jos JSON on virheellinen tai se puuttuu.
 
 **Koodi** : `400 BAD REQUEST`
