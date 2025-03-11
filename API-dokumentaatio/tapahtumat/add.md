@@ -11,30 +11,15 @@ Toiminto lisää uuden tapahtuman.
 **Vaatii hyväksyntää** : TBD
 
 **Data ehdot**
-Lisää tapahtuman nimi, aika ja kokonaislippumäärä
+Lisää tapahtumapaikan id, tapahtuman nimi, aika, kuvaus, kokonaislippumäärä, jäljellä oleva lippumäärä
 ```json
 {
-  "tapahtumaId": 1,
-  "tapahtumaNimi": "[100 chars max]",
-  "tapahtumaAika": "[YYYY-MM-DDTHH:MM:SS]",
-  "kuvaus": "[100 chars max]",
-  "kokonaislippumaara": "[int]",
-  "jaljellaOlevaLippumaara": "[int]"
-}
-```
-Lisää myös tapahtumapaikkanimi, kapasiteetti, lähiosoite ja postinumero
-```json
-{
-  "tapahtumapaikka": {
-    "tapahtumapaikanNimi": "Esimerkki Areena",
-    "kapasiteetti": 5000,
-    "tapahtumapaikkaId": 1,
-    "lahiosoite": "Esimerkkikatu 12",
-    "postinumero": {
-      "postinumero": "00100",
-      "kaupunki": "Helsinki"
-    }
-  }
+  "tapahtumaId": INTEGER,
+  "tapahtumaNimi": STRING,
+  "tapahtumaAika": DATETIME ("[YYYY-MM-DDTHH:MM:SS]"),
+  "kuvaus": STRING,
+  "kokonaislippumaara": INTEGER,
+  "jaljellaOlevaLippumaara": INTEGER
 }
 ```
 
@@ -47,22 +32,23 @@ Lisää myös tapahtumapaikkanimi, kapasiteetti, lähiosoite ja postinumero
 **Sisältö esimerkki**
 ```json
 {
-  "tapahtumaId": 1,
-  "tapahtumaAika": "2025-05-01T18:00:00",
-  "tapahtumaNimi": "Esimerkki Konsertti",
-  "kuvaus": "Tämä on esimerkki konsertti",
-  "kokonaislippumaara": 5000,
-  "jaljellaOlevaLippumaara": 5000,
-  "tapahtumapaikka": {
-    "tapahtumapaikkaId": 1,
-    "tapahtumapaikanNimi": "Esimerkki Areena",
-    "kapasiteetti": 5000,
-    "lahiosoite": "Esimerkkikatu 12",
-    "postinumero": {
-      "postinumero": "00100",
-      "kaupunki": "Helsinki"
-    }
-  }
+    "tapahtumapaikka": {
+        "lahiosoite": "Töölönkatu 51 B",
+        "postinumero": {
+            "postinumero": "00250",
+            "kaupunki": "Helsinki",
+            "postinumeroID": 1
+        },
+        "tapahtumapaikanNimi": "Kulttuuritehdas Korjaamo",
+        "kapasiteetti": 1000,
+        "id": 1
+    },
+    "tapahtumaAika": "2025-03-10T15:00:00",
+    "tapahtumaNimi": "Kevätkonsertti",
+    "kuvaus": "Ihana kevätkonsertti kaupunginpuistossa",
+    "kokonaislippumaara": 500,
+    "jaljellaOlevaLippumaara": 250,
+    "id": 3
 }
 ```
 
