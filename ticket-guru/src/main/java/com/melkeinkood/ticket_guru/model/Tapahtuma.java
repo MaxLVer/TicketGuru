@@ -24,7 +24,7 @@ public class Tapahtuma {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tapahtumaId")
-    private long tapahtumaId;
+    private Long tapahtumaId;
 
     @ManyToOne
     @JoinColumn(name = "tapahtumapaikkaId")
@@ -71,11 +71,11 @@ public class Tapahtuma {
         this.jaljellaOlevaLippumaara = jaljellaOlevaLippumaara;
     }
 
-    public long getId() {
+    public Long getId() {
         return tapahtumaId;
     }
 
-    public void setId(long tapahtumaId){
+    public void setId(Long tapahtumaId){
         this.tapahtumaId = tapahtumaId;
     }
 

@@ -18,7 +18,7 @@ public class Ostostapahtuma {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name="ostostapahtumaId")
-    private long ostostapahtumaId;
+    private Long ostostapahtumaId;
 
     @Column(name="myyntiaika")
     private LocalDateTime myyntiaika;
@@ -43,19 +43,19 @@ public class Ostostapahtuma {
         this.myyntiaika = myyntiaika;
     }
 
-    public long getOstostapahtumaId() {  //Pitäisikö olla näin? Jätin tuohon alas aikaisemman joka on getId. Vai pitäisikö muihinkin tauluihin lisätä muoto getId?
+    public Long getOstostapahtumaId() {  //Pitäisikö olla näin? Jätin tuohon alas aikaisemman joka on getId. Vai pitäisikö muihinkin tauluihin lisätä muoto getId?
         return ostostapahtumaId;
     }
 
-    public void setOstostapahtumaId(long ostotapahtuma_id){
+    public void setOstostapahtumaId(Long ostotapahtuma_id){
         this.ostostapahtumaId = ostotapahtuma_id;
     }
 
-    public long getId() {
+    public Long getId() {
         return ostostapahtumaId;
     }
 
-    public void setId(long ostotapahtuma_id){
+    public void setId(Long ostotapahtuma_id){
         this.ostostapahtumaId = ostotapahtuma_id;
     }
 

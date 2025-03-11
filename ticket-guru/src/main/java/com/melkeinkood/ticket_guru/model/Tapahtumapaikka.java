@@ -25,7 +25,7 @@ public class Tapahtumapaikka {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tapahtumapaikkaId")
-    private long tapahtumapaikkaId;
+    private Long tapahtumapaikkaId;
 
     @NotNull
     @Size(min=1 , max=100)
@@ -60,11 +60,11 @@ public class Tapahtumapaikka {
         this.kapasiteetti = kapasiteetti;
     }
 
-    public long getId() {
+    public Long getId() {
         return tapahtumapaikkaId;
     }
 
-    public void setId(long tapahtumapaikkaId){
+    public void setId(Long tapahtumapaikkaId){
         this.tapahtumapaikkaId = tapahtumapaikkaId;
     }
 

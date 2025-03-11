@@ -46,7 +46,7 @@ public class Kayttaja {
         return kayttajaId;
     }
 
-    public void setKayttajaId(long kayttajaId) {
+    public void setKayttajaId(Long kayttajaId) {
         this.kayttajaId = kayttajaId;
     }
 
