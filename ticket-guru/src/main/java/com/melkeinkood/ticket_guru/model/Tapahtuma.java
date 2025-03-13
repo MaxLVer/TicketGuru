@@ -24,14 +24,14 @@ import jakarta.validation.constraints.Size;
 public class Tapahtuma {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tapahtumaId")
+    @Column(name = "tapahtuma_id")
     private long tapahtumaId;
 
     @ManyToOne
-    @JoinColumn(name = "tapahtumapaikkaId")
+    @JoinColumn(name = "tapahtumapaikka_id")
     private Tapahtumapaikka tapahtumapaikka;
 
-    @Column(name = "tapahtuma_aika") // Pitäisikö kaikki columnien nimet olla selkiyden vuoksi samassa muodossa ts. tapahtumaAika? Vaikuttaako johonkin?
+    @Column(name = "tapahtuma_aika")
     private LocalDateTime tapahtumaAika;
 
     @NotNull
@@ -59,7 +59,7 @@ public class Tapahtuma {
     @Version
     private int version;
 
-    public void ostaLippu(int maara){
+    public synchronized void ostaLippu(int maara){
         if (jaljellaOlevaLippumaara < maara) {
             throw new RuntimeException("Lippuja on jäljellä " + jaljellaOlevaLippumaara + " kappaletta");
         }
@@ -80,11 +80,11 @@ public class Tapahtuma {
         this.jaljellaOlevaLippumaara = jaljellaOlevaLippumaara;
     }
 
-    public long getId() {
+    public long getTapahtumaId() {
         return tapahtumaId;
     }
 
-    public void setId(long tapahtumaId){
+    public void setTapahtumaId(long tapahtumaId){
         this.tapahtumaId = tapahtumaId;
     }
 
