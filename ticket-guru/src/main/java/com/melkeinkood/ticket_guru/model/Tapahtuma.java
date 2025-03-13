@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -55,7 +56,15 @@ public class Tapahtuma {
     @JsonIgnore
     private List<Lippu> liput;
 
-    
+    @Version
+    private int version;
+
+    public void ostaLippu(int maara){
+        if (jaljellaOlevaLippumaara < maara) {
+            throw new RuntimeException("Lippuja on jäljellä " + jaljellaOlevaLippumaara + " kappaletta");
+        }
+        jaljellaOlevaLippumaara -= maara;
+    }
 
     public Tapahtuma() {
         super();
