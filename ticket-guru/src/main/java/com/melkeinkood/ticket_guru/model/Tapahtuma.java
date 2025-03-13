@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -23,14 +24,14 @@ import jakarta.validation.constraints.Size;
 public class Tapahtuma {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tapahtumaId")
+    @Column(name = "tapahtuma_id")
     private long tapahtumaId;
 
     @ManyToOne
-    @JoinColumn(name = "tapahtumapaikkaId")
+    @JoinColumn(name = "tapahtumapaikka_id")
     private Tapahtumapaikka tapahtumapaikka;
 
-    @Column(name = "tapahtuma_aika") // Pitäisikö kaikki columnien nimet olla selkiyden vuoksi samassa muodossa ts. tapahtumaAika? Vaikuttaako johonkin?
+    @Column(name = "tapahtuma_aika")
     private LocalDateTime tapahtumaAika;
 
     @NotNull
@@ -55,7 +56,15 @@ public class Tapahtuma {
     @JsonIgnore
     private List<Lippu> liput;
 
-    
+    @Version
+    private int version;
+
+    public synchronized void ostaLippu(int maara){
+        if (jaljellaOlevaLippumaara < maara) {
+            throw new RuntimeException("Lippuja on jäljellä " + jaljellaOlevaLippumaara + " kappaletta");
+        }
+        jaljellaOlevaLippumaara -= maara;
+    }
 
     public Tapahtuma() {
         super();
@@ -71,11 +80,11 @@ public class Tapahtuma {
         this.jaljellaOlevaLippumaara = jaljellaOlevaLippumaara;
     }
 
-    public long getId() {
+    public long getTapahtumaId() {
         return tapahtumaId;
     }
 
-    public void setId(long tapahtumaId){
+    public void setTapahtumaId(long tapahtumaId){
         this.tapahtumaId = tapahtumaId;
     }
 

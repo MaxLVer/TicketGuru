@@ -74,7 +74,7 @@ public class TGRestController {
     @PutMapping("/tapahtumat/{id}")
     public ResponseEntity<Tapahtuma> muokkaaTapahtuma(@RequestBody Tapahtuma tapahtuma, @PathVariable Long id) {
         if (tapahtumaRepository.existsById(id)) {
-            tapahtuma.setId(id);
+            tapahtuma.setTapahtumaId(id);
             Tapahtuma savedTapahtuma = tapahtumaRepository.save(tapahtuma);
             return ResponseEntity.status(HttpStatus.OK).body(savedTapahtuma);
 
@@ -136,7 +136,7 @@ public class TGRestController {
                 .orElseThrow(() -> new IllegalArgumentException("Lipputyyppiä ei löydy"));
 
         Tapahtuma tapahtuma = tapahtumaRepository
-                .findById(uusiLippu.getTapahtuma().getId())
+                .findById(uusiLippu.getTapahtuma().getTapahtumaId())
                 .orElseThrow(() -> new IllegalArgumentException("Tapahtumaa ei löydy"));
 
         Ostostapahtuma ostostapahtuma = ostostapahtumaRepository

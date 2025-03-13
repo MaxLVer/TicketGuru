@@ -2,7 +2,6 @@ package com.melkeinkood.ticket_guru;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
