@@ -13,8 +13,8 @@ public class TGController {
     @Autowired
     private TapahtumaRepository tapahtumaRepository;
 
-    @Autowired
-    private TapahtumapaikkaRepository tapahtumapaikkaRepository;
+    //@Autowired
+    //private TapahtumapaikkaRepository tapahtumapaikkaRepository;
 
     @GetMapping("/etusivu")
     public String etsivu(){

@@ -13,15 +13,15 @@ public class Rooli {
     @Column(name = "nimike", nullable = false)
     private String nimike;
 
-    @Column(name = "rooli_selite", nullable = false) 
-    private String rooli_selite;    //Pitäisikö tämän kentän olla muodossa rooliSelite? Vai riittäisikö jopa pelkkä selite?
+    @Column(name = "rooliSelite", nullable = false) 
+    private String rooliSelite;
 
     public Rooli() {
     }
 
     public Rooli(String nimike, String rooliSelite) {
         this.nimike = nimike;
-        this.rooli_selite = rooliSelite;
+        this.rooliSelite = rooliSelite;
     }
 
     public long getRooliId() {
@@ -40,11 +40,11 @@ public class Rooli {
         this.nimike = nimike;
     }
 
-    public String getRooli_selite() {
-        return rooli_selite;
+    public String getRooliSelite() {
+        return rooliSelite;
     }
 
-    public void setRooli_selite(String rooli_selite) {
-        this.rooli_selite = rooli_selite;
+    public void setRooliSelite(String rooliSelite) {
+        this.rooliSelite = rooliSelite;
     }
 }

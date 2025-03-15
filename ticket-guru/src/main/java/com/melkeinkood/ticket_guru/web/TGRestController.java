@@ -126,7 +126,7 @@ public class TGRestController {
         ostostapahtuma.setMyyntiaika(myyntiaika);
         Ostostapahtuma savedOstostapahtuma = ostostapahtumaRepository.save(ostostapahtuma);
         return ResponseEntity.ok(savedOstostapahtuma);
-    }
+    } //Muutetaan
 
     @PostMapping("/liput")
     public ResponseEntity<LippuDTO> luoLippu(@RequestBody Lippu uusiLippu) {
