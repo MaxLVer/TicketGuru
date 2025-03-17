@@ -1,6 +1,5 @@
 package com.melkeinkood.ticket_guru.web;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,7 +59,6 @@ public class TGRestController {
     public ResponseEntity<Tapahtuma> lisaaTapahtuma(@RequestBody TapahtumaDTO tapahtumaDTO) {
         Tapahtumapaikka tapahtumapaikka = tapahtumapaikkaRepository
                 .findByTapahtumapaikkaId(tapahtumaDTO.getTapahtumapaikkaId());
-
         Tapahtuma uusiTapahtuma = new Tapahtuma(
                 tapahtumapaikka,
                 tapahtumaDTO.getTapahtumaAika(),

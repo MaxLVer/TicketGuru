@@ -96,7 +96,7 @@ public class TicketGuruApplication {
 			Kayttaja kayttaja1 = (new Kayttaja(rooli1, "test1", "test1234", "Teppo", "Testaaja"));
 			kayttajaRepository.save(kayttaja1);
 
-			Ostostapahtuma ostostapahtuma1 = (new Ostostapahtuma(kayttaja1, null));
+			Ostostapahtuma ostostapahtuma1 = (new Ostostapahtuma(null, kayttaja1));
 			ostostapahtumaRepository.save(ostostapahtuma1);
 
 			Lippu lippu1 = (new Lippu("xxx", ostostapahtuma1, lipputyyppi1, LocalDateTime.of(2025, 6, 1, 20, 0), LippuStatus.MYYTAVANA, tapahtuma1));

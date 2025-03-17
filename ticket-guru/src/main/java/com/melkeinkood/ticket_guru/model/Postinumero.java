@@ -22,7 +22,7 @@ public class Postinumero {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name="postinumeroId")
-    private long postinumeroId;
+    private Long postinumeroId;
 
     @NotNull
     @Column(name = "postinumero")
@@ -47,7 +47,7 @@ public class Postinumero {
         this.kaupunki = kaupunki;
     }
 
-    public long getPostinumeroID() {
+    public Long getPostinumeroId() {
         return postinumeroId;
     }
     

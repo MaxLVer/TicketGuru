@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 
 @Entity
-@Table(name = "kayttajat")
+@Table(name = "kayttaja")
 
 public class Kayttaja {
     @Id
@@ -32,9 +32,11 @@ public class Kayttaja {
     private String sukunimi;
 
     public Kayttaja() {
+        super();
     }
 
     public Kayttaja(Rooli rooli, String kayttajanimi, String salasana, String etunimi, String sukunimi) {
+        super();
         this.rooli = rooli;
         this.kayttajanimi = kayttajanimi;
         this.salasana = salasana;
@@ -42,11 +44,11 @@ public class Kayttaja {
         this.sukunimi = sukunimi;
     }
 
-    public Long getKayttajaId() {
+    public Long getId() {
         return kayttajaId;
     }
 
-    public void setKayttajaId(long kayttajaId) {
+    public void setId(Long kayttajaId) {
         this.kayttajaId = kayttajaId;
     }
 

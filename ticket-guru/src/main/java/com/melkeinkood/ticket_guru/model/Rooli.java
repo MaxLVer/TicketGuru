@@ -8,7 +8,7 @@ public class Rooli {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rooliId")
-    private long rooliId;
+    private Long rooliId;
 
     @Column(name = "nimike", nullable = false)
     private String nimike;
@@ -24,11 +24,11 @@ public class Rooli {
         this.rooliSelite = rooliSelite;
     }
 
-    public long getRooliId() {
+    public Long getRooliId() {
         return rooliId;
     }
 
-    public void setRooliId(long rooliId) {
+    public void setRooliId(Long rooliId) {
         this.rooliId = rooliId;
     }
 

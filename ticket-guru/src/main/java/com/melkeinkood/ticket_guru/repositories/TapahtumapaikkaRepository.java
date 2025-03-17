@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TapahtumapaikkaRepository extends JpaRepository<Tapahtumapaikka, Long>  {
-    Tapahtumapaikka findByTapahtumapaikkaId(long tapahtumapaikkaId); 
+    Tapahtumapaikka findByTapahtumapaikkaId(Long tapahtumapaikkaId); 
 }

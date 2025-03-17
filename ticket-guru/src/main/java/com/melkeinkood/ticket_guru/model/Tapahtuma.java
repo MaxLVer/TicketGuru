@@ -24,8 +24,8 @@ import jakarta.validation.constraints.Size;
 public class Tapahtuma {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tapahtuma_id")
-    private long tapahtumaId;
+    @Column(name = "tapahtumaId")
+    private Long tapahtumaId;
 
     @ManyToOne
     @JoinColumn(name = "tapahtumapaikka_id")
@@ -80,11 +80,11 @@ public class Tapahtuma {
         this.jaljellaOlevaLippumaara = jaljellaOlevaLippumaara;
     }
 
-    public long getTapahtumaId() {
+    public Long getId() {
         return tapahtumaId;
     }
 
-    public void setTapahtumaId(long tapahtumaId){
+    public void setId(Long tapahtumaId){
         this.tapahtumaId = tapahtumaId;
     }
 
