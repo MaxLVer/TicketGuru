@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -97,15 +97,16 @@ public class TGRestController {
 
     @GetMapping("/ostostapahtumat")
     public List<Ostostapahtuma> haeKaikkiOstostapahtumat() {
-    return ostostapahtumaRepository.findAll();
+        return ostostapahtumaRepository.findAll();
     }
 
     @GetMapping("/ostostapahtumat/{id}")
     public ResponseEntity<Object> haeOstostapahtuma(@PathVariable Long id) {
-    Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id).orElse(null);
-    return ostostapahtuma != null ? ResponseEntity.ok(ostostapahtuma) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", "Ostostapahtumaa ei löytynyt"));
+        Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id).orElse(null);
+        return ostostapahtuma != null ? ResponseEntity.ok(ostostapahtuma)
+                : ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Collections.singletonMap("error", "Ostostapahtumaa ei löytynyt"));
     }
-
 
     @PostMapping("/ostostapahtumat")
     public ResponseEntity<Ostostapahtuma> lisaaOstosTapahtuma(@RequestBody Ostostapahtuma ostostapahtuma) {
@@ -114,18 +115,6 @@ public class TGRestController {
         Ostostapahtuma savedOstostapahtuma = ostostapahtumaRepository.save(ostostapahtuma);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOstostapahtuma);
     }
-
-    @PatchMapping("/ostostapahtumat/{id}/myyntiaika")
-    public ResponseEntity<Ostostapahtuma> paivitaMyyntiaika(@PathVariable Long id, @RequestBody Map<String, LocalDateTime> haeMyyntiaika) {
-        Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id).orElse(null);
-        if (ostostapahtuma == null) {
-            return ResponseEntity.notFound().build();
-        }
-        LocalDateTime myyntiaika = haeMyyntiaika.get("myyntiaika");
-        ostostapahtuma.setMyyntiaika(myyntiaika);
-        Ostostapahtuma savedOstostapahtuma = ostostapahtumaRepository.save(ostostapahtuma);
-        return ResponseEntity.ok(savedOstostapahtuma);
-    } // Muutetaan
 
     @PostMapping("/liput")
     public ResponseEntity<LippuDTO> luoLippu(@RequestBody Lippu uusiLippu) {

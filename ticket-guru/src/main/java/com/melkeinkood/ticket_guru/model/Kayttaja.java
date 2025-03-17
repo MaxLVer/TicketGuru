@@ -44,11 +44,11 @@ public class Kayttaja {
         this.sukunimi = sukunimi;
     }
 
-    public Long getId() {
+    public Long getKayttajaId() {
         return kayttajaId;
     }
 
-    public void setId(Long kayttajaId) {
+    public void setKayttajaId(Long kayttajaId) {
         this.kayttajaId = kayttajaId;
     }
 

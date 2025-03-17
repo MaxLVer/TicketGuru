@@ -80,11 +80,11 @@ public class Tapahtuma {
         this.jaljellaOlevaLippumaara = jaljellaOlevaLippumaara;
     }
 
-    public Long getId() {
+    public Long getTapahtumaId() {
         return tapahtumaId;
     }
 
-    public void setId(Long tapahtumaId){
+    public void setTapahtumaId(Long tapahtumaId){
         this.tapahtumaId = tapahtumaId;
     }
 

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.melkeinkood.ticket_guru.model.*;
@@ -40,8 +40,6 @@ public class OstostapahtumaController {
     }
 
     @PostMapping("/ostostapahtumat")
-    // public ResponseEntity<Ostostapahtuma> lisaaOstostapahtuma(@RequestBody
-    // OstostapahtumaDTO ostostapahtumaDTO) {
     public ResponseEntity<OstostapahtumaDTO> lisaaOstostapahtuma(@RequestBody OstostapahtumaDTO ostostapahtumaDTO) {
         Kayttaja kayttaja = kayttajaRepository
                 .findByKayttajaId(ostostapahtumaDTO.getKayttajaId());
@@ -53,7 +51,7 @@ public class OstostapahtumaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ostostapahtumaDTO);
     }
 
-    @PutMapping("/ostostapahtumat/{id}/myyntiaika")
+    @PatchMapping("/ostostapahtumat/{id}/myyntiaika")
     public ResponseEntity<Ostostapahtuma> paivitaMyyntiaika(@PathVariable Long id,
             @RequestBody Map<String, LocalDateTime> haeMyyntiaika) {
         Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id).orElse(null);
@@ -64,5 +62,5 @@ public class OstostapahtumaController {
         ostostapahtuma.setMyyntiaika(myyntiaika);
         Ostostapahtuma savedOstostapahtuma = ostostapahtumaRepository.save(ostostapahtuma);
         return ResponseEntity.ok(savedOstostapahtuma);
-    }
+    } // Muutetaan
 }
