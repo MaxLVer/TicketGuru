@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.melkeinkood.ticket_guru.repositories.TapahtumaRepository;
-import com.melkeinkood.ticket_guru.repositories.TapahtumapaikkaRepository;
 
 @Controller
 public class TGController {
