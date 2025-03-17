@@ -5,10 +5,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 public class OstostapahtumaDTO {
-    private Long ostostapahtumaId;
-    private LocalDateTime myyntiaika;
-    private Long kayttajaId;
+    @Getter @Setter private Long ostostapahtumaId;
+    @Getter @Setter private LocalDateTime myyntiaika;
+    @Getter @Setter private Long kayttajaId;
+
 }

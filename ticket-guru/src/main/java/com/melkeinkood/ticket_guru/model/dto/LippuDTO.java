@@ -22,7 +22,7 @@ public class LippuDTO {
         this.voimassaoloaika = lippu.getVoimassaoloaika();
         this.status = lippu.getStatus();
         this.tapahtumaId = (lippu.getTapahtuma() != null) ? lippu.getTapahtuma().getId() : null;
-        this.ostostapahtumaId = (lippu.getOstostapahtuma() != null) ? lippu.getOstostapahtuma().getOstostapahtumaId() : null;
+        this.ostostapahtumaId = (lippu.getOstostapahtuma() != null) ? lippu.getOstostapahtuma().getId() : null;
         this.tapahtumaLipputyyppiId = (lippu.getTapahtumaLipputyyppi() != null) ? lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId() : null;
     }
 

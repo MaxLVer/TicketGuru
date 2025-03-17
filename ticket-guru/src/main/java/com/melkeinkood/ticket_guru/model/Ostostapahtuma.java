@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 @Table(name = "ostostapahtuma")
 public class Ostostapahtuma {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="ostostapahtumaId")
     private Long ostostapahtumaId;
 
@@ -32,10 +32,10 @@ public class Ostostapahtuma {
     } 
 
     
-    public Ostostapahtuma(Kayttaja kayttaja, LocalDateTime myyntiaika) {
+    public Ostostapahtuma(LocalDateTime myyntiaika, Kayttaja kayttaja) {
         super();
-        this.kayttaja = kayttaja;
         this.myyntiaika = myyntiaika;
+        this.kayttaja = kayttaja;
     }
 
     public Ostostapahtuma(LocalDateTime myyntiaika) {

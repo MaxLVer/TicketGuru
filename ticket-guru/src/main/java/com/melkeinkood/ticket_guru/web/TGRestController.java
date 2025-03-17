@@ -1,6 +1,5 @@
 package com.melkeinkood.ticket_guru.web;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,7 +58,6 @@ public class TGRestController {
     public ResponseEntity<Tapahtuma> lisaaTapahtuma(@RequestBody TapahtumaDTO tapahtumaDTO) {
         Tapahtumapaikka tapahtumapaikka = tapahtumapaikkaRepository
                 .findByTapahtumapaikkaId(tapahtumaDTO.getTapahtumapaikkaId());
-
         Tapahtuma uusiTapahtuma = new Tapahtuma(
                 tapahtumapaikka,
                 tapahtumaDTO.getTapahtumaAika(),
@@ -94,38 +92,6 @@ public class TGRestController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @GetMapping("/ostostapahtumat")
-    public List<Ostostapahtuma> haeKaikkiOstostapahtumat() {
-    return ostostapahtumaRepository.findAll();
-    }
-
-    @GetMapping("/ostostapahtumat/{id}")
-    public ResponseEntity<Object> haeOstostapahtuma(@PathVariable Long id) {
-    Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id).orElse(null);
-    return ostostapahtuma != null ? ResponseEntity.ok(ostostapahtuma) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", "Ostostapahtumaa ei löytynyt"));
-    }
-
-
-    @PostMapping("/ostostapahtumat")
-    public ResponseEntity<Ostostapahtuma> lisaaOstosTapahtuma(@RequestBody Ostostapahtuma ostostapahtuma) {
-        Kayttaja kayttaja = kayttajaRepository.findByKayttajaId(ostostapahtuma.getKayttaja().getKayttajaId());
-        ostostapahtuma.setKayttaja(kayttaja);
-        Ostostapahtuma savedOstostapahtuma = ostostapahtumaRepository.save(ostostapahtuma);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedOstostapahtuma);
-    }
-
-    @PutMapping("/ostostapahtumat/{id}/myyntiaika")
-    public ResponseEntity<Ostostapahtuma> paivitaMyyntiaika(@PathVariable Long id, @RequestBody Map<String, LocalDateTime> haeMyyntiaika) {
-        Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id).orElse(null);
-        if (ostostapahtuma == null) {
-            return ResponseEntity.notFound().build();
-        }
-        LocalDateTime myyntiaika = haeMyyntiaika.get("myyntiaika");
-        ostostapahtuma.setMyyntiaika(myyntiaika);
-        Ostostapahtuma savedOstostapahtuma = ostostapahtumaRepository.save(ostostapahtuma);
-        return ResponseEntity.ok(savedOstostapahtuma);
     }
 
     @PostMapping("/liput")
