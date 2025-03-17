@@ -36,7 +36,16 @@ public class TicketGuruApplication {
 	}
 
 	@Bean
-	public CommandLineRunner tapahtumaData(TapahtumaRepository tapahtumaRepository, TapahtumapaikkaRepository tapahtumapaikkaRepository, PostinumeroRepository postinumeroRepository, AsiakastyyppiRepository asiakastyyppiRepository, KayttajaRepository kayttajaRepository, LippuRepository lippuRepository, OstostapahtumaRepository ostostapahtumaRepository, RooliRepository rooliRepository, TapahtumaLipputyyppiRepository tapahtumaLipputyyppiRepository){
+	public CommandLineRunner tapahtumaData(
+			TapahtumaRepository tapahtumaRepository, 
+			TapahtumapaikkaRepository tapahtumapaikkaRepository, 
+			PostinumeroRepository postinumeroRepository, 
+			AsiakastyyppiRepository asiakastyyppiRepository, 
+			KayttajaRepository kayttajaRepository, 
+			LippuRepository lippuRepository, 
+			OstostapahtumaRepository ostostapahtumaRepository, 
+			RooliRepository rooliRepository, 
+			TapahtumaLipputyyppiRepository tapahtumaLipputyyppiRepository){
 		
 		return (args) -> {
 			Postinumero p00250 = new Postinumero("00250", "Helsinki");
@@ -102,6 +111,17 @@ public class TicketGuruApplication {
 			Lippu lippu1 = (new Lippu("xxx", ostostapahtuma1, lipputyyppi1, LocalDateTime.of(2025, 6, 1, 20, 0), LippuStatus.MYYTAVANA, tapahtuma1));
 			lippuRepository.save(lippu1);
 
+			Tapahtuma tapahtuma = tapahtumaRepository.findById(1L).orElseThrow(() -> new RuntimeException("Tapahtuma not found"));
+        	Asiakastyyppi vipLippu = new Asiakastyyppi("VIP-lippu");
+        	asiakastyyppiRepository.save(vipLippu);
+
+        	TapahtumaLipputyyppi uusiLipputyyppi = new TapahtumaLipputyyppi(
+                tapahtuma,
+                vipLippu,
+                new BigDecimal("50.00")
+        	);
+
+        	tapahtumaLipputyyppiRepository.save(uusiLipputyyppi);
 		};
 	}
 }
