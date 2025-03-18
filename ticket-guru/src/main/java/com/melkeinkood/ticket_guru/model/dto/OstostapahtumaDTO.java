@@ -5,9 +5,17 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-public class OstostapahtumaDTO {
-    @Getter @Setter private Long ostostapahtumaId;
-    @Getter @Setter private LocalDateTime myyntiaika;
-    @Getter @Setter private Long kayttajaId;
+@Getter
+@Setter
 
+public class OstostapahtumaDTO {
+    private Long ostostapahtumaId;
+    private LocalDateTime myyntiaika;
+    private Long kayttajaId;
+
+    public OstostapahtumaDTO(Long ostostapahtumaId, LocalDateTime myyntiaika, Long kayttajaId){
+        this.ostostapahtumaId = ostostapahtumaId;
+        this.myyntiaika = myyntiaika;
+        this.kayttajaId = kayttajaId;
+    }
 }
