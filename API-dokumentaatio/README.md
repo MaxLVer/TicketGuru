@@ -22,5 +22,5 @@ Määräaikaisesti julkiset
 ### Ostostapahtumat
 - [Näytä ostostapahtumat / Näytä yksi ostostapahtuma](ostostapahtumat/get.md): GET
 - [Lisää ostostapahtuma](ostostapahtumat/add.md): POST
-- [Muokkaa ostostapahtumaa](ostostapahtumat/put.md): PUT
+- [Muokkaa ostostapahtumaa](ostostapahtumat/put.md): PATCH
 ---

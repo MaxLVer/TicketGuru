@@ -8,7 +8,7 @@ Toiminnon avulla voidaan päivittää ostostapahtuman myyntiaika tietokannassa.
 
 ---
 
-**Metodi**: `PUT`
+**Metodi**: `PATCH`
 
 **Data ehdot**
 
