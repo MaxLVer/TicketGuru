@@ -95,7 +95,7 @@ public class TGRestController {
         }
     }
 
-    @GetMapping("/ostostapahtumat")
+    /* @GetMapping("/ostostapahtumat")
     public List<Ostostapahtuma> haeKaikkiOstostapahtumat() {
         return ostostapahtumaRepository.findAll();
     }
@@ -114,7 +114,7 @@ public class TGRestController {
         ostostapahtuma.setKayttaja(kayttaja);
         Ostostapahtuma savedOstostapahtuma = ostostapahtumaRepository.save(ostostapahtuma);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOstostapahtuma);
-    }
+    } */
 
     @PostMapping("/liput")
     public ResponseEntity<LippuDTO> luoLippu(@RequestBody Lippu uusiLippu) {
