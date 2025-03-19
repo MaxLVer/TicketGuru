@@ -116,42 +116,6 @@ public class TapahtumaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOstostapahtuma);
     } */
 
-    @PostMapping("/liput")
-    public ResponseEntity<LippuDTO> luoLippu(@RequestBody Lippu uusiLippu) {
-
-        TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiRepository
-                .findById(uusiLippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId())
-                .orElseThrow(() -> new IllegalArgumentException("Lipputyyppiä ei löydy"));
-
-        Tapahtuma tapahtuma = tapahtumaRepository
-                .findById(uusiLippu.getTapahtuma().getTapahtumaId())
-                .orElseThrow(() -> new IllegalArgumentException("Tapahtumaa ei löydy"));
-
-        Ostostapahtuma ostostapahtuma = ostostapahtumaRepository
-                .findById(uusiLippu.getOstostapahtuma().getOstostapahtumaId())
-                .orElseThrow(() -> new IllegalArgumentException("Ostostapahtumaa ei löydy"));
-
-        uusiLippu.setTapahtumaLipputyyppi(tapahtumaLipputyyppi);
-        uusiLippu.setTapahtuma(tapahtuma);
-        uusiLippu.setOstostapahtuma(ostostapahtuma);
-
-        Lippu tallennettuLippu = lippuRepository.save(uusiLippu);
-
-        LippuDTO lippuDTO = new LippuDTO(tallennettuLippu);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(lippuDTO);
-    }
-
-    @GetMapping("/liput")
-    public List<LippuDTO> haeKaikkiLiput() {
-
-        List<Lippu> liput = lippuRepository.findAll();
-
-        List<LippuDTO> lippuDTOt = liput.stream()
-                .map(LippuDTO::new)
-                .collect(Collectors.toList());
-
-        return lippuDTOt;
-    }
+   
 
 }
