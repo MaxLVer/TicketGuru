@@ -110,7 +110,7 @@ public class LippuController {
         Tapahtuma tapahtuma = tapahtumaRepository.findByTapahtumaId(lippu.getTapahtuma().getTapahtumaId());
 
         TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiRepository.findById(lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId())
-            .orElseThrow(() -> new ResourceNotFoundException("tapahtumalipputyyppiä ei löydy ID:llä + lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId()"));
+            .orElseThrow(() -> new ResourceNotFoundException("tapahtumalipputyyppiä ei löydy ID:llä: " + lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId()));
 
         Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(lippu.getOstostapahtuma().getOstostapahtumaId())
             .orElseThrow(() -> new ResourceNotFoundException("Ostostapahtumaa ei löydy ID:llä: " + lippu.getOstostapahtuma().getOstostapahtumaId()));
@@ -132,4 +132,18 @@ public class LippuController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/liput/{id}")
+    public ResponseEntity<EntityModel<Lippu>> muokkaaLippua(@RequestBody Lippu lippu, @PathVariable("id") Long lippuId){
+        if(lippuRepository.existsById(lippuId)){
+            lippu.setLippuId(lippuId);
+            Lippu muokattuLippu = lippuRepository.save(lippu);
+            return ResponseEntity.status(HttpStatus.OK).body(toEntityModel(muokattuLippu));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    
+    }
+
+
 }
