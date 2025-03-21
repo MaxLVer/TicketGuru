@@ -1,6 +1,5 @@
 package com.melkeinkood.ticket_guru.model;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -8,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 
@@ -53,51 +51,47 @@ public class Lippu {
     @Column(name = "voimassaoloaika")
     private LocalDateTime voimassaoloaika;
 
-    @Enumerated(EnumType.STRING)
-    private LippuStatus status;
+    
 
     
 
 
     public Lippu(Long lippuId, @NotNull @Size(min = 1, max = 20) String tunniste, Ostostapahtuma ostostapahtuma,
-            TapahtumaLipputyyppi tapahtumalipputyyppi, LocalDateTime voimassaoloaika, LippuStatus status, Tapahtuma tapahtuma) {
+            TapahtumaLipputyyppi tapahtumalipputyyppi, LocalDateTime voimassaoloaika, Tapahtuma tapahtuma) {
         this.lippuId = lippuId;
         this.tunniste = tunniste;
         this.ostostapahtuma = ostostapahtuma;
         this.tapahtumalipputyyppi = tapahtumalipputyyppi;
         this.voimassaoloaika = voimassaoloaika;
-        this.status = status;
         this.tapahtuma = tapahtuma;
     }
 
     public Lippu(@NotNull @Size(min = 1, max = 20) String tunniste, Ostostapahtuma ostostapahtuma,
-            TapahtumaLipputyyppi tapahtumalipputyyppi, LocalDateTime voimassaoloaika, LippuStatus status, Tapahtuma tapahtuma) {
+            TapahtumaLipputyyppi tapahtumalipputyyppi, LocalDateTime voimassaoloaika, Tapahtuma tapahtuma) {
         this.tunniste = tunniste;
         this.ostostapahtuma = ostostapahtuma;
         this.tapahtumalipputyyppi = tapahtumalipputyyppi;
         this.voimassaoloaika = voimassaoloaika;
-        this.status = status;
         this.tapahtuma = tapahtuma;
     }
 
 
 
-    public Lippu(@NotNull @Size(min = 1, max = 20) String tunniste, LocalDateTime voimassaoloaika, LippuStatus status) {
+    public Lippu(@NotNull @Size(min = 1, max = 20) String tunniste, LocalDateTime voimassaoloaika) {
         this.tunniste = tunniste;
         this.voimassaoloaika = voimassaoloaika;
-        this.status = status;
+
     }
 
 
 
 
 
-    public Lippu(Long lippuId, @NotNull @Size(min = 1, max = 20) String tunniste, LocalDateTime voimassaoloaika,
-            LippuStatus status) {
+    public Lippu(Long lippuId, @NotNull @Size(min = 1, max = 20) String tunniste, LocalDateTime voimassaoloaika
+            ) {
         this.lippuId = lippuId;
         this.tunniste = tunniste;
         this.voimassaoloaika = voimassaoloaika;
-        this.status = status;
     }
 
 
@@ -133,13 +127,6 @@ public class Lippu {
         this.voimassaoloaika = voimassaoloaika;
     }
 
-    public LippuStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LippuStatus status) {
-        this.status = status;
-    }
 
     public Ostostapahtuma getOstostapahtuma() {
         return ostostapahtuma;
