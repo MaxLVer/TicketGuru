@@ -34,14 +34,26 @@ public class LippuController {
     @Autowired
     TapahtumaLipputyyppiRepository tapahtumaLipputyyppiRepository;
 
-    private EntityModel<Lippu> toEntityModel(Lippu lippu){
+    private EntityModel<LippuDTO> toEntityModel(LippuDTO lippuDTO){
         
-        Link selfLink = linkTo(methodOn(LippuController.class).haeLippu(lippu.getLippuId())).withSelfRel();
-        Link tapahtumaLink = linkTo(methodOn(TapahtumaController.class).haeTapahtuma(lippu.getTapahtuma().getTapahtumaId())).withRel("tapahtuma");
-        Link tapahtumaLipputyyppiLink = linkTo(methodOn(TapahtumaLippuTyyppiController.class).haeTapahtumaLipputyyppi(lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId())).withRel("tapahtumalipputyyppi");
-        Link ostostapahtumaLink = linkTo(methodOn(OstostapahtumaController.class).haeOstostapahtuma(lippu.getOstostapahtuma().getOstostapahtumaId())).withRel("ostostapahtuma");
+        Link selfLink = linkTo(methodOn(LippuController.class).haeLippu(lippuDTO.getLippuId())).withSelfRel();
+        Link tapahtumaLink = linkTo(methodOn(TapahtumaController.class).haeTapahtuma(lippuDTO.getTapahtumaId())).withRel("tapahtuma");
+        Link tapahtumaLipputyyppiLink = linkTo(methodOn(TapahtumaLippuTyyppiController.class).haeTapahtumaLipputyyppi(lippuDTO.getTapahtumaLipputyyppiId())).withRel("tapahtumalipputyyppi");
+        Link ostostapahtumaLink = linkTo(methodOn(OstostapahtumaController.class).haeOstostapahtuma(lippuDTO.getOstostapahtumaId())).withRel("ostostapahtuma");
         
-        return EntityModel.of(lippu, selfLink, tapahtumaLink, tapahtumaLipputyyppiLink, ostostapahtumaLink);
+        return EntityModel.of(lippuDTO, selfLink, tapahtumaLink, tapahtumaLipputyyppiLink, ostostapahtumaLink);
+    }
+
+    private LippuDTO convertToDTO(Lippu lippu){
+        LippuDTO dto = new LippuDTO();
+        dto.setLippuId(lippu.getLippuId());
+        dto.setTunniste(lippu.getTunniste());
+        dto.setVoimassaoloaika(lippu.getVoimassaoloaika());
+        dto.setOstostapahtumaId(lippu.getOstostapahtuma().getOstostapahtumaId());
+        dto.setTapahtumaId(lippu.getTapahtuma().getTapahtumaId());
+        dto.setTapahtumaLipputyyppiId(lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId());
+        return dto;
+
     }
     
     /* @PostMapping("/liput")
@@ -86,41 +98,48 @@ public class LippuController {
     public ResponseEntity<Object> haeLippu(@PathVariable Long id){
         Lippu lippu = lippuRepository.findById(id).orElse(null);
         if (lippu != null){
-            return ResponseEntity.ok(toEntityModel(lippu));
+            LippuDTO lippuDTO = new LippuDTO(lippu);
+            return ResponseEntity.ok(toEntityModel(lippuDTO));
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("/liput")
-    public ResponseEntity<CollectionModel<EntityModel<Lippu>>> haeKaikkiLiput(){
+    public ResponseEntity<List<EntityModel<LippuDTO>>> haeKaikkiLiput(){
         List<Lippu> liput = lippuRepository.findAll();
-        List<EntityModel<Lippu>> liputModel = liput.stream()
-            .map(this::toEntityModel)
+        List<EntityModel<LippuDTO>> liputModel = liput.stream()
+            .map(lippu -> toEntityModel(convertToDTO(lippu)))
             .collect(Collectors.toList());
         if(liputModel != null){
-            return ResponseEntity.ok(CollectionModel.of(liputModel));
+            return ResponseEntity.ok(liputModel);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping("/liput")
-    public ResponseEntity<EntityModel<Lippu>> luoLippu(@RequestBody Lippu lippu){
-        Tapahtuma tapahtuma = tapahtumaRepository.findByTapahtumaId(lippu.getTapahtuma().getTapahtumaId());
-
-        TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiRepository.findById(lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId())
-            .orElseThrow(() -> new ResourceNotFoundException("tapahtumalipputyyppiä ei löydy ID:llä: " + lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId()));
-
-        Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(lippu.getOstostapahtuma().getOstostapahtumaId())
-            .orElseThrow(() -> new ResourceNotFoundException("Ostostapahtumaa ei löydy ID:llä: " + lippu.getOstostapahtuma().getOstostapahtumaId()));
-
-        lippu.setTapahtumaLipputyyppi(tapahtumaLipputyyppi);
-        lippu.setTapahtuma(tapahtuma);
-        lippu.setOstostapahtuma(ostostapahtuma);
-        lippuRepository.save(lippu);
+    public ResponseEntity<EntityModel<LippuDTO>> luoLippu(@RequestBody LippuDTO lippuDTO){
         
-        return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(lippu));
+        Tapahtuma tapahtuma = tapahtumaRepository.findByTapahtumaId(lippuDTO.getTapahtumaId());
+
+        TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiRepository.findById(lippuDTO.getTapahtumaLipputyyppiId())
+            .orElseThrow(() -> new ResourceNotFoundException("tapahtumalipputyyppiä ei löydy ID:llä: " + lippuDTO.getTapahtumaLipputyyppiId()));
+
+        Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(lippuDTO.getOstostapahtumaId())
+            .orElseThrow(() -> new ResourceNotFoundException("Ostostapahtumaa ei löydy ID:llä: " + lippuDTO.getOstostapahtumaId()));
+
+        Lippu uusiLippu = new Lippu(
+            lippuDTO.getTunniste(),
+            ostostapahtuma,
+            tapahtumaLipputyyppi,
+            lippuDTO.getVoimassaoloaika(),
+            tapahtuma
+        );
+        Lippu tallenttuLippu = lippuRepository.save(uusiLippu);
+        
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(convertToDTO(tallenttuLippu)));
     }
 
     @DeleteMapping("/liput/{id}")
@@ -134,11 +153,11 @@ public class LippuController {
     }
 
     @PutMapping("/liput/{id}")
-    public ResponseEntity<EntityModel<Lippu>> muokkaaLippua(@RequestBody Lippu lippu, @PathVariable("id") Long lippuId){
+    public ResponseEntity<EntityModel<LippuDTO>> muokkaaLippua(@RequestBody Lippu lippu, @PathVariable("id") Long lippuId){
         if(lippuRepository.existsById(lippuId)){
             lippu.setLippuId(lippuId);
             Lippu muokattuLippu = lippuRepository.save(lippu);
-            return ResponseEntity.status(HttpStatus.OK).body(toEntityModel(muokattuLippu));
+            return ResponseEntity.status(HttpStatus.OK).body(toEntityModel(convertToDTO(muokattuLippu)));
         } else {
             return ResponseEntity.notFound().build();
         }
