@@ -95,27 +95,6 @@ public class TapahtumaController {
         }
     }
 
-    /* @GetMapping("/ostostapahtumat")
-    public List<Ostostapahtuma> haeKaikkiOstostapahtumat() {
-        return ostostapahtumaRepository.findAll();
-    }
-
-    @GetMapping("/ostostapahtumat/{id}")
-    public ResponseEntity<Object> haeOstostapahtuma(@PathVariable Long id) {
-        Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id).orElse(null);
-        return ostostapahtuma != null ? ResponseEntity.ok(ostostapahtuma)
-                : ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Collections.singletonMap("error", "Ostostapahtumaa ei löytynyt"));
-    }
-
-    @PostMapping("/ostostapahtumat")
-    public ResponseEntity<Ostostapahtuma> lisaaOstosTapahtuma(@RequestBody Ostostapahtuma ostostapahtuma) {
-        Kayttaja kayttaja = kayttajaRepository.findByKayttajaId(ostostapahtuma.getKayttaja().getKayttajaId());
-        ostostapahtuma.setKayttaja(kayttaja);
-        Ostostapahtuma savedOstostapahtuma = ostostapahtumaRepository.save(ostostapahtuma);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedOstostapahtuma);
-    } */
-
    
 
 }

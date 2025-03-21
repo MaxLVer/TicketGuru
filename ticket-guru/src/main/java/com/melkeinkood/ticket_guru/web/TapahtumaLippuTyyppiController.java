@@ -1,6 +1,7 @@
 package com.melkeinkood.ticket_guru.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.*;
@@ -20,10 +21,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 
 
 @RestController
+@RequestMapping("/tapahtumalipputyypit")
 public class TapahtumaLippuTyyppiController {
     @Autowired
     private TapahtumaLipputyyppiRepository tapahtumaLipputyyppiRepo;
@@ -34,39 +40,44 @@ public class TapahtumaLippuTyyppiController {
     @Autowired
     private AsiakastyyppiRepository asiakastyyppiRepo;
 
-    private TapahtumaLipputyyppiDTO toDTO(TapahtumaLipputyyppi tapahtumaLipputyyppi) {
-        return new TapahtumaLipputyyppiDTO(
+    private EntityModel<TapahtumaLipputyyppiDTO> toDTO(TapahtumaLipputyyppi tapahtumaLipputyyppi) {
+        TapahtumaLipputyyppiDTO dto = new TapahtumaLipputyyppiDTO(
                 tapahtumaLipputyyppi.getTapahtumaLipputyyppiId(),
                 tapahtumaLipputyyppi.getTapahtuma().getTapahtumaId(),
                 tapahtumaLipputyyppi.getAsiakastyyppi().getAsiakastyyppiId(),
                 tapahtumaLipputyyppi.getHinta()
         );
+//Testaa vain
+        return EntityModel.of(dto,
+                linkTo(methodOn(TapahtumaLippuTyyppiController.class).haeTapahtumaLipputyyppi(dto.getTapahtumaLipputyyppiId())).withSelfRel(),
+                linkTo(methodOn(TapahtumaLippuTyyppiController.class).getTapahtumaLipputyypit()).withRel("all-tapahtumalipputyypit")
+        );
     }
 
-    @GetMapping("/tapahtumalipputyypit")
-    public List<TapahtumaLipputyyppiDTO> getTapahtumaLipputyypit() {
-        return tapahtumaLipputyyppiRepo.findAll().stream()
-            .map(this::toDTO)
-            .collect(Collectors.toList());
+    @GetMapping
+    public List<EntityModel<TapahtumaLipputyyppiDTO>> getTapahtumaLipputyypit() {
+        return tapahtumaLipputyyppiRepo.findAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/tapahtumalipputyypit/{id}")
-    public ResponseEntity<TapahtumaLipputyyppiDTO> haeTapahtumaLipputyyppi(@PathVariable Long id) {
-        TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiRepo.findById(id).orElse(null);
-        return (tapahtumaLipputyyppi != null) ? 
-            ResponseEntity.ok(toDTO(tapahtumaLipputyyppi)) : ResponseEntity.notFound().build();
+    @GetMapping("/{id}")
+    public ResponseEntity<EntityModel<TapahtumaLipputyyppiDTO>> haeTapahtumaLipputyyppi(@PathVariable Long id) {
+        return tapahtumaLipputyyppiRepo.findById(id)
+                .map(this::toDTO)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
     
-    @PostMapping("/tapahtumalipputyypit")
-    public ResponseEntity<TapahtumaLipputyyppiDTO> lisaaTapahtumaLipputyyppi(@RequestBody TapahtumaLipputyyppiDTO tapahtumaLipputyyppiDTO) {
+    @PostMapping
+    public ResponseEntity<EntityModel<TapahtumaLipputyyppiDTO>> lisaaTapahtumaLipputyyppi(@RequestBody TapahtumaLipputyyppiDTO tapahtumaLipputyyppiDTO) {
         Tapahtuma tapahtuma = tapahtumaRepo
                 .findByTapahtumaId(tapahtumaLipputyyppiDTO.getTapahtumaId());
 
-        //Toimii kun asiakastyyppi DTO on lisätty
         Asiakastyyppi asiakastyyppi = asiakastyyppiRepo
                 .findByAsiakastyyppiId(tapahtumaLipputyyppiDTO.getAsiakastyyppiId())
                 .orElseThrow(() -> new RuntimeException("Asiakastyyppi not found with id: " + tapahtumaLipputyyppiDTO.getAsiakastyyppiId()));
-
 
         TapahtumaLipputyyppi uusiTapahtumaLipputyyppi = new TapahtumaLipputyyppi(
                 tapahtuma,
@@ -75,33 +86,26 @@ public class TapahtumaLippuTyyppiController {
 
         TapahtumaLipputyyppi savedTapahtumaLipputyyppi = tapahtumaLipputyyppiRepo.save(uusiTapahtumaLipputyyppi);
 
-        TapahtumaLipputyyppiDTO responseDTO = toDTO(savedTapahtumaLipputyyppi);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(savedTapahtumaLipputyyppi));
     }
 
-    @PutMapping("/tapahtumalipputyypit/{id}")
+
+    @PutMapping("/{id}")
     public ResponseEntity<?> muokkaaTapahtumaLipputyyppi(
         @PathVariable Long id,
         @RequestBody TapahtumaLipputyyppiDTO tapahtumaLipputyyppiDTO) {
     
-    Optional<TapahtumaLipputyyppi> optionalTapahtumaLipputyyppi = tapahtumaLipputyyppiRepo.findById(id);
-
-    if (optionalTapahtumaLipputyyppi.isEmpty()) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("Error: TapahtumaLipputyyppi with id " + id + " not found.");
-    }
-
-    TapahtumaLipputyyppi tapahtumaLipputyyppi = optionalTapahtumaLipputyyppi.get();
-
-    tapahtumaLipputyyppi.setHinta(tapahtumaLipputyyppiDTO.getHinta());
-
-    tapahtumaLipputyyppiRepo.save(tapahtumaLipputyyppi);
-
-    return ResponseEntity.ok("TapahtumaLipputyyppi updated successfully.");
+            return tapahtumaLipputyyppiRepo.findById(id)
+            .map(tapahtumaLipputyyppi -> {
+                tapahtumaLipputyyppi.setHinta(tapahtumaLipputyyppiDTO.getHinta());
+                tapahtumaLipputyyppiRepo.save(tapahtumaLipputyyppi);
+                return ResponseEntity.ok("TapahtumaLipputyyppi updated successfully.");
+            })
+            .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Error: TapahtumaLipputyyppi with id " + id + " not found."));
 }
 
-     @DeleteMapping("/tapahtumalipputyypit/{id}")
+     @DeleteMapping("/{id}")
      public ResponseEntity<String> deleteTapahtumaLipputyyppi(@PathVariable Long id) {
         if (!tapahtumaLipputyyppiRepo.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
