@@ -13,6 +13,8 @@ public class OstostapahtumaDTO {
     private LocalDateTime myyntiaika;
     private Long kayttajaId;
 
+    public OstostapahtumaDTO(){}
+    
     public OstostapahtumaDTO(Long ostostapahtumaId, LocalDateTime myyntiaika, Long kayttajaId){
         this.ostostapahtumaId = ostostapahtumaId;
         this.myyntiaika = myyntiaika;
