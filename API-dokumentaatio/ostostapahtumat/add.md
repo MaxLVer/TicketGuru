@@ -1,6 +1,6 @@
-# Uuden lipun lisääminen
+# Uuden ostostapahtuman lisääminen
 
-Toiminto lisää uuden lipun.
+Toiminto lisää uuden ostostapahtuman.
 
 **URL** : `/ostostapahtumat`
 
@@ -14,38 +14,39 @@ Toiminto lisää uuden lipun.
 Lisää käyttäjän id
 ```json
 {
-  "kayttaja":{
-    "kayttajaId":INTEGER
-  }
+  "kayttajaId": 1
 }
 ```
 
 
 ## Onnistunut response
 
-**Tila** : Jos kaikki on OK ja tapahtuma ei toistu.
+**Tila** : Jos kaikki on OK-
 
 **Koodi** : `201 CREATED`
 
-**Sisältö esimerkki**
+**Sisältö esimerkki:**
 ```json
 {
   "ostostapahtumaId": 2,
   "myyntiaika": null,
-  "kayttaja": {
-    "kayttajaId": 1,
-    "rooli": {
-      "rooliId": 1,
-      "nimike": "yllapito",
-      "rooli_selite": "Ylläpitäjät hallitsevat järjestelmää."
+  "kayttajaId": 1,
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/ostostapahtumat/2"
     },
-    "kayttajanimi": "test1",
-    "etunimi": "Teppo",
-    "sukunimi": "Testaaja"
-  },
-  "id": 2
+    "kayttaja": {
+      "href": "http://localhost:8080/kayttajat/1"
+    }
+  }
 }
 ```
+
+## Virhe Response
+
+**Tila** : Jos käyttäjää ei löydy
+
+**Koodi** : `404 Not Found`
 
 ## Virhe Response
 

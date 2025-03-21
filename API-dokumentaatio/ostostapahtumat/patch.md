@@ -20,10 +20,20 @@ Toiminnon avulla voidaan päivittää ostostapahtuman myyntiaika tietokannassa.
 
 **Koodi** : `200 OK`
 
-**Sisältö** :
+**Esimerkki sisältö** :
 ```json
 {
-  "myyntiaika": "2025-03-10T10:00:00"
+  "ostostapahtumaId": 1,
+  "myyntiaika": "2025-03-10T10:00:00",
+  "kayttajaId": 1,
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/ostostapahtumat/1"
+    },
+    "kayttaja": {
+      "href": "http://localhost:8080/kayttajat/1"
+    }
+  }
 }
 ```
 
@@ -34,3 +44,9 @@ Toiminnon avulla voidaan päivittää ostostapahtuman myyntiaika tietokannassa.
 **Koodi** : `404 NOT FOUND`
 
 **Sisältö** : `{}`
+
+## Virhe Response
+
+**Tila** : Jos JSON on virheellinen tai se puuttuu.
+
+**Koodi** : `400 BAD REQUEST`
