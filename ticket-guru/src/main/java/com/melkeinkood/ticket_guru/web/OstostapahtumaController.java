@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -76,7 +77,7 @@ public class OstostapahtumaController {
 
     @PostMapping("/ostostapahtumat")
     public ResponseEntity<EntityModel<OstostapahtumaDTO>> lisaaOstostapahtuma(
-            @RequestBody OstostapahtumaDTO ostostapahtumaDTO) {
+           @Validated @RequestBody OstostapahtumaDTO ostostapahtumaDTO) {
         Kayttaja kayttaja = kayttajaRepository
                 .findByKayttajaId(ostostapahtumaDTO.getKayttajaId())
                 .orElseThrow(() -> new ResourceNotFoundException(
