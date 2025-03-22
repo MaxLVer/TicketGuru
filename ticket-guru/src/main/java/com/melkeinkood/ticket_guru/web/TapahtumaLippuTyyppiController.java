@@ -56,7 +56,7 @@ public class TapahtumaLippuTyyppiController {
     @GetMapping("/{id}")
     public ResponseEntity<TapahtumaLipputyyppiDTO> haeTapahtumaLipputyyppi(@PathVariable Long id) {
         return tapahtumaLipputyyppiRepo.findById(id)
-                .map(this::toDTO)  // Convert entity to DTO with href links
+                .map(this::toDTO)  
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
