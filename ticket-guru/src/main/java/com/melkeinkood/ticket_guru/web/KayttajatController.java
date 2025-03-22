@@ -59,7 +59,7 @@ public class KayttajatController {
     }
 
 
-    @PostMapping("/kayttajat")
+   /*  @PostMapping("/kayttajat")
     public ResponseEntity<KayttajaDTO> lisaaKayttaja(@RequestBody KayttajaDTO kayttajaDTO){
        
         Rooli rooli = rooliRepo.findByRooliId(kayttajaDTO.getRooliId());
@@ -85,7 +85,7 @@ public class KayttajatController {
 
          return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     } 
-
+ */
     @PutMapping("kayttajat/{id}")
     public ResponseEntity<Kayttaja> muokkaaKayttajaa(@RequestBody Kayttaja kayttaja, @PathVariable Long id) {
         if(kayttajaRepo.existsById(id)) {

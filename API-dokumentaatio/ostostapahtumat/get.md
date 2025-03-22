@@ -32,21 +32,82 @@ Tämä toiminto listaa kaikki ostostapahtumat tai hakee yhden tietyn tapahtuman.
 
 **Koodi** : `200 OK`
 
-**Sisältö** :  
+**Sisältö esimerkki** :  
 ```json
-[
-  {
-    "id": INTEGER,
-    "kayttajaId": INTEGER,
-    "myyntiaika": DATE,
+{
+  "_embedded": {
+    "ostostapahtumaDTOes": [
+      {
+        "ostostapahtumaId": 1,
+        "myyntiaika": null,
+        "kayttajaId": 1,
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/ostostapahtumat/1"
+          },
+          "kayttaja": {
+            "href": "http://localhost:8080/kayttajat/1"
+          }
+        }
+      },
+      {
+        "ostostapahtumaId": 2,
+        "myyntiaika": null,
+        "kayttajaId": 1,
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/ostostapahtumat/2"
+          },
+          "kayttaja": {
+            "href": "http://localhost:8080/kayttajat/1"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/ostostapahtumat"
+    }
   }
-]
+}
 ```
 
 ## TAI
+### Onnistunut pyyntö – yksi
 
-**Tila** : Tapahtumalle ei ole sisältöä
+**Koodi** : `200 OK`
+
+**Sisältö esimerkki** :  
+```json
+{
+  "ostostapahtumaId": 1,
+  "myyntiaika": null,
+  "kayttajaId": 1,
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/ostostapahtumat/1"
+    },
+    "kayttaja": {
+      "href": "http://localhost:8080/kayttajat/1"
+    }
+  }
+}
+```
+## Virhe Response
+
+**Tila** : Jos ostostapahtumaa ei löydy
+
+**Koodi** : `404 Not Found`
+## Virhe Response
+**Tila** : Ostostapahtumia ei ole
 
 **Koodi** : `200 OK`
 
 **Sisältö** : `{}`
+
+## Virhe Response
+
+**Tila** : Jos JSON on virheellinen tai se puuttuu.
+
+**Koodi** : `400 BAD REQUEST`
