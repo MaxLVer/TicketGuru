@@ -10,4 +10,5 @@ import com.melkeinkood.ticket_guru.model.Rooli;
 @Repository
 public interface RooliRepository extends JpaRepository<Rooli, Long> {
     List<Rooli> findByNimike(String nimike);
+    Rooli findByRooliId(Long rooliId);
 }

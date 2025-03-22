@@ -34,7 +34,7 @@ Lisää käyttäjän id, roolin id, kayttajanimen, salasanan, etunimen, sukunime
 {
   "kayttajaId": 1,
   "kayttajanimi": "Kayttaja123",
-  "kayttajanimi": "Salasana123",
+  "salasana": "Salasana123",
   "etunimi": "Kalle",
   "sukunimi": "Kayttaja",
   "rooli": {
