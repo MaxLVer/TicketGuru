@@ -11,7 +11,11 @@ Toiminto lisää uuden tapahtuman.
 **Vaatii hyväksyntää** : TBD
 
 **Data ehdot**
-Lisää tapahtumapaikan id, tapahtuman nimi, aika, kuvaus, kokonaislippumäärä, jäljellä oleva lippumäärä
+- Lisää tapahtumapaikan id
+- Tapahtuman nimi
+- Tapahtuman aika
+- Kuvaus
+- Kokonaislippumäärä. Kokonaislippumäärä ei voi olla negatiivinen.
 ```json
 {
   "tapahtumaId": INTEGER,
@@ -19,7 +23,6 @@ Lisää tapahtumapaikan id, tapahtuman nimi, aika, kuvaus, kokonaislippumäärä
   "tapahtumaAika": DATETIME ("[YYYY-MM-DDTHH:MM:SS]"),
   "kuvaus": STRING,
   "kokonaislippumaara": INTEGER,
-  "jaljellaOlevaLippumaara": INTEGER
 }
 ```
 
@@ -32,23 +35,21 @@ Lisää tapahtumapaikan id, tapahtuman nimi, aika, kuvaus, kokonaislippumäärä
 **Sisältö esimerkki**
 ```json
 {
-    "tapahtumapaikka": {
-        "lahiosoite": "Töölönkatu 51 B",
-        "postinumero": {
-            "postinumero": "00250",
-            "kaupunki": "Helsinki",
-            "postinumeroID": 1
+    "tapahtumaId": 4,
+    "tapahtumapaikkaId": 1,
+    "tapahtumaAika": "2025-04-15T18:00:00",
+    "tapahtumaNimi": "Rock Festival",
+    "kuvaus": "Annual rock music festival.",
+    "kokonaislippumaara": 1000,
+    "jaljellaOlevaLippumaara": 1000,
+    "_links": {
+        "self": {
+            "href": "http://localhost:8080/tapahtumat/4"
         },
-        "tapahtumapaikanNimi": "Kulttuuritehdas Korjaamo",
-        "kapasiteetti": 1000,
-        "id": 1
-    },
-    "tapahtumaAika": "2025-03-10T15:00:00",
-    "tapahtumaNimi": "Kevätkonsertti",
-    "kuvaus": "Ihana kevätkonsertti kaupunginpuistossa",
-    "kokonaislippumaara": 500,
-    "jaljellaOlevaLippumaara": 250,
-    "id": 3
+        "tapahtumapaikka": {
+            "href": "http://localhost:8080/tapahtumapaikat/1"
+        }
+    }
 }
 ```
 
