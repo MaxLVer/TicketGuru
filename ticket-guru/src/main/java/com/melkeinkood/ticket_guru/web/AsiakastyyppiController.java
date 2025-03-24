@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.http.HttpStatus;
 import org.springframework.hateoas.Link;
@@ -28,7 +31,6 @@ import com.melkeinkood.ticket_guru.repositories.*;
 import jakarta.validation.Valid;
 
 import com.melkeinkood.ticket_guru.model.dto.AsiakastyyppiDTO;
-
 
 @RestController
 @Validated
@@ -59,16 +61,16 @@ public class AsiakastyyppiController {
                 .map(asiakastyyppi -> toEntityModel(convertToDTO(asiakastyyppi)))
                 .collect(Collectors.toList());
 
-        if(asiakastyypitModel != null){
+        if (asiakastyypitModel != null) {
             return ResponseEntity.ok(asiakastyypitModel);
         } else {
             return ResponseEntity.notFound().build();
         }
-        
+
     }
 
     @GetMapping("/asiakastyypit/{id}")
-    public ResponseEntity<Object> haeAsiakastyyppi( @PathVariable Long id) {
+    public ResponseEntity<Object> haeAsiakastyyppi(@PathVariable Long id) {
         Asiakastyyppi asiakasTyyppi = asiakastyyppiRepository.findById(id).orElse(null);
         if (asiakasTyyppi != null) {
             AsiakastyyppiDTO asiakastyyppiDTO = new AsiakastyyppiDTO(asiakasTyyppi);
@@ -79,7 +81,16 @@ public class AsiakastyyppiController {
     }
 
     @PostMapping("/asiakastyypit")
-    public ResponseEntity<EntityModel<AsiakastyyppiDTO>> lisaaAsiakastyyppi(@Valid @RequestBody AsiakastyyppiDTO asiakastyyppiDTO) {
+    public ResponseEntity<?> lisaaAsiakastyyppi(@Valid @RequestBody AsiakastyyppiDTO asiakastyyppiDTO,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
+        if (asiakastyyppiDTO.getAsiakastyyppi().isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", ("Asiakastyyppi ei voi olla tyhjä")));}
         Asiakastyyppi uusiAsiakastyyppi = new Asiakastyyppi();
         uusiAsiakastyyppi.setAsiakastyyppi(asiakastyyppiDTO.getAsiakastyyppi());
         asiakastyyppiRepository.save(uusiAsiakastyyppi);
@@ -99,8 +110,18 @@ public class AsiakastyyppiController {
     }
 
     @PutMapping("/asiakastyypit/{id}")
-    public ResponseEntity<EntityModel<AsiakastyyppiDTO>> muokkaaAsiakastyyppiä(@Valid @RequestBody Asiakastyyppi asiakastyyppi,
-            @PathVariable("id") Long asiakastyyppiId) {
+    public ResponseEntity<?> muokkaaAsiakastyyppiä(
+            @Valid @RequestBody Asiakastyyppi asiakastyyppi,
+            @PathVariable("id") Long asiakastyyppiId, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
+        if (asiakastyyppi.getAsiakastyyppi().isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", ("Asiakastyyppi ei voi olla tyhjä")));
+        }
         if (asiakastyyppiRepository.existsById(asiakastyyppiId)) {
             asiakastyyppi.setAsiakastyyppiId(asiakastyyppiId);
             Asiakastyyppi muokattuAsiakastyyppi = asiakastyyppiRepository.save(asiakastyyppi);

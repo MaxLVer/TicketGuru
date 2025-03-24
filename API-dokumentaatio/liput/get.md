@@ -68,3 +68,9 @@ Toiminto listaa kaikki liput tai näyttää yhden lipun
 **Koodi** : `200 OK`
 
 **Sisältö** : `{}`
+
+## Virhe Response
+
+**Tila** : Lippua ei löydy.
+
+**Koodi** : `404 NOT FOUND`

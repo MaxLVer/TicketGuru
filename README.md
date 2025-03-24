@@ -148,9 +148,7 @@ Tapahtumakohtainen raportti jossa näkyy heti alkuun:
 > lippu_id | int PK | Lipun id
 > ostostapahtuma_id | int fk |  Ostostapahtuma, viittaus [Ostostapahtumat](#Ostostapahtumat)-tauluun
 > tunniste | varchar(20) | Lipuntarkastus tunniste
-> voimassaoloaika | Date | Lipun voimassaoloaika
 > tapahtuma_lipputyyppi_id | int FK | Tapahtuma Lipputyyppi, viittaus [Tapahtuma Lipputyyppit](#Tapahtuma_Lipputyypit)-tauluun
-> status | varchar(10) | Lipun status (myytävänä, myyty, myytävänä ovella)
 > tapahtuma_id | int fk | Tapahtuma, viittaus [Tapahtumat](#Tapahtumat)-tauluun
 
 > ### _Asiakastyypit_

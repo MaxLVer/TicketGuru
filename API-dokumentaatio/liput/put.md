@@ -58,8 +58,6 @@ Lisää lipun tunniste, voimassaoloaika, ostostapahtuman id, tapahtuman id ja ta
 
 ## Virhe Response
 
-### Tai
-
 **Tila** : Jos kenttiä puuttuu tai niissä on virheitä.
 
 **Koodi** : `400 BAD REQUEST`

@@ -26,7 +26,7 @@ Lisää lipun tunniste, voimassaoloaika, ostostapahtuman id, tapahtuman id ja ta
 
 ## Onnistunut response
 
-**Tila** : Jos kaikki on OK ja tapahtuma ei toistu.
+**Tila** : Jos kaikki on OK.
 
 **Koodi** : `201 CREATED`
 

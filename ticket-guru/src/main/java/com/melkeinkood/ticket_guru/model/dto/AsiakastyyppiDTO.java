@@ -13,8 +13,7 @@ import jakarta.validation.constraints.Size;
 public class AsiakastyyppiDTO {
     private Long asiakastyypiId;
 
-    @NotNull
-    @Size(min=1 , max=100)
+    @NotNull(message = "Asiakastyyppi ei voi olla tyhjä")
     private String asiakastyyppi;
     
     public AsiakastyyppiDTO(Asiakastyyppi asiakasTyyppi) {
