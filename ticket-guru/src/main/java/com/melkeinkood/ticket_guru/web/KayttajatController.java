@@ -1,27 +1,28 @@
 package com.melkeinkood.ticket_guru.web;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.melkeinkood.ticket_guru.model.Kayttaja;
 import com.melkeinkood.ticket_guru.model.Rooli;
 import com.melkeinkood.ticket_guru.repositories.KayttajaRepository;
-import com.melkeinkood.ticket_guru.repositories.OstostapahtumaRepository;
+import com.melkeinkood.ticket_guru.repositories.RooliRepository;
 import com.melkeinkood.ticket_guru.model.dto.KayttajaDTO;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
-@Controller
+@RestController
 public class KayttajatController {
 
 
@@ -29,23 +30,38 @@ public class KayttajatController {
     private KayttajaRepository kayttajaRepo;
 
     @Autowired
-    private OstostapahtumaRepository ostostapahtumaRepo;
+    private RooliRepository rooliRepo;
+
+    private KayttajaDTO toDTO(Kayttaja kayttaja) {
+        return new KayttajaDTO(
+            kayttaja.getKayttajaId(),
+            kayttaja.getRooli().getRooliId(),
+            kayttaja.getKayttajanimi(),
+            kayttaja.getSalasana(),
+            kayttaja.getEtunimi(),
+            kayttaja.getSukunimi()
+        );
+    }
+
 
     @GetMapping("/kayttajat")
-    public Iterable<Kayttaja> haeKaikkiKayttajat() {
-        return kayttajaRepo.findAll();
+    public List<KayttajaDTO> haeKaikkiKayttajat() {
+        return kayttajaRepo.findAll().stream()
+        .map(this::toDTO)
+        .collect(Collectors.toList());
     }
 
     @GetMapping("/kayttajat/{id}")
-    public ResponseEntity<Object> haeKayttaja(@PathVariable Long id) {
+    public ResponseEntity<KayttajaDTO> haeKayttaja(@PathVariable Long id) {
         Kayttaja kayttaja = kayttajaRepo.findById(id).orElse(null);
-        return ResponseEntity.ok(kayttaja != null ? kayttaja : Collections.emptyMap());
+        return (kayttaja != null) ?
+        ResponseEntity.ok(toDTO(kayttaja)) : ResponseEntity.notFound().build();
     }
 
 
    /*  @PostMapping("/kayttajat")
     public ResponseEntity<KayttajaDTO> lisaaKayttaja(@RequestBody KayttajaDTO kayttajaDTO){
-        //Toimii kun rooli on lisätty
+       
         Rooli rooli = rooliRepo.findByRooliId(kayttajaDTO.getRooliId());
 
          Kayttaja uusiKayttaja = new Kayttaja(

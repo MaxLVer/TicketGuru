@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "ostostapahtuma")
@@ -27,6 +28,7 @@ public class Ostostapahtuma {
     @Column(name = "myyntiaika")
     private LocalDateTime myyntiaika;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "kayttajaId")
     private Kayttaja kayttaja;
