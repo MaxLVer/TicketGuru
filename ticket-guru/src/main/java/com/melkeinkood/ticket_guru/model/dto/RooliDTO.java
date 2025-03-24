@@ -18,6 +18,8 @@ public class RooliDTO {
         this.rooliSelite = rooli.getRooliSelite();
 
     }
+
+    public RooliDTO(){}
     }
     
 
