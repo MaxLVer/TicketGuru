@@ -7,47 +7,61 @@ Toiminnon avulla voidaan muokata yhtä tietokannassa olevaa tapahtumaa
 
 **URL Parameters** : `id` vastaa tietokannassa Tapahtumat-taulun primary keytä.
 
----
-
 **Metodi**: `PUT`
+
+**Vaatii tunnistautumisen** : TBD
+
+**Vaatii hyväksyntää** : TBD
 
 **Data ehdot**
 
--
+- Joko tapahtumapaikan id:n, tapahtumapaikan nimi, tapahtumaaika, tapahtuman nimi, kuvaus, kokonaislippumäärän muokkaaminen.
 
-## Onnistunut response
-
-**Tila** : Tietue löytyy ja sitä on muokattu onnistuneesti
-
-**Koodi** : `200 OK`
-
-**Sisältö** :
 ```json
 {
-  "tapahtumapaikka": {
-    "lahiosoite": string,
-    "postinumero": {
-      "postinumero": string,
-      "kaupunki": string
-    },
-    "tapahtumapaikanNimi": string,
-    "kapasiteetti": int,
-    "id": 1
-  },
-  "tapahtumaAika": date,
-  "tapahtumaNimi": string,
-  "kuvaus": string,
-  "kokonaislippumaara": int,
-  "jaljellaOlevaLippumaara": int,
-  "id": 3,
-  "tapahtumatLipputyyppi": []
+  "tapahtumapaikkaId": INT
+}
+```
+tai
+```json
+{
+  "tapahtumaAika": DATE
+}
+```
+tai
+```json
+{
+  "tapahtumaNimi": STRING
+}
+```
+tai
+```json
+{
+  "kuvaus": STRING
+}
+```
+tai
+```json
+{
+  "kokonaislippumäärä": INT
 }
 ```
 
-## TAI
+## Onnistunut response
+
+**Tila** : Tapahtuma löytyy ja sitä on muokattu onnistuneesti
+
+**Koodi** : `200 OK`
+
+## Virhe Response
 
 **Tila** : Tapahtumaa ei ole tietokannassa
 
 **Koodi** : `404 NOT FOUND`
 
-**Sisältö** : `{}`
+## Virhe Response
+
+**Tila** : Jos JSON on virheellinen tai se puuttuu.
+
+**Koodi** : `400 BAD REQUEST`
+

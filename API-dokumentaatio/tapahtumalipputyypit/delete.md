@@ -4,6 +4,8 @@ Toiminto poistaa tapahtuma lipputyypin id:llä.
 
 **URL** : `/tapahtumalipputyypit/{id}`
 
+**URL Parameters** : `id` vastaa tietokannassa Tapahtuma lipputyypin-taulun primary keytä.
+
 **Metodi**: `DELETE`
 
 **Vaatii tunnistautumisen** : TBD

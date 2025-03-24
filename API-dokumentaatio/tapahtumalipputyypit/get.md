@@ -22,11 +22,12 @@ Tämä toiminto listaa kaikki tapahtuma lipputyypit tai hakee yhden tietyn tapah
 **Metodi**: `GET`
 
 **Vaatii tunnistautumisen** : TBD  
+
 **Vaatii hyväksyntää** : TBD  
 
 ---
 
-## Response
+## Onnistunut Response
 
 ### Onnistunut pyyntö – kaikki tapahtuma lipputyypit
 

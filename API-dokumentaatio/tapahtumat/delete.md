@@ -14,21 +14,21 @@ Poistaa tapahtuman.
 
 **Data** : `{}`
 
-## Success Response
+## Onnistunut response
 
-**Condition** : Tapahtuman oltava tietokannssa.
+**Tila** : Jos kaikki on ok ja tapahtuma on poistettu.
 
-**Code** : `204 NO CONTENT`
+**Koodi** : `20O`
 
-**Content** : `{}`
 
-## Error Responses
+## Virhe Response
+**Tila** : Tapahtumaa ei ole tietokannassa
 
-**Condition** : Tapahtumaa ei ole tietokannassa
+**Koodi** : `404 NOT FOUND`
 
-**Code** : `404 NOT FOUND`
+**Sisältö** : `{}`
 
-**Content** : `{}`
+
 
 
 

@@ -17,9 +17,9 @@ Toiminto lisää uuden tapahtuma lipputyypin.
 - Lisää hinta. Hinta ei voi olla negatiivinen.
 ```json
 {
-  "tapahtumaId": 1,
-  "asiakastyyppiId": 1,
-  "hinta": 10.50
+  "tapahtumaId": INT,
+  "asiakastyyppiId": INT,
+  "hinta": DOUBLE
 }
 ```
 
