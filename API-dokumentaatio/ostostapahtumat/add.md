@@ -31,6 +31,7 @@ Lisää käyttäjän id
   "ostostapahtumaId": 2,
   "myyntiaika": null,
   "kayttajaId": 1,
+  "lippuIdt": [],
   "_links": {
     "self": {
       "href": "http://localhost:8080/ostostapahtumat/2"

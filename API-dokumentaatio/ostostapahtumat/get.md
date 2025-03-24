@@ -41,12 +41,18 @@ Tämä toiminto listaa kaikki ostostapahtumat tai hakee yhden tietyn tapahtuman.
         "ostostapahtumaId": 1,
         "myyntiaika": null,
         "kayttajaId": 1,
+        "lippuIdt": [
+          1
+        ],
         "_links": {
           "self": {
             "href": "http://localhost:8080/ostostapahtumat/1"
           },
           "kayttaja": {
             "href": "http://localhost:8080/kayttajat/1"
+         },
+          "liput": {
+            "href": "http://localhost:8080/liput/1"
           }
         }
       },
@@ -54,6 +60,7 @@ Tämä toiminto listaa kaikki ostostapahtumat tai hakee yhden tietyn tapahtuman.
         "ostostapahtumaId": 2,
         "myyntiaika": null,
         "kayttajaId": 1,
+        "lippuIdt": [],
         "_links": {
           "self": {
             "href": "http://localhost:8080/ostostapahtumat/2"
@@ -84,12 +91,18 @@ Tämä toiminto listaa kaikki ostostapahtumat tai hakee yhden tietyn tapahtuman.
   "ostostapahtumaId": 1,
   "myyntiaika": null,
   "kayttajaId": 1,
+  "lippuIdt": [
+   1
+  ],
   "_links": {
     "self": {
       "href": "http://localhost:8080/ostostapahtumat/1"
     },
     "kayttaja": {
       "href": "http://localhost:8080/kayttajat/1"
+    },
+    "liput": {
+      "href": "http://localhost:8080/liput/1"
     }
   }
 }

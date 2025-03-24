@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.melkeinkood.ticket_guru.model.*;
 import com.melkeinkood.ticket_guru.model.dto.OstostapahtumaDTO;
 import com.melkeinkood.ticket_guru.repositories.*;
+
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,9 +35,19 @@ public class OstostapahtumaController {
     @Autowired
     KayttajaRepository kayttajaRepository;
 
+    @Autowired
+    LippuRepository lippuRepository;
+
     private EntityModel<OstostapahtumaDTO> toEntityModel(Ostostapahtuma ostostapahtuma) {
+        List<Long> lippuIdt = new ArrayList<>();
+        if (ostostapahtuma.getLiput() != null) {
+            List<Lippu> liput = ostostapahtuma.getLiput();
+            for (Lippu lippu : liput) {
+                lippuIdt.add(lippu.getLippuId());
+            }
+        }
         OstostapahtumaDTO ostostapahtumaDTO = new OstostapahtumaDTO(ostostapahtuma.getOstostapahtumaId(),
-                ostostapahtuma.getMyyntiaika(), ostostapahtuma.getKayttaja().getKayttajaId());
+                ostostapahtuma.getMyyntiaika(), ostostapahtuma.getKayttaja().getKayttajaId(), lippuIdt);
         EntityModel<OstostapahtumaDTO> entityModel = EntityModel.of(ostostapahtumaDTO);
         Link kayttajaLink = linkTo(
                 methodOn(KayttajatController.class).haeKayttaja(ostostapahtuma.getKayttaja().getKayttajaId()))
@@ -46,6 +57,10 @@ public class OstostapahtumaController {
                 .withSelfRel();
         entityModel.add(selfLink);
         entityModel.add(kayttajaLink);
+        for (Long lippuId : lippuIdt) {
+            Link lipunLink = linkTo(methodOn(LippuController.class).haeLippu(lippuId)).withRel("liput");
+            entityModel.add(lipunLink);
+        }
         return entityModel;
     }
 
@@ -70,6 +85,7 @@ public class OstostapahtumaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Collections.singletonMap("error", "Ostostapahtumaa ei löytynyt"));
         } else {
+            ostostapahtuma.getLiput();
             EntityModel<OstostapahtumaDTO> ostostapahtumaDTO = toEntityModel(ostostapahtuma);
             return ResponseEntity.ok(ostostapahtumaDTO);
         }
@@ -77,7 +93,7 @@ public class OstostapahtumaController {
 
     @PostMapping("/ostostapahtumat")
     public ResponseEntity<EntityModel<OstostapahtumaDTO>> lisaaOstostapahtuma(
-           @Validated @RequestBody OstostapahtumaDTO ostostapahtumaDTO) {
+            @Valid @RequestBody OstostapahtumaDTO ostostapahtumaDTO) {
         Kayttaja kayttaja = kayttajaRepository
                 .findByKayttajaId(ostostapahtumaDTO.getKayttajaId())
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -106,7 +122,7 @@ public class OstostapahtumaController {
 
     @PutMapping("/ostostapahtumat/{id}")
     public ResponseEntity<EntityModel<OstostapahtumaDTO>> muokkaaOstostapahtumaa(
-            @RequestBody OstostapahtumaDTO ostostapahtumaDTO, @PathVariable Long id) {
+            @Valid @RequestBody OstostapahtumaDTO ostostapahtumaDTO, @PathVariable Long id) {
         if (ostostapahtumaRepository.existsById(id)) {
             Ostostapahtuma muokattuOstostapahtuma = ostostapahtumaRepository.findById(id).get();
             Kayttaja kayttaja = kayttajaRepository
