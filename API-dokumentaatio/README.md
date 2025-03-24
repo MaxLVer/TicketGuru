@@ -22,7 +22,21 @@ Määräaikaisesti julkiset
 ### Ostostapahtumat
 - [Näytä ostostapahtumat / Näytä yksi ostostapahtuma](ostostapahtumat/get.md): GET
 - [Lisää ostostapahtuma](ostostapahtumat/add.md): POST
-- [Lisää ostostapahtumaan myyntiaika](ostostapahtumat/patch.md): PATCH¨
+- [Lisää ostostapahtumaan myyntiaika](ostostapahtumat/patch.md): PATCH
 - [Muokkaa ostostapahtumaa](ostostapahtumat/put.md): PUT
 - [Poista ostostapahtuan](ostostapahtumat/delete.md): DELETE
 ---
+### Tapahtumapaikat
+- [Näytä tapahtumapaikat / Hae yksi tapahtumapaikka](tapahtumapaikat/get.md): GET
+- [Luo tapahtumapaikka](tapahtumapaikat/add.md): POST
+- [Muokkaa tapahtumapaikkaa](tapahtumapaikat/put.md): PUT
+- [Poista tapahtumapaikka](tapahtumapaikat/delete.md): DELETE
+---
+### Tapahtumalipputyypit
+- [Näytä tapahtumalipputyypit](tapahtumalipputyypit/get.md): GET
+- [Luo tapahtumalippu](tapahtumalipputyypit/add.md): POST
+- [Muokkaa tapahtumalipputyyppiä](tapahtumalipputyypit/put.md): PUT
+- [Poista tapahtumalipputyyppi](tapahtumalipputyypit/delete.md): DELETE
+---
+### Roolit
+- [Näytä roolit](roolit/get.md): GET
