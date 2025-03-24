@@ -15,19 +15,19 @@ Toiminto muokkaa tapahtuma lipputyyppiä.
 
 ```json
 {
-  "kayttajaId": 1
+  "kayttajaId": INT
 }
 ```
 tai
 ```json
 {
-  "asiakastyyppiId": 1
+  "asiakastyyppiId": INT
 }
 ```
 tai
 ```json
 {
-  "hinta": 1
+  "hinta": DOUBLE
 }
 ```
 
