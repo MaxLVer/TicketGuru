@@ -60,11 +60,11 @@ public class Tapahtumapaikka {
         this.kapasiteetti = kapasiteetti;
     }
 
-    public Long getId() {
+    public Long getTapahtumapaikkaId() {
         return tapahtumapaikkaId;
     }
 
-    public void setId(Long tapahtumapaikkaId){
+    public void setTapahtumapaikkaId(Long tapahtumapaikkaId){
         this.tapahtumapaikkaId = tapahtumapaikkaId;
     }
 
