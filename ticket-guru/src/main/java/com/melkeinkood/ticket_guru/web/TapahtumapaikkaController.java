@@ -29,7 +29,10 @@ public class TapahtumapaikkaController {
     @GetMapping("/tapahtumapaikat/{id}")
     public ResponseEntity<Object> getTapahtumapaikka(@PathVariable Long id) {
         Tapahtumapaikka tapahtumapaikka = tapahtumapaikkaRepository.findById(id).orElse(null);
-        return ResponseEntity.ok(tapahtumapaikka != null ? tapahtumapaikka : Collections.emptyMap());
+        if (tapahtumapaikka == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(tapahtumapaikka);
     }
 
     @PostMapping("/tapahtumapaikat")
@@ -39,8 +42,8 @@ public class TapahtumapaikkaController {
                 .findByPostinumeroId(tapahtumapaikkaDTO.getPostinumeroId());
         if (postinumero.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Palautta 404, jos postinumeron ID:tä ei ole
-                                                                        // olemassa.
-        }
+        }                                                               // olemassa.
+        
 
         Tapahtumapaikka uusiTapahtumapaikka = new Tapahtumapaikka(
                 tapahtumapaikkaDTO.getLahiosoite(),
