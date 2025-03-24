@@ -2,14 +2,12 @@ package com.melkeinkood.ticket_guru.model.dto;
 
 import java.math.BigDecimal;
 
-import org.springframework.hateoas.RepresentationModel;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class TapahtumaLipputyyppiDTO extends RepresentationModel<TapahtumaLipputyyppiDTO> {
+public class TapahtumaLipputyyppiDTO {
 
     private long tapahtumaLipputyyppiId;
     private long tapahtumaId;
