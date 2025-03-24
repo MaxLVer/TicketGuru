@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.melkeinkood.ticket_guru.model.*;
-import com.melkeinkood.ticket_guru.model.dto.LippuDTO;
 import com.melkeinkood.ticket_guru.model.dto.TapahtumaDTO;
-import com.melkeinkood.ticket_guru.model.dto.TapahtumaLipputyyppiDTO;
 import com.melkeinkood.ticket_guru.repositories.*;
 
 import jakarta.validation.Valid;
