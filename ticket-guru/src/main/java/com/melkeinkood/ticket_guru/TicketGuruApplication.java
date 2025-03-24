@@ -108,7 +108,7 @@ public class TicketGuruApplication {
 			Ostostapahtuma ostostapahtuma1 = (new Ostostapahtuma(null, kayttaja1));
 			ostostapahtumaRepository.save(ostostapahtuma1);
 
-			Lippu lippu1 = (new Lippu("xxx", ostostapahtuma1, lipputyyppi1, LocalDateTime.of(2025, 6, 1, 20, 0), tapahtuma1));
+			Lippu lippu1 = (new Lippu(ostostapahtuma1, lipputyyppi1, tapahtuma1));
 			lippuRepository.save(lippu1);
 
 			Tapahtuma tapahtuma = tapahtumaRepository.findById(1L).orElseThrow(() -> new RuntimeException("Tapahtuma not found"));

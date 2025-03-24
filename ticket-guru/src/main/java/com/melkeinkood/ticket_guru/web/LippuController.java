@@ -1,12 +1,17 @@
 package com.melkeinkood.ticket_guru.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +24,10 @@ import com.melkeinkood.ticket_guru.model.TapahtumaLipputyyppi;
 import com.melkeinkood.ticket_guru.model.dto.LippuDTO;
 import com.melkeinkood.ticket_guru.repositories.*;
 
+import jakarta.validation.Valid;
+
 @RestController
+@Validated
 public class LippuController {
     @Autowired
     TapahtumaRepository tapahtumaRepository;
@@ -33,70 +41,76 @@ public class LippuController {
     @Autowired
     TapahtumaLipputyyppiRepository tapahtumaLipputyyppiRepository;
 
-    private EntityModel<LippuDTO> toEntityModel(LippuDTO lippuDTO){
-        
+    private EntityModel<LippuDTO> toEntityModel(LippuDTO lippuDTO) {
+
         Link selfLink = linkTo(methodOn(LippuController.class).haeLippu(lippuDTO.getLippuId())).withSelfRel();
-        Link tapahtumaLink = linkTo(methodOn(TapahtumaController.class).haeTapahtuma(lippuDTO.getTapahtumaId())).withRel("tapahtuma");
-        Link tapahtumaLipputyyppiLink = linkTo(methodOn(TapahtumaLipputyyppiController.class).haeTapahtumaLipputyyppi(lippuDTO.getTapahtumaLipputyyppiId())).withRel("tapahtumalipputyyppi");
-        Link ostostapahtumaLink = linkTo(methodOn(OstostapahtumaController.class).haeOstostapahtuma(lippuDTO.getOstostapahtumaId())).withRel("ostostapahtuma");
-        
+        Link tapahtumaLink = linkTo(methodOn(TapahtumaController.class).haeTapahtuma(lippuDTO.getTapahtumaId()))
+                .withRel("tapahtuma");
+        Link tapahtumaLipputyyppiLink = linkTo(methodOn(TapahtumaLipputyyppiController.class)
+                .haeTapahtumaLipputyyppi(lippuDTO.getTapahtumaLipputyyppiId())).withRel("tapahtumalipputyyppi");
+        Link ostostapahtumaLink = linkTo(
+                methodOn(OstostapahtumaController.class).haeOstostapahtuma(lippuDTO.getOstostapahtumaId()))
+                .withRel("ostostapahtuma");
+
         return EntityModel.of(lippuDTO, selfLink, tapahtumaLink, tapahtumaLipputyyppiLink, ostostapahtumaLink);
     }
 
-    private LippuDTO convertToDTO(Lippu lippu){
+    private LippuDTO convertToDTO(Lippu lippu) {
         LippuDTO dto = new LippuDTO();
         dto.setLippuId(lippu.getLippuId());
-        dto.setTunniste(lippu.getTunniste());
-        dto.setVoimassaoloaika(lippu.getVoimassaoloaika());
         dto.setOstostapahtumaId(lippu.getOstostapahtuma().getOstostapahtumaId());
         dto.setTapahtumaId(lippu.getTapahtuma().getTapahtumaId());
         dto.setTapahtumaLipputyyppiId(lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId());
         return dto;
 
     }
-    
-    /* @PostMapping("/liput")
-    public ResponseEntity<LippuDTO> luoLippu(@RequestBody Lippu uusiLippu) {
 
-        TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiRepository
-                .findById(uusiLippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId())
-                .orElseThrow(() -> new IllegalArgumentException("Lipputyyppiä ei löydy"));
+    /*
+     * @PostMapping("/liput")
+     * public ResponseEntity<LippuDTO> luoLippu(@RequestBody Lippu uusiLippu) {
+     * 
+     * TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiRepository
+     * .findById(uusiLippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId())
+     * .orElseThrow(() -> new IllegalArgumentException("Lipputyyppiä ei löydy"));
+     * 
+     * Tapahtuma tapahtuma = tapahtumaRepository
+     * .findById(uusiLippu.getTapahtuma().getTapahtumaId())
+     * .orElseThrow(() -> new IllegalArgumentException("Tapahtumaa ei löydy"));
+     * 
+     * Ostostapahtuma ostostapahtuma = ostostapahtumaRepository
+     * .findById(uusiLippu.getOstostapahtuma().getOstostapahtumaId())
+     * .orElseThrow(() -> new IllegalArgumentException("Ostostapahtumaa ei löydy"));
+     * 
+     * uusiLippu.setTapahtumaLipputyyppi(tapahtumaLipputyyppi);
+     * uusiLippu.setTapahtuma(tapahtuma);
+     * uusiLippu.setOstostapahtuma(ostostapahtuma);
+     * 
+     * Lippu tallennettuLippu = lippuRepository.save(uusiLippu);
+     * 
+     * LippuDTO lippuDTO = new LippuDTO(tallennettuLippu);
+     * 
+     * return ResponseEntity.status(HttpStatus.CREATED).body(lippuDTO);
+     * }
+     */
 
-        Tapahtuma tapahtuma = tapahtumaRepository
-                .findById(uusiLippu.getTapahtuma().getTapahtumaId())
-                .orElseThrow(() -> new IllegalArgumentException("Tapahtumaa ei löydy"));
-
-        Ostostapahtuma ostostapahtuma = ostostapahtumaRepository
-                .findById(uusiLippu.getOstostapahtuma().getOstostapahtumaId())
-                .orElseThrow(() -> new IllegalArgumentException("Ostostapahtumaa ei löydy"));
-
-        uusiLippu.setTapahtumaLipputyyppi(tapahtumaLipputyyppi);
-        uusiLippu.setTapahtuma(tapahtuma);
-        uusiLippu.setOstostapahtuma(ostostapahtuma);
-
-        Lippu tallennettuLippu = lippuRepository.save(uusiLippu);
-
-        LippuDTO lippuDTO = new LippuDTO(tallennettuLippu);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(lippuDTO);
-    } */
-
-    /* @GetMapping("/liput")
-    public List<LippuDTO> haeKaikkiLiput() {
-
-        List<Lippu> liput = lippuRepository.findAll();
-
-        List<LippuDTO> lippuDTOt = liput.stream()
-                .map(LippuDTO::new)
-                .collect(Collectors.toList());
-
-        return lippuDTOt;
-    } */
+    /*
+     * @GetMapping("/liput")
+     * public List<LippuDTO> haeKaikkiLiput() {
+     * 
+     * List<Lippu> liput = lippuRepository.findAll();
+     * 
+     * List<LippuDTO> lippuDTOt = liput.stream()
+     * .map(LippuDTO::new)
+     * .collect(Collectors.toList());
+     * 
+     * return lippuDTOt;
+     * }
+     */
 
     @GetMapping("/liput/{id}")
-    public ResponseEntity<Object> haeLippu(@PathVariable Long id){
+    public ResponseEntity<Object> haeLippu(@PathVariable Long id) {
         Lippu lippu = lippuRepository.findById(id).orElse(null);
-        if (lippu != null){
+        if (lippu != null) {
             LippuDTO lippuDTO = new LippuDTO(lippu);
             return ResponseEntity.ok(toEntityModel(lippuDTO));
         } else {
@@ -105,12 +119,12 @@ public class LippuController {
     }
 
     @GetMapping("/liput")
-    public ResponseEntity<List<EntityModel<LippuDTO>>> haeKaikkiLiput(){
+    public ResponseEntity<List<EntityModel<LippuDTO>>> haeKaikkiLiput() {
         List<Lippu> liput = lippuRepository.findAll();
         List<EntityModel<LippuDTO>> liputModel = liput.stream()
-            .map(lippu -> toEntityModel(convertToDTO(lippu)))
-            .collect(Collectors.toList());
-        if(liputModel != null){
+                .map(lippu -> toEntityModel(convertToDTO(lippu)))
+                .collect(Collectors.toList());
+        if (liputModel != null) {
             return ResponseEntity.ok(liputModel);
         } else {
             return ResponseEntity.notFound().build();
@@ -118,32 +132,51 @@ public class LippuController {
     }
 
     @PostMapping("/liput")
-    public ResponseEntity<EntityModel<LippuDTO>> luoLippu(@RequestBody LippuDTO lippuDTO){
+    public ResponseEntity<?> luoLippu(@Valid @RequestBody LippuDTO lippuDTO, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
+
         
         Tapahtuma tapahtuma = tapahtumaRepository.findByTapahtumaId(lippuDTO.getTapahtumaId());
+        if (tapahtuma == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", ("Tapahtumaa ei löydy ID:llä " + lippuDTO.getTapahtumaId())));
+        }
 
-        TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiRepository.findById(lippuDTO.getTapahtumaLipputyyppiId())
-            .orElseThrow(() -> new ResourceNotFoundException("tapahtumalipputyyppiä ei löydy ID:llä: " + lippuDTO.getTapahtumaLipputyyppiId()));
+        Optional<TapahtumaLipputyyppi> tapahtumaLipputyyppiOptional = tapahtumaLipputyyppiRepository
+                .findById(lippuDTO.getTapahtumaLipputyyppiId());
+        if (tapahtumaLipputyyppiOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    Map.of("error", ("Tapahtumalipputyyppiä ei löydy ID:llä " + lippuDTO.getTapahtumaLipputyyppiId())));
+        }
+        TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiOptional.get();
 
-        Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(lippuDTO.getOstostapahtumaId())
-            .orElseThrow(() -> new ResourceNotFoundException("Ostostapahtumaa ei löydy ID:llä: " + lippuDTO.getOstostapahtumaId()));
+        Optional<Ostostapahtuma> ostostapahtumaOptional = ostostapahtumaRepository
+                .findById(lippuDTO.getOstostapahtumaId());
+        if (ostostapahtumaOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", ("Ostostapahtumaa ei löydy ID:llä: " + lippuDTO.getOstostapahtumaId())));
+        }
+        
+        
+        Ostostapahtuma ostostapahtuma = ostostapahtumaOptional.get();
 
         Lippu uusiLippu = new Lippu(
-            lippuDTO.getTunniste(),
-            ostostapahtuma,
-            tapahtumaLipputyyppi,
-            lippuDTO.getVoimassaoloaika(),
-            tapahtuma
-        );
+                ostostapahtuma,
+                tapahtumaLipputyyppi,
+                tapahtuma);
         Lippu tallenttuLippu = lippuRepository.save(uusiLippu);
-        
-        
+
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(convertToDTO(tallenttuLippu)));
     }
 
     @DeleteMapping("/liput/{id}")
-    public ResponseEntity<Void> poistaLippu(@PathVariable("id") Long lippuId){
-        if (lippuRepository.existsById(lippuId)){
+    public ResponseEntity<Void> poistaLippu(@PathVariable("id") Long lippuId) {
+        if (lippuRepository.existsById(lippuId)) {
             lippuRepository.deleteById(lippuId);
             return ResponseEntity.noContent().build();
         } else {
@@ -152,16 +185,60 @@ public class LippuController {
     }
 
     @PutMapping("/liput/{id}")
-    public ResponseEntity<EntityModel<LippuDTO>> muokkaaLippua(@RequestBody Lippu lippu, @PathVariable("id") Long lippuId){
-        if(lippuRepository.existsById(lippuId)){
-            lippu.setLippuId(lippuId);
-            Lippu muokattuLippu = lippuRepository.save(lippu);
-            return ResponseEntity.status(HttpStatus.OK).body(toEntityModel(convertToDTO(muokattuLippu)));
-        } else {
+    public ResponseEntity<?> muokkaaLippua(@Valid @RequestBody LippuDTO lippuDTO, @PathVariable("id") Long lippuId,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        Lippu olemassaOlevaLippu = lippuRepository.findById(lippuId).orElse(null);
+        if (olemassaOlevaLippu == null) {
             return ResponseEntity.notFound().build();
         }
-    
-    }
 
+        Tapahtuma tapahtuma = tapahtumaRepository.findByTapahtumaId(lippuDTO.getTapahtumaId());
+        if (tapahtuma == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", ("Tapahtumaa ei löydy ID:llä " + lippuDTO.getTapahtumaId())));
+        }
+
+        Optional<TapahtumaLipputyyppi> tapahtumaLipputyyppiOptional = tapahtumaLipputyyppiRepository
+                .findById(lippuDTO.getTapahtumaLipputyyppiId());
+        if (tapahtumaLipputyyppiOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    Map.of("error", ("Tapahtumalipputyyppiä ei löydy ID:llä " + lippuDTO.getTapahtumaLipputyyppiId())));
+        }
+        TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiOptional.get();
+
+        Optional<Ostostapahtuma> ostostapahtumaOptional = ostostapahtumaRepository
+                .findById(lippuDTO.getOstostapahtumaId());
+        if (ostostapahtumaOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", ("Ostostapahtumaa ei löydy ID:llä: " + lippuDTO.getOstostapahtumaId())));
+        }
+        Ostostapahtuma ostostapahtuma = ostostapahtumaOptional.get();
+
+        olemassaOlevaLippu.setTapahtuma(tapahtuma);
+        olemassaOlevaLippu.setTapahtumaLipputyyppi(tapahtumaLipputyyppi);
+        olemassaOlevaLippu.setOstostapahtuma(ostostapahtuma);
+
+        Lippu muokattuLippu = lippuRepository.save(olemassaOlevaLippu);
+
+        return ResponseEntity.ok(toEntityModel(convertToDTO(muokattuLippu)));
+
+        /*
+         * if (lippuRepository.existsById(lippuId)) {
+         * lippu.setLippuId(lippuId);
+         * Lippu muokattuLippu = lippuRepository.save(lippu);
+         * return ResponseEntity.status(HttpStatus.OK).body(toEntityModel(convertToDTO(
+         * muokattuLippu)));
+         * } else {
+         * return ResponseEntity.notFound().build();
+         * }
+         */
+
+    }
 
 }

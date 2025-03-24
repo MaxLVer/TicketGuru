@@ -26,7 +26,6 @@ public class Asiakastyyppi {
 
 
     @NotNull
-    @Size(min=1 , max=100)
     @Column(name = "asiakastyyppi")
     private String asiakastyyppi;
 
