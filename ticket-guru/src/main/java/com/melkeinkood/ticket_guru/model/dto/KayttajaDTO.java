@@ -1,5 +1,7 @@
 package com.melkeinkood.ticket_guru.model.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,8 +9,14 @@ import lombok.Setter;
 @Setter
 public class KayttajaDTO {
     private Long kayttajaId;
+    
+    @NotNull(message = "RooliId ei saa olla tyhjä")
     private Long rooliId; 
+    @NotNull(message = "Kayttajanimi ei saa olla tyhjä")
+    @Size(min = 5, max = 10, message = "Kayttajanimen pituuden tulee olla 5-10 merkkiä")
     private String kayttajanimi;
+    @NotNull(message = "Salasana ei saa olla tyhjä")
+    @Size(min = 10, max = 15, message = "Salasanan pituuden tulee olla 10-15 merkkiä")
     private String salasana;
     private String etunimi;
     private String sukunimi;
