@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 import com.melkeinkood.ticket_guru.model.*;
 import com.melkeinkood.ticket_guru.model.dto.TapahtumapaikkaDTO;
@@ -36,9 +35,16 @@ public class TapahtumapaikkaController {
     @PostMapping("/tapahtumapaikat")
     public ResponseEntity<Tapahtumapaikka> lisaaTapahtumapaikka(@RequestBody TapahtumapaikkaDTO tapahtumapaikkaDTO) {
 
+        Optional<Postinumero> postinumero = postinumeroRepository
+                .findByPostinumeroId(tapahtumapaikkaDTO.getPostinumeroId());
+        if (postinumero.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Palautta 404, jos postinumeron ID:tä ei ole
+                                                                        // olemassa.
+        }
+
         Tapahtumapaikka uusiTapahtumapaikka = new Tapahtumapaikka(
                 tapahtumapaikkaDTO.getLahiosoite(),
-                null, // Joudun hieman säätämään tämän kanssa...
+                postinumero.get(),
                 tapahtumapaikkaDTO.getTapahtumapaikanNimi(),
                 tapahtumapaikkaDTO.getKapasiteetti());
         Tapahtumapaikka savedTapahtumapaikka = tapahtumapaikkaRepository.save(uusiTapahtumapaikka);
@@ -46,19 +52,34 @@ public class TapahtumapaikkaController {
     }
 
     @PutMapping("/tapahtumapaikat/{id}")
-    public ResponseEntity<Tapahtumapaikka> muokkaaTapahtumapaikka(@RequestBody Tapahtumapaikka tapahtumapaikka,
+    public ResponseEntity<Tapahtumapaikka> muokkaaTapahtumapaikka(@RequestBody TapahtumapaikkaDTO tapahtumapaikkaDTO,
             @PathVariable Long id) {
-        if (tapahtumapaikkaRepository.existsById(id)) {
-            tapahtumapaikka.setId(id); 
-            Tapahtumapaikka savedTapahtumapaikka = tapahtumapaikkaRepository.save(tapahtumapaikka);
-            return ResponseEntity.ok(savedTapahtumapaikka); 
-        } else {
-            return ResponseEntity.notFound().build(); 
+        Optional<Tapahtumapaikka> loytynytTapahtumapaikka = tapahtumapaikkaRepository.findById(id);
+        if (loytynytTapahtumapaikka.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
+        Optional<Postinumero> postinumero = postinumeroRepository
+                .findByPostinumeroId(tapahtumapaikkaDTO.getPostinumeroId());
+        if (postinumero.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Palauttaa 400, jos väärä postinumero
+        }
+        Tapahtumapaikka tapahtumapaikka = loytynytTapahtumapaikka.get();
+        tapahtumapaikka.setLahiosoite(tapahtumapaikkaDTO.getLahiosoite());
+        tapahtumapaikka.setTapahtumapaikanNimi(tapahtumapaikkaDTO.getTapahtumapaikanNimi());
+        tapahtumapaikka.setKapasiteetti(tapahtumapaikkaDTO.getKapasiteetti());
+        tapahtumapaikka.setPostinumero(postinumero.get());
+
+        Tapahtumapaikka paivitettyTapahtumapaikka = tapahtumapaikkaRepository.save(tapahtumapaikka);
+        return ResponseEntity.ok(paivitettyTapahtumapaikka);
     }
 
-    /*
-DELETE MAPPING WHENEVER NECESSARY
-    */
-
+    @DeleteMapping("/tapahtumapaikat/{id}")
+    public ResponseEntity<Void> poistaTapahtumapaikka(@PathVariable Long id) {
+        if (!tapahtumapaikkaRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        tapahtumapaikkaRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+    //Koodi päivitetään seuraavalla sprintillä.
 }
