@@ -1,44 +1,40 @@
-# Lippujen haku
+# Olemassa olevan lipun muokkaaminen
 
-Toiminto listaa kaikki liput tai näyttää yhden lipun
-
-**Listaa kaikki liput**
-
-**URL** : `/liput/` 
-
----
-
-
-**Hakee liput-taulun ID:n avulla tietyn lipun**
+Toiminto muokkaa lippua.
 
 **URL** : `/liput/{id}`
 
-**URL Parameters** : `id` vastaa tietokannassa liput-taulun primary keytä.
-
----
-
-
-**Metodi**: `GET`
+**Metodi**: `PUT`
 
 **Vaatii tunnistautumisen** : TBD
 
 **Vaatii hyväksyntää** : TBD
 
 **Data ehdot**
+Lisää lipun tunniste, voimassaoloaika, ostostapahtuman id, tapahtuman id ja tapahtumalipputyypin id
+```json
+{
+  "tunniste": STRING,
+  "voimassaoloaika": DATETIME,
+  "ostostapahtumaId": INTEGER,
+  "tapahtumaId": INTEGER,
+  "tapahtumaLipputyyppiId": INTEGER
 
--
+}
+```
+
 
 ## Onnistunut response
 
-**Tila** : Yksi tai useampi lippu on näkyvissä käyttäjälle
+**Tila** : Jos kaikki on OK ja muokkaus onnistuu.
 
 **Koodi** : `200 OK`
 
-**Sisältö esimerkki** : 
+**Sisältö esimerkki**
 ```json
 {
     "lippuId": 1,
-    "tunniste": "LIPPU300",
+    "tunniste": "LIPPU123",
     "voimassaoloaika": "2025-10-11T12:00:00",
     "tapahtumaId": 1,
     "ostostapahtumaId": 1,
@@ -58,13 +54,12 @@ Toiminto listaa kaikki liput tai näyttää yhden lipun
         }
     }
 }
-
 ```
 
-## TAI
+## Virhe Response
 
-**Tila** : lipulle ei ole sisältöä
+### Tai
 
-**Koodi** : `200 OK`
+**Tila** : Jos kenttiä puuttuu tai niissä on virheitä.
 
-**Sisältö** : `{}`
+**Koodi** : `400 BAD REQUEST`

@@ -11,21 +11,15 @@ Toiminto lisää uuden lipun.
 **Vaatii hyväksyntää** : TBD
 
 **Data ehdot**
-Lisää lipun tunniste, voimassaoloaika, status ostostapahtuman id, tapahtuman id ja tapahtumalipputyypin id
+Lisää lipun tunniste, voimassaoloaika, ostostapahtuman id, tapahtuman id ja tapahtumalipputyypin id
 ```json
 {
   "tunniste": STRING,
   "voimassaoloaika": DATETIME,
-  "status": STRING,
-  "ostostapahtuma": {
-    "ostostapahtumaId": INTEGER
-  },
-  "tapahtuma": {
-    "id": INTEGER
-  },
-  "tapahtumaLipputyyppi": {
-    "tapahtumaLipputyyppiId": INTEGER
-  }
+  "ostostapahtumaId": INTEGER,
+  "tapahtumaId": INTEGER,
+  "tapahtumaLipputyyppiId": INTEGER
+
 }
 ```
 
@@ -41,8 +35,7 @@ Lisää lipun tunniste, voimassaoloaika, status ostostapahtuman id, tapahtuman i
 {
     "lippuId": 2,
     "tunniste": "LIPPU123",
-    "voimassaoloaika": "2023-10-11T12:00:00",
-    "status": "MYYTY",
+    "voimassaoloaika": "2025-10-11T12:00:00",
     "tapahtumaId": 1,
     "ostostapahtumaId": 1,
     "tapahtumaLipputyyppiId": 1

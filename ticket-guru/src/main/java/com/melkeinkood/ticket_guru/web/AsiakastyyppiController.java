@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.http.HttpStatus;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.CollectionModel;
@@ -23,10 +24,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import com.melkeinkood.ticket_guru.model.*;
 import com.melkeinkood.ticket_guru.repositories.*;
+
+import jakarta.validation.Valid;
+
 import com.melkeinkood.ticket_guru.model.dto.AsiakastyyppiDTO;
-import com.melkeinkood.ticket_guru.model.dto.LippuDTO;
+
 
 @RestController
+@Validated
 public class AsiakastyyppiController {
 
     @Autowired
@@ -63,7 +68,7 @@ public class AsiakastyyppiController {
     }
 
     @GetMapping("/asiakastyypit/{id}")
-    public ResponseEntity<Object> haeAsiakastyyppi(@PathVariable Long id) {
+    public ResponseEntity<Object> haeAsiakastyyppi( @PathVariable Long id) {
         Asiakastyyppi asiakasTyyppi = asiakastyyppiRepository.findById(id).orElse(null);
         if (asiakasTyyppi != null) {
             AsiakastyyppiDTO asiakastyyppiDTO = new AsiakastyyppiDTO(asiakasTyyppi);
@@ -74,7 +79,7 @@ public class AsiakastyyppiController {
     }
 
     @PostMapping("/asiakastyypit")
-    public ResponseEntity<EntityModel<AsiakastyyppiDTO>> lisaaAsiakastyyppi(@RequestBody AsiakastyyppiDTO asiakastyyppiDTO) {
+    public ResponseEntity<EntityModel<AsiakastyyppiDTO>> lisaaAsiakastyyppi(@Valid @RequestBody AsiakastyyppiDTO asiakastyyppiDTO) {
         Asiakastyyppi uusiAsiakastyyppi = new Asiakastyyppi();
         uusiAsiakastyyppi.setAsiakastyyppi(asiakastyyppiDTO.getAsiakastyyppi());
         asiakastyyppiRepository.save(uusiAsiakastyyppi);
@@ -94,12 +99,12 @@ public class AsiakastyyppiController {
     }
 
     @PutMapping("/asiakastyypit/{id}")
-    public ResponseEntity<Asiakastyyppi> muokkaaAsiakastyyppiä(@RequestBody Asiakastyyppi asiakastyyppi,
+    public ResponseEntity<EntityModel<AsiakastyyppiDTO>> muokkaaAsiakastyyppiä(@Valid @RequestBody Asiakastyyppi asiakastyyppi,
             @PathVariable("id") Long asiakastyyppiId) {
         if (asiakastyyppiRepository.existsById(asiakastyyppiId)) {
             asiakastyyppi.setAsiakastyyppiId(asiakastyyppiId);
-            Asiakastyyppi tallennettuAsiakastyyppi = asiakastyyppiRepository.save(asiakastyyppi);
-            return ResponseEntity.status(HttpStatus.OK).body(tallennettuAsiakastyyppi);
+            Asiakastyyppi muokattuAsiakastyyppi = asiakastyyppiRepository.save(asiakastyyppi);
+            return ResponseEntity.status(HttpStatus.OK).body(toEntityModel(convertToDTO(muokattuAsiakastyyppi)));
         } else {
             return ResponseEntity.notFound().build();
         }

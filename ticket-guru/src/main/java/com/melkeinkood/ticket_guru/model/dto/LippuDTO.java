@@ -4,9 +4,14 @@ import java.time.LocalDateTime;
 
 import com.melkeinkood.ticket_guru.model.Lippu;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 
 public class LippuDTO {
     private Long lippuId;
+    @NotEmpty
+    @Size(min=1, max=20)
     private String tunniste;
     private LocalDateTime voimassaoloaika;
     private Long tapahtumaId;

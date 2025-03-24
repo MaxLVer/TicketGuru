@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -20,7 +21,10 @@ import com.melkeinkood.ticket_guru.model.TapahtumaLipputyyppi;
 import com.melkeinkood.ticket_guru.model.dto.LippuDTO;
 import com.melkeinkood.ticket_guru.repositories.*;
 
+import jakarta.validation.Valid;
+
 @RestController
+@Validated
 public class LippuController {
     @Autowired
     TapahtumaRepository tapahtumaRepository;
@@ -119,7 +123,7 @@ public class LippuController {
     }
 
     @PostMapping("/liput")
-    public ResponseEntity<EntityModel<LippuDTO>> luoLippu(@RequestBody LippuDTO lippuDTO){
+    public ResponseEntity<EntityModel<LippuDTO>> luoLippu(@Valid @RequestBody LippuDTO lippuDTO){
         
         Tapahtuma tapahtuma = tapahtumaRepository.findByTapahtumaId(lippuDTO.getTapahtumaId());
 
@@ -153,7 +157,7 @@ public class LippuController {
     }
 
     @PutMapping("/liput/{id}")
-    public ResponseEntity<EntityModel<LippuDTO>> muokkaaLippua(@RequestBody Lippu lippu, @PathVariable("id") Long lippuId){
+    public ResponseEntity<EntityModel<LippuDTO>> muokkaaLippua(@Valid @RequestBody Lippu lippu, @PathVariable("id") Long lippuId){
         if(lippuRepository.existsById(lippuId)){
             lippu.setLippuId(lippuId);
             Lippu muokattuLippu = lippuRepository.save(lippu);

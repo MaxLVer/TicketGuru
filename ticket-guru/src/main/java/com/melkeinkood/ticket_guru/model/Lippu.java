@@ -8,8 +8,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-
+import jakarta.validation.constraints.Past;
 
 import java.time.LocalDateTime;
 
@@ -29,7 +31,7 @@ public class Lippu {
     private Long lippuId;
 
 
-    @NotNull
+    @NotEmpty
     @Size(min=1, max=20)
     @Column(name = "tunniste")
     private String tunniste;
@@ -47,7 +49,7 @@ public class Lippu {
     private Tapahtuma tapahtuma;
 
     
-
+    @FutureOrPresent
     @Column(name = "voimassaoloaika")
     private LocalDateTime voimassaoloaika;
 
