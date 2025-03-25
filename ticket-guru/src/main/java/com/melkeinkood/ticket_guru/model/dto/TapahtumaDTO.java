@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 @Getter
@@ -21,6 +22,7 @@ public class TapahtumaDTO {
     @NotNull(message = "Kuvaus ei saa olla tyhjä")
     private String kuvaus;
     @NotNull(message = "Kokonaislippumäärä ei saa olla tyhjä")
+    @Min(value = 0, message = "Kokonaislippumäärä ei voi olla negatiivinen")
     private int kokonaislippumaara;
     private int jaljellaOlevaLippumaara; 
 
