@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.melkeinkood.ticket_guru.model.*;
 import com.melkeinkood.ticket_guru.model.dto.TapahtumapaikkaDTO;
 import com.melkeinkood.ticket_guru.repositories.TapahtumapaikkaRepository;
+
+import jakarta.validation.Valid;
+
 import com.melkeinkood.ticket_guru.repositories.PostinumeroRepository;
 
 @RestController
@@ -36,13 +39,13 @@ public class TapahtumapaikkaController {
     }
 
     @PostMapping("/tapahtumapaikat")
-    public ResponseEntity<Tapahtumapaikka> lisaaTapahtumapaikka(@RequestBody TapahtumapaikkaDTO tapahtumapaikkaDTO) {
+    public ResponseEntity<Tapahtumapaikka> lisaaTapahtumapaikka(@Valid @RequestBody TapahtumapaikkaDTO tapahtumapaikkaDTO) {
 
         Optional<Postinumero> postinumero = postinumeroRepository
                 .findByPostinumeroId(tapahtumapaikkaDTO.getPostinumeroId());
         if (postinumero.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Palautta 404, jos postinumeron ID:tä ei ole
-        }                                                               // olemassa.
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }                                                               
         
 
         Tapahtumapaikka uusiTapahtumapaikka = new Tapahtumapaikka(
@@ -55,17 +58,20 @@ public class TapahtumapaikkaController {
     }
 
     @PutMapping("/tapahtumapaikat/{id}")
-    public ResponseEntity<Tapahtumapaikka> muokkaaTapahtumapaikka(@RequestBody TapahtumapaikkaDTO tapahtumapaikkaDTO,
+    public ResponseEntity<Tapahtumapaikka> muokkaaTapahtumapaikka(@Valid @RequestBody TapahtumapaikkaDTO tapahtumapaikkaDTO,
             @PathVariable Long id) {
+
         Optional<Tapahtumapaikka> loytynytTapahtumapaikka = tapahtumapaikkaRepository.findById(id);
         if (loytynytTapahtumapaikka.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+
         Optional<Postinumero> postinumero = postinumeroRepository
                 .findByPostinumeroId(tapahtumapaikkaDTO.getPostinumeroId());
         if (postinumero.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Palauttaa 400, jos väärä postinumero
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+
         Tapahtumapaikka tapahtumapaikka = loytynytTapahtumapaikka.get();
         tapahtumapaikka.setLahiosoite(tapahtumapaikkaDTO.getLahiosoite());
         tapahtumapaikka.setTapahtumapaikanNimi(tapahtumapaikkaDTO.getTapahtumapaikanNimi());
@@ -84,5 +90,5 @@ public class TapahtumapaikkaController {
         tapahtumapaikkaRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-    //Koodi päivitetään seuraavalla sprintillä.
+    
 }
