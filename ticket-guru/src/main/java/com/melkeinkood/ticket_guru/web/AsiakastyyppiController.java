@@ -20,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.http.HttpStatus;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -33,7 +32,6 @@ import jakarta.validation.Valid;
 import com.melkeinkood.ticket_guru.model.dto.AsiakastyyppiDTO;
 
 @RestController
-@Validated
 public class AsiakastyyppiController {
 
     @Autowired
@@ -88,7 +86,7 @@ public class AsiakastyyppiController {
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
-        if (asiakastyyppiDTO.getAsiakastyyppi().isEmpty()) {
+        if (asiakastyyppiDTO.getAsiakastyyppi().isEmpty() || asiakastyyppiDTO.getAsiakastyyppi() == null) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", ("Asiakastyyppi ei voi olla tyhjä")));}
         Asiakastyyppi uusiAsiakastyyppi = new Asiakastyyppi();

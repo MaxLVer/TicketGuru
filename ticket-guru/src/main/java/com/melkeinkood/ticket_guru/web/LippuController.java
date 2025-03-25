@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -27,7 +26,6 @@ import com.melkeinkood.ticket_guru.repositories.*;
 import jakarta.validation.Valid;
 
 @RestController
-@Validated
 public class LippuController {
     @Autowired
     TapahtumaRepository tapahtumaRepository;
@@ -65,53 +63,12 @@ public class LippuController {
 
     }
 
-    /*
-     * @PostMapping("/liput")
-     * public ResponseEntity<LippuDTO> luoLippu(@RequestBody Lippu uusiLippu) {
-     * 
-     * TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiRepository
-     * .findById(uusiLippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId())
-     * .orElseThrow(() -> new IllegalArgumentException("Lipputyyppiä ei löydy"));
-     * 
-     * Tapahtuma tapahtuma = tapahtumaRepository
-     * .findById(uusiLippu.getTapahtuma().getTapahtumaId())
-     * .orElseThrow(() -> new IllegalArgumentException("Tapahtumaa ei löydy"));
-     * 
-     * Ostostapahtuma ostostapahtuma = ostostapahtumaRepository
-     * .findById(uusiLippu.getOstostapahtuma().getOstostapahtumaId())
-     * .orElseThrow(() -> new IllegalArgumentException("Ostostapahtumaa ei löydy"));
-     * 
-     * uusiLippu.setTapahtumaLipputyyppi(tapahtumaLipputyyppi);
-     * uusiLippu.setTapahtuma(tapahtuma);
-     * uusiLippu.setOstostapahtuma(ostostapahtuma);
-     * 
-     * Lippu tallennettuLippu = lippuRepository.save(uusiLippu);
-     * 
-     * LippuDTO lippuDTO = new LippuDTO(tallennettuLippu);
-     * 
-     * return ResponseEntity.status(HttpStatus.CREATED).body(lippuDTO);
-     * }
-     */
-
-    /*
-     * @GetMapping("/liput")
-     * public List<LippuDTO> haeKaikkiLiput() {
-     * 
-     * List<Lippu> liput = lippuRepository.findAll();
-     * 
-     * List<LippuDTO> lippuDTOt = liput.stream()
-     * .map(LippuDTO::new)
-     * .collect(Collectors.toList());
-     * 
-     * return lippuDTOt;
-     * }
-     */
 
     @GetMapping("/liput/{id}")
     public ResponseEntity<Object> haeLippu(@PathVariable Long id) {
         Lippu lippu = lippuRepository.findById(id).orElse(null);
         if (lippu != null) {
-            LippuDTO lippuDTO = new LippuDTO(lippu);
+            LippuDTO lippuDTO = convertToDTO(lippu);
             return ResponseEntity.ok(toEntityModel(lippuDTO));
         } else {
             return ResponseEntity.notFound().build();
@@ -144,14 +101,14 @@ public class LippuController {
         Tapahtuma tapahtuma = tapahtumaRepository.findByTapahtumaId(lippuDTO.getTapahtumaId());
         if (tapahtuma == null) {
             return ResponseEntity.badRequest()
-                    .body(Map.of("error", ("Tapahtumaa ei löydy ID:llä " + lippuDTO.getTapahtumaId())));
+                    .body(Map.of("error", ("Tapahtumaa ei löydy")));
         }
 
         Optional<TapahtumaLipputyyppi> tapahtumaLipputyyppiOptional = tapahtumaLipputyyppiRepository
                 .findById(lippuDTO.getTapahtumaLipputyyppiId());
         if (tapahtumaLipputyyppiOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    Map.of("error", ("Tapahtumalipputyyppiä ei löydy ID:llä " + lippuDTO.getTapahtumaLipputyyppiId())));
+                    Map.of("error", ("Tapahtumalipputyyppiä ei löydy")));
         }
         TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiOptional.get();
 
@@ -159,7 +116,7 @@ public class LippuController {
                 .findById(lippuDTO.getOstostapahtumaId());
         if (ostostapahtumaOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("error", ("Ostostapahtumaa ei löydy ID:llä: " + lippuDTO.getOstostapahtumaId())));
+                    .body(Map.of("error", ("Ostostapahtumaa ei löydy ")));
         }
         
         
