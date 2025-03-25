@@ -47,6 +47,6 @@ Lisää uusi tapahtumapaikka, johon sisältyy muun muassa osoite, postinumero, k
 
 ### Virhe Response
 
-**Tila**: Jos postinumeroa ei löydy
+**Tila**: Jos vaaditut parametrit ovat tyhjiä/virheellisiä
 
 **Koodi**: `400 BAD REQUEST`
