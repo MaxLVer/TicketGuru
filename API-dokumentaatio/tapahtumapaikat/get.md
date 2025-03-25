@@ -80,7 +80,7 @@ Tämä toiminto listaa kaikki tapahtumapaikat tai hakee yhden.
 
 **Tila** : Jos tapahtumapaikkaa ei löydy
 
-**Koodi** : `404 Not Found`
+**Koodi** : `404 NOT FOUND`
 
 ## Virhe Response
 
