@@ -35,13 +35,13 @@ public class Asiakastyyppi {
     @JsonIgnore
     private List<TapahtumaLipputyyppi> tapahtumaLipputyyppi;
 
-    public Asiakastyyppi(@NotNull @Size(min = 1, max = 100) String asiakastyyppi) {
+    public Asiakastyyppi(@NotNull String asiakastyyppi) {
         this.asiakastyyppi = asiakastyyppi;
     }  
 
 
 
-    public Asiakastyyppi(Long asiakastyyppiId, @NotNull @Size(min = 1, max = 100) String asiakastyyppi,
+    public Asiakastyyppi(Long asiakastyyppiId, @NotNull String asiakastyyppi,
             List<TapahtumaLipputyyppi> tapahtumaLipputyyppi) {
         this.asiakastyyppiId = asiakastyyppiId;
         this.asiakastyyppi = asiakastyyppi;
@@ -51,7 +51,7 @@ public class Asiakastyyppi {
 
 
 
-    public Asiakastyyppi(@NotNull @Size(min = 1, max = 100) String asiakastyyppi,
+    public Asiakastyyppi(@NotNull String asiakastyyppi,
             List<TapahtumaLipputyyppi> tapahtumaLipputyyppi) {
         this.asiakastyyppi = asiakastyyppi;
         this.tapahtumaLipputyyppi = tapahtumaLipputyyppi;

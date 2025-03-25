@@ -4,12 +4,13 @@ package com.melkeinkood.ticket_guru.model.dto;
 
 import com.melkeinkood.ticket_guru.model.Lippu;
 
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+
 
 
 public class LippuDTO {
+    
+
     private Long lippuId;
     @NotNull(message = "TapahtumaId ei saa olla tyhjä")
     private Long tapahtumaId;
@@ -18,13 +19,15 @@ public class LippuDTO {
     @NotNull(message = "TapahtumaLipputyyppiId ei saa olla tyhjä")
     private Long tapahtumaLipputyyppiId;
 
-    
-    public LippuDTO(Lippu lippu) {
-        this.lippuId = lippu.getLippuId();
-        this.tapahtumaId = (lippu.getTapahtuma() != null) ? lippu.getTapahtuma().getTapahtumaId() : null;
-        this.ostostapahtumaId = (lippu.getOstostapahtuma() != null) ? lippu.getOstostapahtuma().getId() : null;
-        this.tapahtumaLipputyyppiId = (lippu.getTapahtumaLipputyyppi() != null) ? lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId() : null;
+    public LippuDTO(Long lippuId, @NotNull(message = "TapahtumaId ei saa olla tyhjä") Long tapahtumaId,
+            @NotNull(message = "OstostapahtumaId ei saa olla tyhjä") Long ostostapahtumaId,
+            @NotNull(message = "TapahtumaLipputyyppiId ei saa olla tyhjä") Long tapahtumaLipputyyppiId) {
+        this.lippuId = lippuId;
+        this.tapahtumaId = tapahtumaId;
+        this.ostostapahtumaId = ostostapahtumaId;
+        this.tapahtumaLipputyyppiId = tapahtumaLipputyyppiId;
     }
+    
 
     public LippuDTO(){}
 
