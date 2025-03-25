@@ -50,3 +50,9 @@ Lisää uusi tapahtumapaikka, johon sisältyy muun muassa osoite, postinumero, k
 **Tila**: Jos vaaditut parametrit ovat tyhjiä/virheellisiä
 
 **Koodi**: `400 BAD REQUEST`
+
+---
+
+**Tila**: Jos haettua postinumeroa ei ole löydy
+
+**Koodi**: `404 NOT FOUND`
