@@ -25,9 +25,7 @@ import com.melkeinkood.ticket_guru.model.Rooli;
 import com.melkeinkood.ticket_guru.repositories.KayttajaRepository;
 import com.melkeinkood.ticket_guru.repositories.RooliRepository;
 import com.melkeinkood.ticket_guru.model.dto.KayttajaDTO;
-import com.melkeinkood.ticket_guru.model.dto.RooliDTO;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 

@@ -13,7 +13,6 @@ import com.melkeinkood.ticket_guru.repositories.AsiakastyyppiRepository;
 import com.melkeinkood.ticket_guru.model.Kayttaja;
 import com.melkeinkood.ticket_guru.repositories.KayttajaRepository;
 import com.melkeinkood.ticket_guru.model.Lippu;
-import com.melkeinkood.ticket_guru.model.LippuStatus;
 import com.melkeinkood.ticket_guru.repositories.LippuRepository;
 import com.melkeinkood.ticket_guru.model.Ostostapahtuma;
 import com.melkeinkood.ticket_guru.repositories.OstostapahtumaRepository;
