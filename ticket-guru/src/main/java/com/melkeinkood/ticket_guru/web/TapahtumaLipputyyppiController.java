@@ -81,12 +81,12 @@ public class TapahtumaLipputyyppiController {
     }
 
     @GetMapping("/tapahtumalipputyypit/{id}")
-    public ResponseEntity<EntityModel<TapahtumaLipputyyppiDTO>> haeTapahtumaLipputyyppi(@PathVariable Long id) {
+    public ResponseEntity<?> haeTapahtumaLipputyyppi(@PathVariable Long id) {
 
         Optional<TapahtumaLipputyyppi> optionalTapahtumaLipputyyppi = tapahtumaLipputyyppiRepo.findById(id);
 
         if (optionalTapahtumaLipputyyppi.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Tapahtuma lipputyyppiä ei löydy"));
         }
 
         TapahtumaLipputyyppiDTO tapahtumaLipputyyppiDTO = toDTO(optionalTapahtumaLipputyyppi.get());
@@ -119,7 +119,11 @@ public class TapahtumaLipputyyppiController {
         }
         Asiakastyyppi asiakastyyppi = asiakastyyppiOptional.get();
 
-        if (tapahtumaLipputyyppiDTO.getHinta() == null || tapahtumaLipputyyppiDTO.getHinta().doubleValue() < 0) {
+        if (tapahtumaLipputyyppiDTO.getHinta() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Hinta ei löydy"));
+        }
+
+        if (tapahtumaLipputyyppiDTO.getHinta().doubleValue() < 0) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Map.of("error", "Hinnan tulee olla vähintään 0"));
         }
 
@@ -136,26 +140,50 @@ public class TapahtumaLipputyyppiController {
 
     @PutMapping("/tapahtumalipputyypit/{id}")
     public ResponseEntity<?> muokkaaTapahtumaLipputyyppi(@PathVariable Long id,
-            @Valid @RequestBody TapahtumaLipputyyppiDTO tapahtumaLipputyyppiDTO, BindingResult bindingResult) {
+        @Valid @RequestBody TapahtumaLipputyyppiDTO tapahtumaLipputyyppiDTO, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errors);
-        }
-
-        Optional<TapahtumaLipputyyppi> optionalTapahtumaLipputyyppi = tapahtumaLipputyyppiRepo.findById(id);
-
-        if (optionalTapahtumaLipputyyppi.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        TapahtumaLipputyyppi tapahtumaLipputyyppi = optionalTapahtumaLipputyyppi.get();
-        tapahtumaLipputyyppi.setHinta(tapahtumaLipputyyppiDTO.getHinta());
-        tapahtumaLipputyyppiRepo.save(tapahtumaLipputyyppi);
-
-        return ResponseEntity.ok("TapahtumaLipputyyppi päivitetty.");
+    if (bindingResult.hasErrors()) {
+        Map<String, String> errors = new HashMap<>();
+        bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+        return ResponseEntity.badRequest().body(errors);
     }
+
+    Optional<TapahtumaLipputyyppi> optionalTapahtumaLipputyyppi = tapahtumaLipputyyppiRepo.findById(id);
+    if (optionalTapahtumaLipputyyppi.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", "Tapahtuma lipputyyppiä ei löydy"));
+    }
+
+    Optional<Tapahtuma> tapahtumaOptional = tapahtumaRepo.findById(tapahtumaLipputyyppiDTO.getTapahtumaId());
+    if (tapahtumaOptional.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", "Tapahtumaa ei löydy"));
+    }
+    Tapahtuma tapahtuma = tapahtumaOptional.get();
+
+    Optional<Asiakastyyppi> asiakastyyppiOptional = asiakastyyppiRepo
+            .findByAsiakastyyppiId(tapahtumaLipputyyppiDTO.getAsiakastyyppiId());
+    if (asiakastyyppiOptional.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", "Asiakastyyppiä ei löydy"));
+    }
+    Asiakastyyppi asiakastyyppi = asiakastyyppiOptional.get();
+
+    if (tapahtumaLipputyyppiDTO.getHinta() == null || tapahtumaLipputyyppiDTO.getHinta().doubleValue() < 0) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(Map.of("error", "Hinnan tulee olla vähintään 0"));
+    }
+
+    TapahtumaLipputyyppi tapahtumaLipputyyppi = optionalTapahtumaLipputyyppi.get();
+    tapahtumaLipputyyppi.setTapahtuma(tapahtuma);
+    tapahtumaLipputyyppi.setAsiakastyyppi(asiakastyyppi);
+    tapahtumaLipputyyppi.setHinta(tapahtumaLipputyyppiDTO.getHinta());
+
+    TapahtumaLipputyyppi updatedTapahtumaLipputyyppi = tapahtumaLipputyyppiRepo.save(tapahtumaLipputyyppi);
+
+    TapahtumaLipputyyppiDTO responseDTO = toDTO(updatedTapahtumaLipputyyppi);
+    return ResponseEntity.ok(toEntityModel(responseDTO));
+}
 
     @DeleteMapping("/tapahtumalipputyypit/{id}")
     public ResponseEntity<String> deleteTapahtumaLipputyyppi(@PathVariable Long id) {
