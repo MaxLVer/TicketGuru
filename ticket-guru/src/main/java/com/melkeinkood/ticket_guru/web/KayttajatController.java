@@ -80,12 +80,13 @@ public class KayttajatController {
     
 
     @GetMapping("/kayttajat/{id}")
-    public ResponseEntity<EntityModel<KayttajaDTO>> haeKayttaja(@PathVariable Long id) {
+    public ResponseEntity<Object> haeKayttaja(@PathVariable Long id) {
 
         Optional<Kayttaja> optionalKayttaja = kayttajaRepo.findById(id);
 
         if(optionalKayttaja.isEmpty()){
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(Collections.singletonMap("error", "Käyttäjää ei löytynyt"));
         }
         KayttajaDTO kayttajaDTO = toDTO(optionalKayttaja.get());
         EntityModel<KayttajaDTO> entityModel = toEntityModel(kayttajaDTO);
@@ -141,6 +142,17 @@ public class KayttajatController {
         }
 
         Kayttaja kayttaja = optionalKayttaja.get();
+        if (kayttajaDTO.getRooliId() != null) {
+            Optional<Rooli> optionalRooli = rooliRepo.findById(kayttajaDTO.getRooliId());
+            if (optionalRooli.isEmpty()) {
+                return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("error","rooli ID " + kayttajaDTO.getRooliId() + " ei ole olemassa"));
+            }
+            kayttaja.setRooli(optionalRooli.get());
+        }
+
+        
         kayttaja.setKayttajanimi(kayttajaDTO.getKayttajanimi());
         kayttaja.setSalasana(kayttajaDTO.getSalasana());
         kayttaja.setEtunimi(kayttajaDTO.getEtunimi());
@@ -152,9 +164,10 @@ public class KayttajatController {
     
 
     @DeleteMapping("/kayttajat/{id}")
-    public ResponseEntity<String> poistakayttaja(@PathVariable Long id) {
+    public ResponseEntity<Object> poistakayttaja(@PathVariable Long id) {
         if (!kayttajaRepo.existsById(id)) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of("error", "Käyttäjää ei löydy"));
         } 
         kayttajaRepo.deleteById(id);
         return ResponseEntity.ok("Käyttäjä " +id + " on poistettu.");

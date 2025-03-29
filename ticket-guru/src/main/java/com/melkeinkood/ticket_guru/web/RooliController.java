@@ -7,6 +7,7 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.melkeinkood.ticket_guru.repositories.RooliRepository;
@@ -62,7 +63,8 @@ public class RooliController {
             RooliDTO rooliDTO = new RooliDTO(rooli);
             return ResponseEntity.ok(toEntityModel(rooliDTO));
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(Collections.singletonMap("error", "Roolia ei löytynyt"));
         }
     }
     
