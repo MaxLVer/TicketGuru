@@ -8,8 +8,6 @@ import java.util.List;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import com.melkeinkood.ticket_guru.model.Lippu;
-
 import jakarta.validation.constraints.NotNull;
 
 

@@ -1,9 +1,5 @@
 package com.melkeinkood.ticket_guru.model.dto;
 
-
-
-import com.melkeinkood.ticket_guru.model.Lippu;
-
 import jakarta.validation.constraints.NotNull;
 
 

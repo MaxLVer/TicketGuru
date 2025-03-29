@@ -74,12 +74,12 @@ public class TapahtumaController {
     }
 
     @GetMapping("/tapahtumat/{id}")
-    public ResponseEntity<EntityModel<TapahtumaDTO>> haeTapahtuma(@PathVariable Long id) {
+    public ResponseEntity<?> haeTapahtuma(@PathVariable Long id) {
 
         Optional<Tapahtuma> optionalTapahtuma = tapahtumaRepository.findById(id);
 
         if (optionalTapahtuma.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Tapahtumaa ei löydy"));
         }
 
         TapahtumaDTO tapahtumaDTO = toDTO(optionalTapahtuma.get());
@@ -134,8 +134,13 @@ public class TapahtumaController {
         Optional<Tapahtuma> optionalTapahtuma = tapahtumaRepository.findById(id);
 
         if (optionalTapahtuma.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Tapahtumaa ei löydy"));
         }
+
+        Optional<Tapahtumapaikka> optionalTapahtumapaikka = tapahtumapaikkaRepository.findById(tapahtumaDTO.getTapahtumapaikkaId());
+    if (optionalTapahtumapaikka.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Tapahtumapaikkaa ei löydy"));
+    }
 
         Tapahtuma tapahtuma = optionalTapahtuma.get();
         tapahtuma.setTapahtumaAika(tapahtumaDTO.getTapahtumaAika());
