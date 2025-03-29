@@ -10,7 +10,6 @@ import com.melkeinkood.ticket_guru.model.Kayttaja;
 
 @Repository
 public interface KayttajaRepository extends JpaRepository<Kayttaja, Long> {
-    List<Kayttaja> findByKayttajanimi(String kayttajanimi);
+    Kayttaja findByKayttajanimi(String kayttajanimi);
     Optional<Kayttaja> findByKayttajaId(Long kayttajaId);
-    Kayttaja findByUsername(String kayttajanimi);
 }
