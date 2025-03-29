@@ -24,11 +24,11 @@ public class Postinumero {
     @Column(name="postinumeroId")
     private Long postinumeroId;
 
-    @NotNull
+    @NotNull(message = "Postinumero ei voi olla tyhjä")
     @Column(name = "postinumero")
-    private String postinumero;
-    
-    @NotNull
+    private String postinumero;  
+
+    @NotNull(message = "Kaupunki ei voi olla tyhjä")
     @Size(min=1 , max=50)
     @Column(name = "kaupunki")
     private String kaupunki;
