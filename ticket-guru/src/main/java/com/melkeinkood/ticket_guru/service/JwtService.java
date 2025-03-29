@@ -15,7 +15,7 @@ import io.jsonwebtoken.security.SignatureException;
 
 @Component
 public class JwtService {
-    @Value("${jwt.sercet}")
+    @Value("${jwt.secret}")
     private String secretKey;
 
     @Value("${jwt.expiration}")
