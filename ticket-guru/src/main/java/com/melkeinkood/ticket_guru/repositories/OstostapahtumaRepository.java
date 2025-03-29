@@ -12,3 +12,4 @@ public interface OstostapahtumaRepository extends JpaRepository<Ostostapahtuma, 
 
     
 } 
+// teksti
