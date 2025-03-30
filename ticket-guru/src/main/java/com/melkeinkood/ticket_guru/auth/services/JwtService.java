@@ -1,3 +1,4 @@
+package com.melkeinkood.ticket_guru.auth.services;
 // package com.melkeinkood.ticket_guru.service;
 
 // import java.security.Key;
