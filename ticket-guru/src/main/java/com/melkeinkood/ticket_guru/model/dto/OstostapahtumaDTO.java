@@ -17,7 +17,7 @@ import jakarta.validation.constraints.NotNull;
 public class OstostapahtumaDTO extends RepresentationModel<OstostapahtumaDTO>{
     private Long ostostapahtumaId;
     private LocalDateTime myyntiaika;
-    @NotNull
+    @NotNull(message = "KayttajaId ei voi olla tyhjä")
     private Long kayttajaId;
     private List<Long> lippuIdt;
 

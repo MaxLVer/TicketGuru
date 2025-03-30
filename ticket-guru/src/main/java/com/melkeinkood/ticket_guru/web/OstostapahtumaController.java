@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -38,7 +39,29 @@ public class OstostapahtumaController {
     @Autowired
     LippuRepository lippuRepository;
 
-    private EntityModel<OstostapahtumaDTO> toEntityModel(Ostostapahtuma ostostapahtuma) {
+    private EntityModel<OstostapahtumaDTO> toEntityModel(OstostapahtumaDTO ostostapahtumaDTO) {
+        List<Long> lippuIdt = ostostapahtumaDTO.getLippuIdt();
+        EntityModel<OstostapahtumaDTO> entityModel = EntityModel.of(ostostapahtumaDTO);
+        Link kayttajaLink = linkTo(
+                methodOn(KayttajatController.class).haeKayttaja(ostostapahtumaDTO.getKayttajaId()))
+                .withRel("kayttaja");
+        Link selfLink = linkTo(
+                methodOn(OstostapahtumaController.class).haeOstostapahtuma(ostostapahtumaDTO.getOstostapahtumaId()))
+                .withSelfRel();
+        entityModel.add(selfLink);
+        entityModel.add(kayttajaLink);
+        if (lippuIdt != null) {
+
+            for (Long lippuId : lippuIdt) {
+                Link lipunLink = linkTo(methodOn(LippuController.class).haeLippu(lippuId)).withRel("liput");
+                entityModel.add(lipunLink);
+            }
+        }
+        return entityModel;
+
+    }
+
+    private OstostapahtumaDTO toDTO(Ostostapahtuma ostostapahtuma) {
         List<Long> lippuIdt = new ArrayList<>();
         if (ostostapahtuma.getLiput() != null) {
             List<Lippu> liput = ostostapahtuma.getLiput();
@@ -46,33 +69,21 @@ public class OstostapahtumaController {
                 lippuIdt.add(lippu.getLippuId());
             }
         }
-        OstostapahtumaDTO ostostapahtumaDTO = new OstostapahtumaDTO(ostostapahtuma.getOstostapahtumaId(),
-                ostostapahtuma.getMyyntiaika(), ostostapahtuma.getKayttaja().getKayttajaId(), lippuIdt);
-        EntityModel<OstostapahtumaDTO> entityModel = EntityModel.of(ostostapahtumaDTO);
-        Link kayttajaLink = linkTo(
-                methodOn(KayttajatController.class).haeKayttaja(ostostapahtuma.getKayttaja().getKayttajaId()))
-                .withRel("kayttaja");
-        Link selfLink = linkTo(
-                methodOn(OstostapahtumaController.class).haeOstostapahtuma(ostostapahtuma.getOstostapahtumaId()))
-                .withSelfRel();
-        entityModel.add(selfLink);
-        entityModel.add(kayttajaLink);
-        for (Long lippuId : lippuIdt) {
-            Link lipunLink = linkTo(methodOn(LippuController.class).haeLippu(lippuId)).withRel("liput");
-            entityModel.add(lipunLink);
-        }
-        return entityModel;
+        return new OstostapahtumaDTO(
+                ostostapahtuma.getOstostapahtumaId(),
+                ostostapahtuma.getMyyntiaika(),
+                ostostapahtuma.getKayttaja().getKayttajaId(),
+                lippuIdt);
     }
 
     @GetMapping("/ostostapahtumat")
-    public ResponseEntity<CollectionModel<EntityModel<OstostapahtumaDTO>>> haeKaikkiOstostapahtumat() {
+    public ResponseEntity<Object> haeKaikkiOstostapahtumat() {
         List<Ostostapahtuma> ostostapahtumat = ostostapahtumaRepository.findAll();
-        List<EntityModel<OstostapahtumaDTO>> ostostapahtumaDTOt = ostostapahtumat.stream().map(this::toEntityModel)
+        List<EntityModel<OstostapahtumaDTO>> ostostapahtumaModel = ostostapahtumat.stream()
+                .map(ostostapahtuma -> toEntityModel(toDTO(ostostapahtuma)))
                 .collect(Collectors.toList());
-        Link kaikkiOstostapahtumatLink = linkTo(methodOn(OstostapahtumaController.class).haeKaikkiOstostapahtumat())
-                .withSelfRel();
-        if (ostostapahtumaDTOt != null) {
-            return ResponseEntity.ok(CollectionModel.of(ostostapahtumaDTOt, kaikkiOstostapahtumatLink));
+        if (ostostapahtumaModel != null) {
+            return ResponseEntity.ok(ostostapahtumaModel);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -86,14 +97,18 @@ public class OstostapahtumaController {
                     .body(Collections.singletonMap("error", "Ostostapahtumaa ei löytynyt"));
         } else {
             ostostapahtuma.getLiput();
-            EntityModel<OstostapahtumaDTO> ostostapahtumaDTO = toEntityModel(ostostapahtuma);
-            return ResponseEntity.ok(ostostapahtumaDTO);
+            return ResponseEntity.ok(toEntityModel(toDTO(ostostapahtuma)));
         }
     }
 
     @PostMapping("/ostostapahtumat")
-    public ResponseEntity<EntityModel<OstostapahtumaDTO>> lisaaOstostapahtuma(
-            @Valid @RequestBody OstostapahtumaDTO ostostapahtumaDTO) {
+    public ResponseEntity<?> lisaaOstostapahtuma(
+            @Valid @RequestBody OstostapahtumaDTO ostostapahtumaDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
         Kayttaja kayttaja = kayttajaRepository
                 .findByKayttajaId(ostostapahtumaDTO.getKayttajaId())
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -103,7 +118,7 @@ public class OstostapahtumaController {
                 kayttaja);
         ostostapahtumaRepository.save(uusiOstostapahtuma);
         ostostapahtumaDTO.setOstostapahtumaId(uusiOstostapahtuma.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(uusiOstostapahtuma));
+        return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(ostostapahtumaDTO));
     }
 
     @PatchMapping("/ostostapahtumat/{id}/myyntiaika")
@@ -116,14 +131,31 @@ public class OstostapahtumaController {
         LocalDateTime myyntiaika = haeMyyntiaika.get("myyntiaika");
         ostostapahtuma.setMyyntiaika(myyntiaika);
         Ostostapahtuma savedOstostapahtuma = ostostapahtumaRepository.save(ostostapahtuma);
-        EntityModel<OstostapahtumaDTO> savedOstostapahtumaDTO = toEntityModel(savedOstostapahtuma);
+        EntityModel<OstostapahtumaDTO> savedOstostapahtumaDTO = toEntityModel(toDTO(savedOstostapahtuma));
         return ResponseEntity.ok(savedOstostapahtumaDTO);
     }
 
     @PutMapping("/ostostapahtumat/{id}")
-    public ResponseEntity<EntityModel<OstostapahtumaDTO>> muokkaaOstostapahtumaa(
-            @Valid @RequestBody OstostapahtumaDTO ostostapahtumaDTO, @PathVariable Long id) {
-        if (ostostapahtumaRepository.existsById(id)) {
+    public ResponseEntity<?> muokkaaOstostapahtumaa(
+            @Valid @RequestBody OstostapahtumaDTO ostostapahtumaDTO, @PathVariable Long id,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
+        Optional<Ostostapahtuma> optionalOstostpahtuma = ostostapahtumaRepository.findById(id);
+        if (optionalOstostpahtuma.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Ostostapahtuma ostostapahtuma = optionalOstostpahtuma.get();
+        if (ostostapahtuma.getOstostapahtumaId() == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", ("OstostapahtumaId ei voi olla tyhjä")));
+        }
+        if (ostostapahtumaRepository.existsById(id))
+
+        {
             Ostostapahtuma muokattuOstostapahtuma = ostostapahtumaRepository.findById(id).get();
             Kayttaja kayttaja = kayttajaRepository
                     .findByKayttajaId(ostostapahtumaDTO.getKayttajaId())
@@ -131,25 +163,26 @@ public class OstostapahtumaController {
                             "KayttajaId:tä " + ostostapahtumaDTO.getKayttajaId() + " ei löydy"));
             muokattuOstostapahtuma.setKayttaja(kayttaja);
             ostostapahtumaDTO.setOstostapahtumaId(id);
-            return ResponseEntity.status(HttpStatus.OK).body(toEntityModel(muokattuOstostapahtuma));
+            return ResponseEntity.status(HttpStatus.OK).body(toEntityModel(toDTO(muokattuOstostapahtuma)));
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/ostostapahtumat/{id}")
-    public ResponseEntity<Void> poistaOstostapahtuma(@PathVariable Long id) {
+    public ResponseEntity<Object> poistaOstostapahtuma(@PathVariable Long id) {
         if (ostostapahtumaRepository.existsById(id)) {
             List<Lippu> liput = ostostapahtumaRepository.findById(id).get().getLiput();
-            System.out.println(liput);
             if (liput.isEmpty()) {
                 ostostapahtumaRepository.deleteById(id);
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok("Ostostapahtuma " + id + " on poistettu.");
             } else {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Error: Ostostapahtumaan liittyy lippuja, ostostapahtumaa ei voi poistaa");
             }
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Error: OstostapahtumaId:tä ei löydetty");
         }
     }
 }
