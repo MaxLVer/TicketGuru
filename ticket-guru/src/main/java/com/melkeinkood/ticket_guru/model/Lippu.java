@@ -28,8 +28,8 @@ public class Lippu {
     private Ostostapahtuma ostostapahtuma;
 
     @ManyToOne
-    @JoinColumn(name = "tapahtumaLipputyyppiId")
-    private TapahtumaLipputyyppi tapahtumalipputyyppi;
+    @JoinColumn(name = "tapahtumaLipputyyppiId", referencedColumnName = "tapahtumaLipputyyppiId")
+    private TapahtumaLipputyyppi tapahtumaLipputyyppi;
 
     @ManyToOne
     @JoinColumn(name = "tapahtumaId")
@@ -46,14 +46,14 @@ public class Lippu {
             TapahtumaLipputyyppi tapahtumalipputyyppi, Tapahtuma tapahtuma) {
         this.lippuId = lippuId;
         this.ostostapahtuma = ostostapahtuma;
-        this.tapahtumalipputyyppi = tapahtumalipputyyppi;
+        this.tapahtumaLipputyyppi = tapahtumalipputyyppi;
         this.tapahtuma = tapahtuma;
     }
 
     public Lippu(Ostostapahtuma ostostapahtuma,
             TapahtumaLipputyyppi tapahtumalipputyyppi, Tapahtuma tapahtuma) {
         this.ostostapahtuma = ostostapahtuma;
-        this.tapahtumalipputyyppi = tapahtumalipputyyppi;
+        this.tapahtumaLipputyyppi = tapahtumalipputyyppi;
         this.tapahtuma = tapahtuma;
     }
 
@@ -84,11 +84,11 @@ public class Lippu {
     }
 
     public TapahtumaLipputyyppi getTapahtumaLipputyyppi() {
-        return tapahtumalipputyyppi;
+        return tapahtumaLipputyyppi;
     }
 
     public void setTapahtumaLipputyyppi(TapahtumaLipputyyppi tapahtumalipputyyppi) {
-        this.tapahtumalipputyyppi = tapahtumalipputyyppi;
+        this.tapahtumaLipputyyppi = tapahtumalipputyyppi;
     }
 
     public Tapahtuma getTapahtuma() {
