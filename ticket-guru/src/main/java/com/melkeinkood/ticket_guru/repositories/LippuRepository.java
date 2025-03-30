@@ -11,6 +11,7 @@ import com.melkeinkood.ticket_guru.model.Lippu;
 @Repository
 public interface LippuRepository extends JpaRepository<Lippu, Long> {
     List<Lippu> findByLippuId (Long lippuId);
-    
-    
+    boolean existsByTapahtumaLipputyyppi_TapahtumaLipputyyppiId(Long tapahtumaLipputyyppiId);
+
 }
+    

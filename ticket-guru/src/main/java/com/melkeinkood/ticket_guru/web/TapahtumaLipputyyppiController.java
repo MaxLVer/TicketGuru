@@ -15,6 +15,7 @@ import com.melkeinkood.ticket_guru.model.Tapahtuma;
 import com.melkeinkood.ticket_guru.model.TapahtumaLipputyyppi;
 import com.melkeinkood.ticket_guru.model.dto.TapahtumaLipputyyppiDTO;
 import com.melkeinkood.ticket_guru.repositories.AsiakastyyppiRepository;
+import com.melkeinkood.ticket_guru.repositories.LippuRepository;
 import com.melkeinkood.ticket_guru.repositories.TapahtumaLipputyyppiRepository;
 import com.melkeinkood.ticket_guru.repositories.TapahtumaRepository;
 
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
@@ -39,6 +41,9 @@ public class TapahtumaLipputyyppiController {
 
     @Autowired
     private AsiakastyyppiRepository asiakastyyppiRepo;
+
+    @Autowired
+    private LippuRepository lippuRepo;
 
     private EntityModel<TapahtumaLipputyyppiDTO> toEntityModel(TapahtumaLipputyyppiDTO tapahtumaLipputyyppiDTO) {
         Link selfLink = linkTo(
@@ -185,13 +190,19 @@ public class TapahtumaLipputyyppiController {
     return ResponseEntity.ok(toEntityModel(responseDTO));
 }
 
-    @DeleteMapping("/tapahtumalipputyypit/{id}")
-    public ResponseEntity<String> deleteTapahtumaLipputyyppi(@PathVariable Long id) {
-        if (!tapahtumaLipputyyppiRepo.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-
-        tapahtumaLipputyyppiRepo.deleteById(id);
-        return ResponseEntity.ok("TapahtumaLipputyyppi " + id + " on poistettu.");
+@DeleteMapping("/tapahtumalipputyypit/{id}")
+public ResponseEntity<?> deleteTapahtumaLipputyyppi(@PathVariable Long id) {
+    if (!tapahtumaLipputyyppiRepo.existsById(id)) {
+        return ResponseEntity.notFound().build();
     }
+
+    if (lippuRepo.existsByTapahtumaLipputyyppi_TapahtumaLipputyyppiId(id)) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", "Lipputyyppiä ei voi poistaa, koska siihen liittyy myytyjä lippuja."));
+    }
+
+    tapahtumaLipputyyppiRepo.deleteById(id);
+    return ResponseEntity.ok("TapahtumaLipputyyppi " + id + " on poistettu.");
+}
+
 }
