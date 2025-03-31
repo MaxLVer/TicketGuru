@@ -60,6 +60,6 @@ Toiminto listaa kaikki asiakastyypit tai näyttää yhden asiakastyypin
 
 ## Virhe Response
 
-**Tila** : asiakstyyppiä ei löydy.
+**Tila** : asiakastyyppiä ei löydy.
 
 **Koodi** : `404 NOT FOUND`

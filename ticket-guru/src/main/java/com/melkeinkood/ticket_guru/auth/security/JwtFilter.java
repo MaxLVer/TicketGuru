@@ -3,47 +3,59 @@
 // import com.melkeinkood.ticket_guru.auth.services.JwtService;
 // import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 // import org.springframework.security.core.context.SecurityContextHolder;
+// import org.springframework.security.core.userdetails.UserDetails;
+// import org.springframework.security.core.userdetails.UserDetailsService;
 // import org.springframework.web.filter.OncePerRequestFilter;
 
-// import javax.servlet.FilterChain;
-// import javax.servlet.ServletException;
-// import javax.servlet.ServletRequest;
-// import javax.servlet.ServletResponse;
-// import javax.servlet.http.HttpServletRequest;
+// import jakarta.servlet.FilterChain;
+// import jakarta.servlet.ServletException;
+
+// import jakarta.servlet.http.HttpServletRequest;
+// import jakarta.servlet.http.HttpServletResponse;
+
 // import java.io.IOException;
 
 // public class JwtFilter extends OncePerRequestFilter {
 
 //     private final JwtService jwtService;
+//     private final UserDetailsService userDetailsService;
 
-//     public JwtFilter(JwtService jwtService) {
+//     public JwtFilter(JwtService jwtService, UserDetailsService userDetailsService) {
 //         this.jwtService = jwtService;
+//         this.userDetailsService = userDetailsService;
 //     }
 
 //     @Override
-//     protected void doFilterInternal(HttpServletRequest request, javax.servlet.http.HttpServletResponse response, FilterChain filterChain)
-//             throws ServletException, IOException {
-        
-//         // Get the Authorization header from the request
-//         String token = request.getHeader("Authorization");
+//     protected void doFilterInternal(
+//         HttpServletRequest request, 
+//         HttpServletResponse response, 
+//         FilterChain filterChain
+//         ) throws ServletException, IOException {
 
-//         if (token != null && token.startsWith("Bearer ")) {
-//             token = token.substring(7);  // Remove "Bearer " from the token string
+//         String authHeader = request.getHeader("Authorization");
+
+//         if (authHeader != null && authHeader.startsWith("Bearer ")) {
+//             String token = authHeader.substring(7);
             
-//             // Validate the token
-//             if (jwtService.validateToken(token)) {
-//                 // Extract username from the token
-//                 String username = jwtService.getUsernameFromToken(token);
+//             try {
+//                 if (jwtService.validateToken(token)) {
+//                     String username = jwtService.getUsernameFromToken(token);
 
-//                 // Create an authentication object for Spring Security
-//                 UsernamePasswordAuthenticationToken authenticationToken =
-//                         new UsernamePasswordAuthenticationToken(username, null, null);
-//                 // Set the authentication object in the security context
-//                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+//                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+//                     if (SecurityContextHolder.getContext().getAuthentication() == null) {
+//                         UsernamePasswordAuthenticationToken authenticationToken =
+//                                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+//                     }
+//                 }
+//             } catch (Exception e) {
+//                 System.out.println("JWT validation failed: " + e.getMessage()); // Log for debugging
 //             }
 //         }
 
-//         // Continue the request-response cycle
 //         filterChain.doFilter(request, response);
 //     }
 // }
+        
+      
