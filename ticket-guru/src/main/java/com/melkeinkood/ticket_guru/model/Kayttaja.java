@@ -35,6 +35,11 @@ public class Kayttaja {
         super();
     }
 
+    public Kayttaja(String kayttajanimi, String salasana) {
+        this.kayttajanimi = kayttajanimi;
+        this.salasana = salasana;
+    }
+
     public Kayttaja(Rooli rooli, String kayttajanimi, String salasana, String etunimi, String sukunimi) {
         super();
         this.rooli = rooli;
