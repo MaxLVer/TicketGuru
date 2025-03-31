@@ -2,10 +2,7 @@ package com.melkeinkood.ticket_guru.model.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-
-
 public class LippuDTO {
-    
 
     private Long lippuId;
     @NotNull(message = "TapahtumaId ei saa olla tyhjä")
@@ -15,23 +12,21 @@ public class LippuDTO {
     @NotNull(message = "TapahtumaLipputyyppiId ei saa olla tyhjä")
     private Long tapahtumaLipputyyppiId;
 
-    public LippuDTO(Long lippuId, @NotNull(message = "TapahtumaId ei saa olla tyhjä") Long tapahtumaId,
-            @NotNull(message = "OstostapahtumaId ei saa olla tyhjä") Long ostostapahtumaId,
-            @NotNull(message = "TapahtumaLipputyyppiId ei saa olla tyhjä") Long tapahtumaLipputyyppiId) {
+    public LippuDTO(Long lippuId, Long tapahtumaId,
+            Long ostostapahtumaId,
+            Long tapahtumaLipputyyppiId) {
         this.lippuId = lippuId;
         this.tapahtumaId = tapahtumaId;
         this.ostostapahtumaId = ostostapahtumaId;
         this.tapahtumaLipputyyppiId = tapahtumaLipputyyppiId;
     }
-    
 
-    public LippuDTO(){}
+    public LippuDTO() {
+    }
 
-   
     public Long getLippuId() {
         return lippuId;
     }
-
 
     public Long getTapahtumaId() {
         return tapahtumaId;
@@ -48,7 +43,6 @@ public class LippuDTO {
     public void setLippuId(Long lippuId) {
         this.lippuId = lippuId;
     }
-
 
     public void setTapahtumaId(Long tapahtumaId) {
         this.tapahtumaId = tapahtumaId;

@@ -70,7 +70,7 @@ public class LippuController {
             LippuDTO lippuDTO = convertToDTO(lippu);
             return ResponseEntity.ok(toEntityModel(lippuDTO));
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lippua ei löydy id:llä " + id);
         }
     }
 
@@ -100,14 +100,14 @@ public class LippuController {
         Tapahtuma tapahtuma = tapahtumaRepository.findByTapahtumaId(lippuDTO.getTapahtumaId());
         if (tapahtuma == null) {
             return ResponseEntity.badRequest()
-                    .body(Map.of("error", ("Tapahtumaa ei löydy")));
+                    .body(Map.of("error", ("Tapahtumaa ei löydy id:llä " + lippuDTO.getTapahtumaId())));
         }
 
         Optional<TapahtumaLipputyyppi> tapahtumaLipputyyppiOptional = tapahtumaLipputyyppiRepository
                 .findById(lippuDTO.getTapahtumaLipputyyppiId());
         if (tapahtumaLipputyyppiOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    Map.of("error", ("Tapahtumalipputyyppiä ei löydy")));
+                    Map.of("error", ("Tapahtumalipputyyppiä ei löydy id:llä " + lippuDTO.getTapahtumaLipputyyppiId())));
         }
         TapahtumaLipputyyppi tapahtumaLipputyyppi = tapahtumaLipputyyppiOptional.get();
 
@@ -115,7 +115,7 @@ public class LippuController {
                 .findById(lippuDTO.getOstostapahtumaId());
         if (ostostapahtumaOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("error", ("Ostostapahtumaa ei löydy ")));
+                    .body(Map.of("error", ("Ostostapahtumaa ei löydy id:llä " + lippuDTO.getOstostapahtumaId())));
         }
         
         
@@ -131,18 +131,18 @@ public class LippuController {
     }
 
     @DeleteMapping("/liput/{id}")
-    public ResponseEntity<Void> poistaLippu(@PathVariable("id") Long lippuId) {
+    public ResponseEntity<?> poistaLippu(@PathVariable("id") Long lippuId) {
         if (lippuRepository.existsById(lippuId)) {
             lippuRepository.deleteById(lippuId);
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lippua ei löydy id:llä " + lippuId);
         }
     }
 
     @PutMapping("/liput/{id}")
-    public ResponseEntity<?> muokkaaLippua(@Valid @RequestBody LippuDTO lippuDTO, @PathVariable("id") Long lippuId,
-            BindingResult bindingResult) {
+    public ResponseEntity<?> muokkaaLippua(@Valid @RequestBody LippuDTO lippuDTO, BindingResult bindingResult, @PathVariable("id") Long lippuId
+            ) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
@@ -151,7 +151,7 @@ public class LippuController {
 
         Lippu olemassaOlevaLippu = lippuRepository.findById(lippuId).orElse(null);
         if (olemassaOlevaLippu == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lippua ei löydy id:llä " + lippuId);
         }
 
         Tapahtuma tapahtuma = tapahtumaRepository.findByTapahtumaId(lippuDTO.getTapahtumaId());
