@@ -1,5 +1,4 @@
-package com.melkeinkood.ticket_guru.auth.services;
-// package com.melkeinkood.ticket_guru.service;
+// package com.melkeinkood.ticket_guru.auth.services;
 
 // import java.util.ArrayList;
 
@@ -19,9 +18,16 @@ package com.melkeinkood.ticket_guru.auth.services;
 
 //     @Override
 //     public UserDetails loadUserByUsername(String kayttajanimi) throws UsernameNotFoundException {
-//         Kayttaja kayttaja = kayttajaRepository.findByUsername(kayttajanimi);
-//         UserDetails user = new org.springframework.security.core.userdetails.User(kayttajanimi, kayttaja.getSalasana(),
-//         new ArrayList<>());
-//         return user;
-//     }
+//         Kayttaja kayttaja = kayttajaRepository.findByKayttajanimi(kayttajanimi);
+
+//         if (kayttaja == null) {
+//             throw new UsernameNotFoundException("Käyttäjää ei löydy: " + kayttajanimi);
+//         }
+
+//         return new org.springframework.security.core.userdetails.User(
+//         kayttaja.getKayttajanimi(),
+//         kayttaja.getSalasana(),
+//         new ArrayList<>()
+//     );
+// }
 // }
