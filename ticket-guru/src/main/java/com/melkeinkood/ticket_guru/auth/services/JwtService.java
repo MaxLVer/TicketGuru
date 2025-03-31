@@ -26,7 +26,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private SecretKey key =  Jwts.SIG.HS256.key().build();
+    private SecretKey key =  Jwts.SIG.HS384.key().build();
 
     public String generateToken(String kayttajanimi) {
         Date now = new Date ();
@@ -35,7 +35,7 @@ public class JwtService {
                 .subject(kayttajanimi)
                 .issuedAt(now)
                 .expiration(expiryDate)
-                .signWith(getSingInKey())
+                .signWith(key)
                 .compact();
     }
     
@@ -51,11 +51,23 @@ public class JwtService {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+            Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token);
             return true;
-        } catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException ex){
-            System.out.println("Invalid token");
+        } catch (SignatureException ex) {
+            System.out.println("Invalid token signature: " + ex.getMessage());
+        } catch (MalformedJwtException ex) {
+            System.out.println("Token is malformed: " + ex.getMessage());
+        } catch (ExpiredJwtException ex) {
+            System.out.println("Token has expired: " + ex.getMessage());
+        } catch (UnsupportedJwtException ex) {
+            System.out.println("Token is unsupported: " + ex.getMessage());
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Token is empty or null: " + ex.getMessage());
         }
         return false;
     }
+    
 }

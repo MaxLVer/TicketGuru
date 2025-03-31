@@ -1,13 +1,15 @@
 package com.melkeinkood.ticket_guru.auth.config;
 
+import com.melkeinkood.ticket_guru.auth.services.JwtAuthenticationEntryPoint;
 import com.melkeinkood.ticket_guru.auth.services.JwtService;
 import com.melkeinkood.ticket_guru.auth.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,14 +19,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    public SecurityConfig(JwtService jwtService, UserDetailsService userDetailsService) {
+    public SecurityConfig(JwtService jwtService, UserDetailsService userDetailsService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     @Bean
@@ -33,11 +38,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager() {
+    public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
-        return new ProviderManager(authProvider);
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+            .authenticationProvider(authProvider())
+            .build();
     }
 
     @Bean
@@ -51,9 +63,12 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/kayttajat/**").permitAll()
+                .requestMatchers("/kayttajat/luo").permitAll()
+                .requestMatchers("/kayttajat/kirjaudu").permitAll()
                 .anyRequest().authenticated() 
+            )
+            .exceptionHandling(exceptionHandling -> 
+                exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint)
             )
             .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class); 
 
