@@ -1,4 +1,4 @@
-package com.melkeinkood.ticket_guru.web;
+package com.melkeinkood.ticket_guru.auth.controller;
 /* 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
