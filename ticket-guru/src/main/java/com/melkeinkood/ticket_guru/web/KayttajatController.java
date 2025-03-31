@@ -10,6 +10,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,6 +39,9 @@ public class KayttajatController {
 
     @Autowired
     private RooliRepository rooliRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private EntityModel<KayttajaDTO> toEntityModel(KayttajaDTO kayttajaDTO) {
         Link selfLink = linkTo(
@@ -98,11 +102,13 @@ public class KayttajatController {
      @PostMapping("/kayttajat")
     public ResponseEntity<?> lisaaKayttaja(@Valid @RequestBody KayttajaDTO kayttajaDTO, BindingResult bindingResult){
 
-            if(bindingResult.hasErrors()) {
+        if(bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
+
+        String hashedPassword = passwordEncoder.encode(kayttajaDTO.getSalasana());
        
         Optional<Rooli> rooliOptional = rooliRepo.findById(kayttajaDTO.getRooliId());
         if(rooliOptional.isEmpty()){
@@ -114,7 +120,7 @@ public class KayttajatController {
          Kayttaja uusiKayttaja = new Kayttaja(
             rooli,
             kayttajaDTO.getKayttajanimi(),
-            kayttajaDTO.getSalasana(),
+            hashedPassword,
             kayttajaDTO.getEtunimi(),
             kayttajaDTO.getSukunimi()
          );
@@ -124,7 +130,7 @@ public class KayttajatController {
          KayttajaDTO responseDTO = toDTO(savedKayttaja);
 
          return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(responseDTO));
-    } 
+    }
  
     @PutMapping("kayttajat/{id}")
     public ResponseEntity<?> muokkaaKayttajaa (@PathVariable Long id,
