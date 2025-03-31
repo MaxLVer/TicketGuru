@@ -16,8 +16,10 @@ Määräaikaisesti julkiset
 - [Muokkaa tapahtumaa](tapahtumat/put.md): PUT
 ---
 ### Liput
-- [Näytä liput](liput/get.md): GET
+- [Näytä liput / Hae yksi lippu](liput/get.md): GET
 - [Lisää lippu](liput/add.md): POST
+- [Muokkaa Lippua](liput/put.md): PUT
+- [Poista lippu](liput/delete.md): DELETE
 ---
 ### Ostostapahtumat
 - [Näytä ostostapahtumat / Näytä yksi ostostapahtuma](ostostapahtumat/get.md): GET
@@ -40,3 +42,9 @@ Määräaikaisesti julkiset
 ---
 ### Roolit
 - [Näytä roolit](roolit/get.md): GET
+---
+### Asiakastyypit
+- [Näytä asiakastyypit / hae yksi asiakastyyppi](asiakastyypit/get.md): GET
+- [Luo asiakastyyppi](asiakastyypit/add.md): POST
+- [Muokkaa asiakastyyppiä](asiakastyypit/put.md): PUT
+- [Poista asiakastyyppi](asiakastyypit/delete.md): DELETE
