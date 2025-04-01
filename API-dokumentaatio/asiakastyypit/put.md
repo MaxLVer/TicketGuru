@@ -43,6 +43,6 @@ Lisää asiakastyyppi
 
 ## Virhe Response
 
-**Tila** : Jos kenttiä puuttuu tai niissä on virheitä.
+**Tila** : Jos asiakastyyppi puuttuu tai niissä on virheitä.
 
 **Koodi** : `400 BAD REQUEST`

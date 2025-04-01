@@ -71,7 +71,7 @@ public class AsiakastyyppiController {
             AsiakastyyppiDTO asiakastyyppiDTO = new AsiakastyyppiDTO(asiakasTyyppi);
             return ResponseEntity.ok(toEntityModel(asiakastyyppiDTO));
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Asiakastyyppiä ei löydy id:llä " + id);
         }
     }
 
@@ -95,10 +95,13 @@ public class AsiakastyyppiController {
     }
 
     @DeleteMapping("/asiakastyypit/{id}")
-    public ResponseEntity<Void> poistaAsiakastyyppi(@PathVariable("id") Long asiakastyyppiId) {
+    public ResponseEntity<?> poistaAsiakastyyppi(@PathVariable("id") Long asiakastyyppiId) {
+        if(!asiakastyyppiRepository.existsById(asiakastyyppiId)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Asiakastyyppiä ei löydy id:llä " + asiakastyyppiId);
+        }
         if (asiakastyyppiRepository.existsById(asiakastyyppiId)) {
             asiakastyyppiRepository.deleteById(asiakastyyppiId);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Asiakastyyppi " + asiakastyyppiId + " poistettu");
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -106,8 +109,9 @@ public class AsiakastyyppiController {
 
     @PutMapping("/asiakastyypit/{id}")
     public ResponseEntity<?> muokkaaAsiakastyyppiä(
-            @Valid @RequestBody Asiakastyyppi asiakastyyppi,
-            @PathVariable("id") Long asiakastyyppiId, BindingResult bindingResult) {
+            @Valid @RequestBody Asiakastyyppi asiakastyyppi, BindingResult bindingResult,
+            @PathVariable("id") Long asiakastyyppiId) {
+        
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
@@ -122,7 +126,7 @@ public class AsiakastyyppiController {
             Asiakastyyppi muokattuAsiakastyyppi = asiakastyyppiRepository.save(asiakastyyppi);
             return ResponseEntity.status(HttpStatus.OK).body(toEntityModel(convertToDTO(muokattuAsiakastyyppi)));
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Asiakastyyppiä ei löydy id:llä " + asiakastyyppiId);
         }
     }
 
