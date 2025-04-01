@@ -1,6 +1,5 @@
 package com.melkeinkood.ticket_guru.auth.services;
 
-import java.security.Key;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
@@ -9,22 +8,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 
 @Component
 public class JwtService {
-    @Value("${jwt.secret}")
-    private String secretKey;
 
     @Value("${jwt.expiration}")
     private Long jwtExpirationInMS;
-
-    private Key getSingInKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
 
     private SecretKey key =  Jwts.SIG.HS384.key().build();
 
