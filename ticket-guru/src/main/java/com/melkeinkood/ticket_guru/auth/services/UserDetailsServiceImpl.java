@@ -19,6 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private KayttajaRepository kayttajaRepository;
 
+    // Loggeri virheiden ja tapahtumien kirjaamista varten
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     @Override

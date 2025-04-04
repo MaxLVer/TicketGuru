@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,6 +77,7 @@ public class OstostapahtumaController {
                 lippuIdt);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/ostostapahtumat")
     public ResponseEntity<Object> haeKaikkiOstostapahtumat() {
         List<Ostostapahtuma> ostostapahtumat = ostostapahtumaRepository.findAll();
@@ -89,6 +91,7 @@ public class OstostapahtumaController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/ostostapahtumat/{id}")
     public ResponseEntity<Object> haeOstostapahtuma(@PathVariable Long id) {
         Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id).orElse(null);
@@ -101,6 +104,7 @@ public class OstostapahtumaController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PostMapping("/ostostapahtumat")
     public ResponseEntity<?> lisaaOstostapahtuma(
             @Valid @RequestBody OstostapahtumaDTO ostostapahtumaDTO, BindingResult bindingResult) {
@@ -121,6 +125,7 @@ public class OstostapahtumaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(ostostapahtumaDTO));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PatchMapping("/ostostapahtumat/{id}/myyntiaika")
     public ResponseEntity<EntityModel<OstostapahtumaDTO>> paivitaMyyntiaika(@PathVariable Long id,
             @RequestBody Map<String, LocalDateTime> haeMyyntiaika) {
@@ -135,6 +140,7 @@ public class OstostapahtumaController {
         return ResponseEntity.ok(savedOstostapahtumaDTO);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PutMapping("/ostostapahtumat/{id}")
     public ResponseEntity<?> muokkaaOstostapahtumaa(
             @Valid @RequestBody OstostapahtumaDTO ostostapahtumaDTO, @PathVariable Long id,
@@ -169,6 +175,7 @@ public class OstostapahtumaController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/ostostapahtumat/{id}")
     public ResponseEntity<Object> poistaOstostapahtuma(@PathVariable Long id) {
         if (ostostapahtumaRepository.existsById(id)) {

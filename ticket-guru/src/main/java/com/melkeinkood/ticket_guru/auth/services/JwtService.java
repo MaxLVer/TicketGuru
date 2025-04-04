@@ -21,9 +21,11 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtService {
 
+    //JWT voimassaoloaika
     @Value("${jwt.expiration}")
     private Long jwtExpirationInMS;
 
+    //salainen avain JWT kirjautumiseen
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -35,11 +37,13 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    //Yleiskäyttöinen vaatimusten poimija, jossa käytetään lambdaa
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
+    // Liittää tokenin, vahvistaa sen allekirjoitusavaimella ja palauttaa kaikki vaatimukset
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
@@ -49,24 +53,24 @@ public class JwtService {
                 .getPayload();
     }
 
+    //tarkistaa jos token on vanhentunut
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
+    //validoin tokenin 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-
-
+    //generoi tokenin käyttäjänimelle
     public String generateToken(String username){
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, username);
     }
 
-
-
+    //Apumetodi joka auttaa rakentamaan JWT vaatimuksilla, aiheella, myöntämisajalla, vanhenemisella ja allekirjoituksella
     private String createToken(Map<String, Object> claims, String username) {
 
         Date now = new Date();
@@ -80,6 +84,7 @@ public class JwtService {
                 .compact();
     }
 
+    //Purkaa base64-salaisen avaimen ja palauttaa sen HMAC SHA -avaimena
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);

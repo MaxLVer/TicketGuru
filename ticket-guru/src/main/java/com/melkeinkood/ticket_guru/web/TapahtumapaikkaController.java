@@ -7,6 +7,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,6 +60,7 @@ public class TapahtumapaikkaController {
         return EntityModel.of(tapahtumapaikkaDTO, selfLink, postinumeroLink);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/tapahtumapaikat")
     public ResponseEntity<List<EntityModel<TapahtumapaikkaDTO>>> haeKaikkiTapahtumapaikat() {
         List<Tapahtumapaikka> tapahtumapaikat = (List<Tapahtumapaikka>) tapahtumapaikkaRepository.findAll();
@@ -68,6 +70,7 @@ public class TapahtumapaikkaController {
         return ResponseEntity.ok(tapahtumapaikkaModel);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/tapahtumapaikat/{id}")
     public ResponseEntity<EntityModel<TapahtumapaikkaDTO>> getTapahtumapaikka(@PathVariable Long id) {
         return tapahtumapaikkaRepository.findById(id)
@@ -76,6 +79,7 @@ public class TapahtumapaikkaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/tapahtumapaikat")
     public ResponseEntity<EntityModel<TapahtumapaikkaDTO>> lisaaTapahtumapaikka(@Valid @RequestBody TapahtumapaikkaDTO tapahtumapaikkaDTO) {
         Optional<Postinumero> postinumero = postinumeroRepository.findByPostinumeroId(tapahtumapaikkaDTO.getPostinumeroId());
@@ -92,6 +96,7 @@ public class TapahtumapaikkaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(savedTapahtumapaikka));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/tapahtumapaikat/{id}")
     public ResponseEntity<EntityModel<TapahtumapaikkaDTO>> muokkaaTapahtumapaikka(@Valid @RequestBody TapahtumapaikkaDTO tapahtumapaikkaDTO,
                                                                                    @PathVariable Long id) {
@@ -115,6 +120,7 @@ public class TapahtumapaikkaController {
         return ResponseEntity.ok(toEntityModel(paivitettyTapahtumapaikka));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/tapahtumapaikat/{id}")
     public ResponseEntity<Void> poistaTapahtumapaikka(@PathVariable Long id) {
         if (!tapahtumapaikkaRepository.existsById(id)) {

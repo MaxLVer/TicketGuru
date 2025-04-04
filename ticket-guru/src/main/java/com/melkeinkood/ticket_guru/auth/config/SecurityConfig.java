@@ -34,68 +34,40 @@ public class SecurityConfig {
         return new UserDetailsServiceImpl();
     }
 
+    //Main security config
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
             .requestMatchers("/kayttajat/luo", "/kayttajat/kirjaudu").permitAll()  // Hyväksy spesifiset endpointit
-            .anyRequest().authenticated()  // Vaadi eutentikointia muissa endpointeissa
+            .anyRequest().authenticated()  // Vaadi autentikointia muissa endpointeissa
         )
         .sessionManagement(session -> 
             session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Session luonti stateless
         )
-        .authenticationProvider(authProvider())  
+        .authenticationProvider(authProvider())  //Asettaa mukautetun auntentikointi providerin joka käyttää userdetailservisia
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)  // Lisää JWT autentikaatio filtteri ennen defaulttia UsernamePasswordAuthenticationFilter
-        .build();  
+        .build(); //rakentaa securityfilerchain 
 }
 
+    //salasanan encoding BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+    //Config DAO-todennustarjoajan UserdetailsServicen ja salasanan
     @Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setUserDetailsService(userDetailsService()); //käyttää mukautettua user servicea
+        authProvider.setPasswordEncoder(passwordEncoder()); //käyttää BCryptiä salasanan tarkistamiseen
         return authProvider;
     }
 
+    //Paljastaa AuthenticationManager beanin jota tarvitaan todennusprosesseihin, kuten kirjautumiseen
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
     return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    // public SecurityConfig(JwtService jwtService, UserDetailsService userDetailsService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
-    //     this.jwtService = jwtService;
-    //     this.userDetailsService = userDetailsService;
-    //     this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-    // }
-
-    // @Bean
-    // public JwtFilter jwtFilter() {
-    //     return new JwtFilter(jwtService, userDetailsService);
-    // }
-
-    // @Bean
-    // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    //     http
-    //         .csrf(csrf -> csrf.disable())
-    //         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
-    //         .authorizeHttpRequests(auth -> auth
-    //             .requestMatchers("/kayttajat/luo").permitAll()
-    //             .requestMatchers("/kayttajat/kirjaudu").permitAll()
-    //             .anyRequest().authenticated() 
-    //         )
-    //         .exceptionHandling(exceptionHandling -> 
-    //             exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-    //         )
-    //         .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class); 
-
-    //     //return http.build();
-    // }
-
-    
+    } 
 }

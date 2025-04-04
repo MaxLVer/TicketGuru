@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.EntityModel;
@@ -63,6 +64,7 @@ public class LippuController {
     }
 
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/liput/{id}")
     public ResponseEntity<Object> haeLippu(@PathVariable Long id) {
         Lippu lippu = lippuRepository.findById(id).orElse(null);
@@ -74,6 +76,7 @@ public class LippuController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/liput")
     public ResponseEntity<List<EntityModel<LippuDTO>>> haeKaikkiLiput() {
         List<Lippu> liput = lippuRepository.findAll();
@@ -87,6 +90,7 @@ public class LippuController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PostMapping("/liput")
     public ResponseEntity<?> luoLippu(@Valid @RequestBody LippuDTO lippuDTO, BindingResult bindingResult) {
 
@@ -130,6 +134,7 @@ public class LippuController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(convertToDTO(tallenttuLippu)));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/liput/{id}")
     public ResponseEntity<?> poistaLippu(@PathVariable("id") Long lippuId) {
         if (lippuRepository.existsById(lippuId)) {
@@ -140,6 +145,7 @@ public class LippuController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/liput/{id}")
     public ResponseEntity<?> muokkaaLippua(@Valid @RequestBody LippuDTO lippuDTO, BindingResult bindingResult, @PathVariable("id") Long lippuId
             ) {

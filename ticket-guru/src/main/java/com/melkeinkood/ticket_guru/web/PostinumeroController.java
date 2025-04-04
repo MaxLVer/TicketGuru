@@ -11,6 +11,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +48,7 @@ public class PostinumeroController {
                 postinumero.getKaupunki());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/postinumerot")
     public ResponseEntity<List<EntityModel<PostinumeroDTO>>> getPostinumerot() {
         List<Postinumero> postinumerot = postinumeroRepo.findAll();
@@ -60,6 +62,7 @@ public class PostinumeroController {
         return ResponseEntity.ok(postinumeroModels);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/postinumerot/{id}")
     public ResponseEntity<?> haePostinumero(@PathVariable Long id) {
         Optional<Postinumero> optionalPostinumero = postinumeroRepo.findById(id);
@@ -69,8 +72,8 @@ public class PostinumeroController {
         return ResponseEntity.ok(toEntityModel(toDTO(optionalPostinumero.get())));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/postinumerot")
-
     public ResponseEntity<?> lisaaPostinumero(@Valid @RequestBody PostinumeroDTO postinumeroDTO,
             BindingResult bindingResult) {
 
@@ -98,6 +101,7 @@ public class PostinumeroController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(toDTO(savedPostinumero)));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/postinumerot/{id}")
     public ResponseEntity<?> muokkaaPostinumero(@Valid @PathVariable Long id,
             @RequestBody PostinumeroDTO postinumeroDTO) {
@@ -119,6 +123,7 @@ public class PostinumeroController {
         return ResponseEntity.ok(toEntityModel(toDTO(updatedPostinumero)));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/postinumerot/{id}")
     public ResponseEntity<String> deletePostinumero(@PathVariable Long id) {
         if (!postinumeroRepo.existsById(id)) {

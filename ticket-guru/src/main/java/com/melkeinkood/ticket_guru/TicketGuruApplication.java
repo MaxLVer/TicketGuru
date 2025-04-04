@@ -98,8 +98,11 @@ public class TicketGuruApplication {
 //			peruslippu.getTapahtumaLipputyyppi().add(lipputyyppi1);
 //			lastenlippu.getTapahtumaLipputyyppi().add(lipputyyppi2);
 
-			Rooli rooli1 = (new Rooli ("yllapito", "Ylläpitäjät hallitsevat järjestelmää."));
+			Rooli rooli1 = (new Rooli ("admin", "Ylläpitäjät hallitsevat järjestelmää."));
 			rooliRepository.save(rooli1);
+
+			Rooli rooli2 = (new Rooli ("salesperson", "Myyjän tehtävät"));
+			rooliRepository.save(rooli2);
 
 			Kayttaja kayttaja1 = (new Kayttaja(rooli1, "test1", "test1234", "Teppo", "Testaaja"));
 			kayttajaRepository.save(kayttaja1);

@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.hateoas.Link;
@@ -49,6 +50,7 @@ public class AsiakastyyppiController {
         return dto;
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/asiakastyypit")
     public ResponseEntity<List<EntityModel<AsiakastyyppiDTO>>> haeKaikkiAsiakastyypit() {
         List<Asiakastyyppi> asiakastyypit = asiakastyyppiRepository.findAll();
@@ -64,6 +66,7 @@ public class AsiakastyyppiController {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/asiakastyypit/{id}")
     public ResponseEntity<Object> haeAsiakastyyppi(@PathVariable Long id) {
         Asiakastyyppi asiakasTyyppi = asiakastyyppiRepository.findById(id).orElse(null);
@@ -75,6 +78,7 @@ public class AsiakastyyppiController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/asiakastyypit")
     public ResponseEntity<?> lisaaAsiakastyyppi(@Valid @RequestBody AsiakastyyppiDTO asiakastyyppiDTO,
             BindingResult bindingResult) {
@@ -94,6 +98,7 @@ public class AsiakastyyppiController {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/asiakastyypit/{id}")
     public ResponseEntity<?> poistaAsiakastyyppi(@PathVariable("id") Long asiakastyyppiId) {
         if(!asiakastyyppiRepository.existsById(asiakastyyppiId)){
@@ -107,6 +112,7 @@ public class AsiakastyyppiController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/asiakastyypit/{id}")
     public ResponseEntity<?> muokkaaAsiakastyyppiä(
             @Valid @RequestBody Asiakastyyppi asiakastyyppi, BindingResult bindingResult,

@@ -22,22 +22,28 @@ public class RefreshTokenService {
     @Autowired
     KayttajaRepository userRepository;
 
+    //luo uusi refresh token
     public RefreshToken createRefreshToken(String username){
         Kayttaja user = userRepository.findByKayttajanimi(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         
+        // Luodaan uusi RefreshToken-olio käyttäjälle
         RefreshToken refreshToken = RefreshToken.builder()
                 .kayttaja(user)
                 .token(UUID.randomUUID().toString())
                 .expiryDate(Instant.now().plusMillis(600000))
                 .build();
+        // Tallennetaan token tietokantaan ja palautetaan se
         return refreshTokenRepository.save(refreshToken);
     }
 
+    //Tokenin haku
+    // Palauttaa refresh tokenin sen merkkijonon perusteella (jos löytyy)
     public Optional<RefreshToken> findByToken(String token){
         return refreshTokenRepository.findByToken(token);
     }
 
+    //tokenin voimassaoloajan takrkistus
     public RefreshToken verifyExpiration(RefreshToken token){
         if(token.getExpiryDate().compareTo(Instant.now())<0){
             refreshTokenRepository.delete(token);

@@ -27,12 +27,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     UserDetailsServiceImpl userDetailsServiceImpl;
 
-    
-    // public JwtFilter(JwtService jwtService, UserDetailsService userDetailsService) {
-    //     this.jwtService = jwtService;
-    //     this.userDetailsService = userDetailsService;
-    // }
-
+    //Metodia käytetään per request filterointiin ja JWT validointiin
     @Override
     protected void doFilterInternal(
         HttpServletRequest request, 
@@ -43,28 +38,36 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = null;
         String kayttajanimi = null;
 
+        //tarkista onko requestilla cookie
         if(request.getCookies() != null){
             for(Cookie cookie: request.getCookies()){
                 if(cookie.getName().equals("accessToken")){
-                    token = cookie.getValue();
+                    token = cookie.getValue(); //
                 }
             }
         }
 
+        //jos tokenia ei löydy, jatka autentikaatio asetuksilla
         if(token == null){
             filterChain.doFilter(request, response);
             return;
         }
 
+        //extract käyttäjänimi tokenista
         kayttajanimi = jwtService.extractUsername(token);
 
+        //jos kättäjänimi on saatu onnistuneesti niin lataa käyttäjän tiedot
         if(kayttajanimi != null){
             UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(kayttajanimi);
+
+            //validoi token käyttäjän tiedoilla
             if(jwtService.validateToken(token, userDetails)){
+            //jos validi niin luo autentikointi token ja lisää se suojakontekstiin
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
 
+        //jatka filterchainiä
         filterChain.doFilter(request, response);
     }
 }

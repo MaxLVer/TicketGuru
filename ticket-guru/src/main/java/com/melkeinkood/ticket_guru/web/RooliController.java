@@ -9,6 +9,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.melkeinkood.ticket_guru.repositories.RooliRepository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,7 @@ public class RooliController {
         return dto;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/roolit")
     public ResponseEntity<List<EntityModel<RooliDTO>>> haeKaikkiRoolit() {
         List<Rooli> roolit = rooliRepo.findAll();
@@ -56,6 +58,7 @@ public class RooliController {
         }
     }
     
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/roolit/{id}")
     public ResponseEntity<Object> haeRooli(@PathVariable Long id) {
         Rooli rooli = rooliRepo.findById(id).orElse(null);
