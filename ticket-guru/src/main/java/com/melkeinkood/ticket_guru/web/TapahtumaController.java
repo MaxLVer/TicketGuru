@@ -8,6 +8,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,6 +59,7 @@ public class TapahtumaController {
                 tapahtuma.getJaljellaOlevaLippumaara());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/tapahtumat")
     public ResponseEntity<List<EntityModel<TapahtumaDTO>>> haeKaikkiTapahtumat() {
         List<Tapahtuma> tapahtumat = tapahtumaRepository.findAll();
@@ -73,6 +75,7 @@ public class TapahtumaController {
         return ResponseEntity.ok(tapahtumaModel);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/tapahtumat/{id}")
     public ResponseEntity<?> haeTapahtuma(@PathVariable Long id) {
 
@@ -88,6 +91,7 @@ public class TapahtumaController {
         return ResponseEntity.ok(entityModel);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/tapahtumat")
     public ResponseEntity<?> lisaaTapahtuma(
             @Valid @RequestBody TapahtumaDTO tapahtumaDTO, BindingResult bindingResult) {
@@ -120,6 +124,7 @@ public class TapahtumaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(responseDTO));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/tapahtumat/{id}")
 
     public ResponseEntity<?> muokkaaTapahtuma(@PathVariable Long id,
@@ -153,6 +158,7 @@ public class TapahtumaController {
         return ResponseEntity.ok("Tapahtuma päivitetty.");
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/tapahtumat/{id}")
     public ResponseEntity<String> deleteTapahtuma(@PathVariable Long id) {
         if (!tapahtumaRepository.existsById(id)) {

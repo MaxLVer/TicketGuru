@@ -13,6 +13,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -92,6 +93,7 @@ public class KayttajatController {
         );
     } 
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/kayttajat")
     public ResponseEntity<List<EntityModel<KayttajaDTO>>> haeKaikkiKayttajat() {
         List<Kayttaja> kayttajat = kayttajaRepo.findAll();
@@ -108,6 +110,7 @@ public class KayttajatController {
     }
     
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/kayttajat/{id}")
     public ResponseEntity<Object> haeKayttaja(@PathVariable Long id) {
 
@@ -217,6 +220,7 @@ public ResponseEntity<Void> logout(HttpServletResponse response) {
 }
     
  
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("kayttajat/{id}")
     public ResponseEntity<?> muokkaaKayttajaa (@PathVariable Long id,
     @Valid @RequestBody KayttajaDTO kayttajaDTO, BindingResult bindingResult) {
@@ -254,6 +258,7 @@ public ResponseEntity<Void> logout(HttpServletResponse response) {
     }
     
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/kayttajat/{id}")
     public ResponseEntity<Object> poistakayttaja(@PathVariable Long id) {
         if (!kayttajaRepo.existsById(id)) {

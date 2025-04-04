@@ -5,6 +5,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 
 import java.util.*;
@@ -70,6 +71,7 @@ public class TapahtumaLipputyyppiController {
                 tapahtumaLipputyyppi.getHinta());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/tapahtumalipputyypit")
     public ResponseEntity<List<EntityModel<TapahtumaLipputyyppiDTO>>> haeKaikkiTapahtumaLipputyypit() {
         List<TapahtumaLipputyyppi> tapahtumaLipputyypit = tapahtumaLipputyyppiRepo.findAll();
@@ -85,6 +87,7 @@ public class TapahtumaLipputyyppiController {
         return ResponseEntity.ok(tapahtumaLipputyyppiModel);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/tapahtumalipputyypit/{id}")
     public ResponseEntity<?> haeTapahtumaLipputyyppi(@PathVariable Long id) {
 
@@ -100,6 +103,7 @@ public class TapahtumaLipputyyppiController {
         return ResponseEntity.ok(entityModel);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PostMapping("/tapahtumalipputyypit")
     public ResponseEntity<?> lisaaTapahtumaLipputyyppi(
             @Valid @RequestBody TapahtumaLipputyyppiDTO tapahtumaLipputyyppiDTO, BindingResult bindingResult) {
@@ -143,6 +147,7 @@ public class TapahtumaLipputyyppiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(responseDTO));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/tapahtumalipputyypit/{id}")
     public ResponseEntity<?> muokkaaTapahtumaLipputyyppi(@PathVariable Long id,
         @Valid @RequestBody TapahtumaLipputyyppiDTO tapahtumaLipputyyppiDTO, BindingResult bindingResult) {
@@ -190,6 +195,7 @@ public class TapahtumaLipputyyppiController {
     return ResponseEntity.ok(toEntityModel(responseDTO));
 }
 
+@PreAuthorize("hasAuthority('ADMIN')")
 @DeleteMapping("/tapahtumalipputyypit/{id}")
 public ResponseEntity<?> deleteTapahtumaLipputyyppi(@PathVariable Long id) {
     if (!tapahtumaLipputyyppiRepo.existsById(id)) {
