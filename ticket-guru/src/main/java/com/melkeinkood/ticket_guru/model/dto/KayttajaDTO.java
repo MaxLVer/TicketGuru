@@ -1,5 +1,7 @@
 package com.melkeinkood.ticket_guru.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -15,6 +17,9 @@ public class KayttajaDTO {
     @NotNull(message = "Kayttajanimi ei saa olla tyhjä")
     @Size(min = 5, max = 10, message = "Kayttajanimen pituuden tulee olla 5-10 merkkiä")
     private String kayttajanimi;
+
+    //Salasana piilotettu responsesta
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull(message = "Salasana ei saa olla tyhjä")
     @Size(min = 10, max = 15, message = "Salasanan pituuden tulee olla 10-15 merkkiä")
     private String salasana;
