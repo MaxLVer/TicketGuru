@@ -2,6 +2,8 @@ package com.melkeinkood.ticket_guru.web;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+import org.springframework.http.HttpHeaders;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -9,12 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 
@@ -24,17 +26,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
+import com.melkeinkood.ticket_guru.auth.dto.JwtResponseDTO;
+import com.melkeinkood.ticket_guru.auth.dto.LoginRequestDTO;
+import com.melkeinkood.ticket_guru.auth.model.RefreshToken;
 import com.melkeinkood.ticket_guru.auth.services.JwtService;
+import com.melkeinkood.ticket_guru.auth.services.RefreshTokenService;
 import com.melkeinkood.ticket_guru.model.Kayttaja;
 import com.melkeinkood.ticket_guru.model.Rooli;
 import com.melkeinkood.ticket_guru.repositories.KayttajaRepository;
 import com.melkeinkood.ticket_guru.repositories.RooliRepository;
 import com.melkeinkood.ticket_guru.model.dto.KayttajaDTO;
-import com.melkeinkood.ticket_guru.model.dto.LoginRequestDTO;
 
 import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -56,6 +64,9 @@ public class KayttajatController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 
     private EntityModel<KayttajaDTO> toEntityModel(KayttajaDTO kayttajaDTO) {
         Link selfLink = linkTo(
@@ -121,7 +132,12 @@ public class KayttajatController {
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
-
+        Optional<Kayttaja> existingUser = kayttajaRepo.findByKayttajanimi(kayttajaDTO.getKayttajanimi());
+        if (existingUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                 .body(Map.of("error", "Username already exists"));
+        }
+        //Salasanan hash ennen tallentamista
         String hashedPassword = passwordEncoder.encode(kayttajaDTO.getSalasana());
        
         Optional<Rooli> rooliOptional = rooliRepo.findById(kayttajaDTO.getRooliId());
@@ -147,26 +163,45 @@ public class KayttajatController {
     }
 
     @PostMapping("/kayttajat/kirjaudu")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDTO loginRequest) {
-        try {
-            System.out.println("Attempting to authenticate user: " + loginRequest.getKayttajanimi());
-            String hashedPassword = passwordEncoder.encode(loginRequest.getSalasana());
-            System.out.println("Password: " + hashedPassword);
-    
-            Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getKayttajanimi(), loginRequest.getSalasana())
-            );
-            
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+   public JwtResponseDTO AuthenticateAndGetToken(@RequestBody LoginRequestDTO authRequestDTO, HttpServletResponse response){
+    Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDTO.getKayttajanimi(), authRequestDTO.getSalasana()));
+    if(authentication.isAuthenticated()){
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequestDTO.getKayttajanimi());
+        String accessToken = jwtService.generateToken(authRequestDTO.getKayttajanimi());
+        //aseta tokeni headeriin
+        ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(jwtService.getJwtExpirationInMS() / 1000)
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        return JwtResponseDTO.builder()
+                .accessToken(accessToken)
+                .token(refreshToken.getToken()).build();
 
-            String jwtToken = jwtService.generateToken(loginRequest.getKayttajanimi());
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("JWT Token: " + jwtToken);
-        } catch (BadCredentialsException e) {
-            // Log the exception
-            System.out.println("Authentication failed: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-        }
+    } else {
+        throw new UsernameNotFoundException("invalid user request..!!");
     }
+
+}
+
+@PostMapping("/kayttajat/uloskirjaudu")
+public ResponseEntity<Void> logout(HttpServletResponse response) {
+
+    // Poista token laittamalla expiration aika 0
+    ResponseCookie deleteAccessTokenCookie = ResponseCookie.from("accessToken", "")
+            .httpOnly(true)
+            .secure(false) //Laita false jos local dev
+            .path("/")
+            .maxAge(0)
+            .sameSite("Strict")
+            .build();
+
+    response.setHeader(HttpHeaders.SET_COOKIE, deleteAccessTokenCookie.toString());
+
+    return ResponseEntity.noContent().build();
+}
     
  
     @PutMapping("kayttajat/{id}")
