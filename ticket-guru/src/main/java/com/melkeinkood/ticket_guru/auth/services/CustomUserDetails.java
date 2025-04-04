@@ -15,6 +15,8 @@ public class CustomUserDetails implements UserDetails {
 
     private String username;
     private String password;
+
+    //kokoelma myönnettyjä valtuuksia rooleja/käyttöoikeuksia
     Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(Kayttaja kayttaja) {
@@ -24,6 +26,7 @@ public class CustomUserDetails implements UserDetails {
 
         Rooli rooli = kayttaja.getRooli();  
         
+        //jos rooli on olemassa niin lisää valtuuksia
         if (rooli != null && rooli.getNimike() != null) {
             auths.add(new SimpleGrantedAuthority(rooli.getNimike().toUpperCase()));
         }

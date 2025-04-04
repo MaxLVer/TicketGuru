@@ -127,19 +127,22 @@ public class KayttajatController {
     @PostMapping("/kayttajat/luo")
     public ResponseEntity<?> lisaaKayttaja(@Valid @RequestBody KayttajaDTO kayttajaDTO, BindingResult bindingResult){
 
+        //tarkistus syötteen validointi(tyhjät kentät, väärä muoto jne.)
         if(bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
+        //tarkistus: onko käyttäjänimi jo käytössä
         Optional<Kayttaja> existingUser = kayttajaRepo.findByKayttajanimi(kayttajaDTO.getKayttajanimi());
         if (existingUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                 .body(Map.of("error", "Username already exists"));
+                                 .body(Map.of("error", "Käyttäjänimi on jo käytössä"));
         }
-        //Salasanan hash ennen tallentamista
+        //Salasanan salaaminen ennen tallentamista
         String hashedPassword = passwordEncoder.encode(kayttajaDTO.getSalasana());
        
+        //Tarkistus: löytyykö rooli
         Optional<Rooli> rooliOptional = rooliRepo.findById(kayttajaDTO.getRooliId());
         if(rooliOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -147,6 +150,7 @@ public class KayttajatController {
         }
         Rooli rooli = rooliOptional.get();
 
+        //uusi käyttäjä objekti
          Kayttaja uusiKayttaja = new Kayttaja(
             rooli,
             kayttajaDTO.getKayttajanimi(),
@@ -155,8 +159,10 @@ public class KayttajatController {
             kayttajaDTO.getSukunimi()
          );
 
+         //käyttäjän tallennus tietokantaan
          Kayttaja savedKayttaja = kayttajaRepo.save(uusiKayttaja);
 
+         //muutetaan dto-muotoon ja palautetaan
          KayttajaDTO responseDTO = toDTO(savedKayttaja);
 
          return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(responseDTO));
@@ -164,11 +170,15 @@ public class KayttajatController {
 
     @PostMapping("/kayttajat/kirjaudu")
    public JwtResponseDTO AuthenticateAndGetToken(@RequestBody LoginRequestDTO authRequestDTO, HttpServletResponse response){
+    //autentikointi kirjautumistiedoilla
     Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDTO.getKayttajanimi(), authRequestDTO.getSalasana()));
+    //jos onnistuneesti:
     if(authentication.isAuthenticated()){
+        //luodaan refreshtoken tietokantaan
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequestDTO.getKayttajanimi());
+        //luodaan access token JWT:nä
         String accessToken = jwtService.generateToken(authRequestDTO.getKayttajanimi());
-        //aseta tokeni headeriin
+        //Lisää access token cookieksi
         ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
                 .httpOnly(true)
                 .secure(false)
@@ -176,12 +186,14 @@ public class KayttajatController {
                 .maxAge(jwtService.getJwtExpirationInMS() / 1000)
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        //palautetaan access ja refreshtoken 
         return JwtResponseDTO.builder()
                 .accessToken(accessToken)
                 .token(refreshToken.getToken()).build();
 
     } else {
-        throw new UsernameNotFoundException("invalid user request..!!");
+        //jos epäonnistuneesti:
+        throw new UsernameNotFoundException("virheellinen käyttäjäpyyntö");
     }
 
 }
@@ -198,6 +210,7 @@ public ResponseEntity<Void> logout(HttpServletResponse response) {
             .sameSite("Strict")
             .build();
 
+    //tyhjän evästeen säätäminen
     response.setHeader(HttpHeaders.SET_COOKIE, deleteAccessTokenCookie.toString());
 
     return ResponseEntity.noContent().build();
