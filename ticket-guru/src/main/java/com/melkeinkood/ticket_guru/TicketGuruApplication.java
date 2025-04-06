@@ -33,6 +33,7 @@ public class TicketGuruApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TicketGuruApplication.class, args);
 	}
+/*
 
 	@Bean
 	public CommandLineRunner tapahtumaData(
@@ -126,4 +127,5 @@ public class TicketGuruApplication {
         	tapahtumaLipputyyppiRepository.save(uusiLipputyyppi);
 		};
 	}
+		*/
 }
