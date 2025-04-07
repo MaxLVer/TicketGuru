@@ -166,24 +166,43 @@ Kaikki endpointit on kuvattu erillisessä dokumentaatiossa:
 
 ## Tekninen kuvaus
 
-Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
-ratkaisut, esim.
+### Käytettävät teknologiat
+- Frontend:React + Vite
+- Backend: Spring Boot, JWT-autentikointi
+- Tietokanat: PostreSQL
+- Deployment: CSC Rahti(OpenShift pohjainen)
+- Päälaitteet: Tietokone, tabletti, älypuhelin
 
--   Missä mikäkin järjestelmän komponentti ajetaan (tietokone, palvelinohjelma)
-    ja komponenttien väliset yhteydet (vaikkapa tähän tyyliin:
-    https://security.ufl.edu/it-workers/risk-assessment/creating-an-information-systemdata-flow-diagram/)
--   Palvelintoteutuksen yleiskuvaus: teknologiat, deployment-ratkaisut yms.
--   Keskeisten rajapintojen kuvaukset, esimerkit REST-rajapinta. Tarvittaessa voidaan rajapinnan käyttöä täsmentää
-    UML-sekvenssikaavioilla.
--   Toteutuksen yleisiä ratkaisuja, esim. turvallisuus.
+## Palvelintotoeutus ja deployment
+- Sovellus buildataan Dockerin tai source-imagen avulla
+- Rahtissa käytetään Deployment YAML -tiedostoja, jotka määrittävät podit, service-tasot ja salaisuudet
+- PostgreSQL käynnistetään siemendatan kanssa
 
-Tämän lisäksi
+## Turvallisuusratkaisut
+- JWT-pohjainen autentikointi, joka tarkistetaan kaikissa suojatuissa API-kutsuissa refresh-tokenin avulla
+- Tokenin vanhentuminen ja uusimislogiikka käytössä
+- Yhteydet HTTPS:n kautta, salaus pakotetaan frontendin ja backendin välillä
+- Tietokantayhteys suljettu ulkomaailmalta, pääsy vain backend-palvelulta
+- Syötteen validointi
 
--   ohjelmakoodin tulee olla kommentoitua
--   luokkien, metodien ja muuttujien tulee olla kuvaavasti nimettyjä ja noudattaa
-    johdonmukaisia nimeämiskäytäntöjä
--   ohjelmiston pitää olla organisoitu komponentteihin niin, että turhalta toistolta
-    vältytään
+//Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
+//ratkaisut, esim.
+
+//-  Missä mikäkin järjestelmän komponentti ajetaan (tietokone, palvelinohjelma)
+//    ja komponenttien väliset yhteydet (vaikkapa tähän tyyliin:
+//    https://security.ufl.edu/it-workers/risk-assessment/creating-an-information-systemdata-flow-diagram/)
+//-   Palvelintoteutuksen yleiskuvaus: teknologiat, deployment-ratkaisut yms.
+//-   Keskeisten rajapintojen kuvaukset, esimerkit REST-rajapinta. Tarvittaessa voidaan rajapinnan käyttöä täsmentää
+//    UML-sekvenssikaavioilla.
+//-   Toteutuksen yleisiä ratkaisuja, esim. turvallisuus.
+//
+//Tämän lisäksi
+//
+//-   ohjelmakoodin tulee olla kommentoitua
+//-   luokkien, metodien ja muuttujien tulee olla kuvaavasti nimettyjä ja noudattaa
+//    johdonmukaisia nimeämiskäytäntöjä
+//-   ohjelmiston pitää olla organisoitu komponentteihin niin, että turhalta toistolta
+//    vältytään
 
 ## Testaus
 
