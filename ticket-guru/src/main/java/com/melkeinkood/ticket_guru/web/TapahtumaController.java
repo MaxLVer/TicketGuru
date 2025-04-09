@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+
 @RestController
 public class TapahtumaController {
     @Autowired
@@ -62,6 +64,12 @@ public class TapahtumaController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/tapahtumat")
     public ResponseEntity<List<EntityModel<TapahtumaDTO>>> haeKaikkiTapahtumat() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    
+        Map<String, Object> response = new HashMap<>();
+        response.put("loggedInAs", username);
+        response.put("tapahtumat", tapahtumaRepository.findAll());
+
         List<Tapahtuma> tapahtumat = tapahtumaRepository.findAll();
 
         List<EntityModel<TapahtumaDTO>> tapahtumaModel = tapahtumat.stream()

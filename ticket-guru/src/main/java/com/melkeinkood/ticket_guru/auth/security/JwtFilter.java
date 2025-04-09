@@ -33,8 +33,16 @@ public class JwtFilter extends OncePerRequestFilter {
         HttpServletRequest request, 
         HttpServletResponse response, 
         FilterChain filterChain
-        ) throws ServletException, IOException {
+    ) throws ServletException, IOException {
 
+        // Get the request path
+        String path = request.getRequestURI();
+
+    // List of endpoints that do not require token validation
+        if (path.equals("/kayttajat/luo") || path.equals("/kayttajat/kirjaudu") || path.equals("/kayttajat/uloskirjaudu")) {
+        filterChain.doFilter(request, response);
+            return;
+    }
         String token = null;
         String kayttajanimi = null;
 
@@ -49,28 +57,48 @@ public class JwtFilter extends OncePerRequestFilter {
 
         //jos tokenia ei löydy, jatka autentikaatio asetuksilla
         if(token == null){
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        //extract käyttäjänimi tokenista
-        kayttajanimi = jwtService.extractUsername(token);
-
-        //jos kättäjänimi on saatu onnistuneesti niin lataa käyttäjän tiedot
-        if(kayttajanimi != null){
-            UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(kayttajanimi);
-
-            //validoi token käyttäjän tiedoilla
-            if(jwtService.validateToken(token, userDetails)){
-            //jos validi niin luo autentikointi token ja lisää se suojakontekstiin
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        }
-
+            String authorizationHeader = request.getHeader("Authorization");
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                token = authorizationHeader.substring(7);  // Extract token from header
+            }
+            }
+            if (token == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Token puuttuu\"}");
+                return;
+            }
+    
+            try {
+                // Extract username from the token
+                kayttajanimi = jwtService.extractUsername(token);
+                System.out.println("Token received: " + token);
+                System.out.println("Username from token: " + kayttajanimi);
+    
+                // If the token is valid, set the authentication context
+                UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(kayttajanimi);
+                if (jwtService.validateToken(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken authenticationToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                } else {
+                    // If the token is invalid, respond with 403 Forbidden
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"error\": \"Virheellinen token\"}");
+                    return;
+                }
+            } catch (Exception e) {
+                // If there's any exception (like token parsing issues), respond with 401 Unauthorized
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Virheellinen token\"}");
+                return;
+            }
         //jatka filterchainiä
         filterChain.doFilter(request, response);
     }
 }
-}
+
         
       

@@ -60,8 +60,12 @@ public class JwtService {
 
     //validoin tokenin 
     public Boolean validateToken(String token, UserDetails userDetails) {
+
         final String username = extractUsername(token);
+
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+
+        
     }
 
     //generoi tokenin käyttäjänimelle
@@ -72,6 +76,9 @@ public class JwtService {
 
     //Apumetodi joka auttaa rakentamaan JWT vaatimuksilla, aiheella, myöntämisajalla, vanhenemisella ja allekirjoituksella
     private String createToken(Map<String, Object> claims, String username) {
+
+        System.out.println("JWT expiration in ms: " + jwtExpirationInMS);
+
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMS);
