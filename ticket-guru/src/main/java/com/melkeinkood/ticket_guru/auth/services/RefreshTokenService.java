@@ -27,6 +27,10 @@ public class RefreshTokenService {
         Kayttaja user = userRepository.findByKayttajanimi(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         
+        refreshTokenRepository.findByKayttaja(user).ifPresent(existingToken -> {
+            refreshTokenRepository.delete(existingToken);
+        });
+
         // Luodaan uusi RefreshToken-olio käyttäjälle
         RefreshToken refreshToken = RefreshToken.builder()
                 .kayttaja(user)

@@ -40,7 +40,7 @@ public class SecurityConfig {
         return http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-            .requestMatchers("/kayttajat/luo", "/kayttajat/kirjaudu").permitAll()  // Hyväksy spesifiset endpointit
+            .requestMatchers("/kayttajat/luo", "/kayttajat/kirjaudu", "/kayttajat/uloskirjaudu").permitAll()  // Hyväksy spesifiset endpointit
             .anyRequest().authenticated()  // Vaadi autentikointia muissa endpointeissa
         )
         .sessionManagement(session -> 
