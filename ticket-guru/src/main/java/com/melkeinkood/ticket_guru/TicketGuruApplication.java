@@ -48,6 +48,7 @@ public class TicketGuruApplication {
 			TapahtumaLipputyyppiRepository tapahtumaLipputyyppiRepository){
 		
 		return (args) -> {
+			//Lisätään testidataa
 			Postinumero p00250 = new Postinumero("00250", "Helsinki");
 			postinumeroRepository.save(p00250);
 

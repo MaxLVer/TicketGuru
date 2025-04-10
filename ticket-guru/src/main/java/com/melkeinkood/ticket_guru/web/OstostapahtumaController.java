@@ -40,6 +40,7 @@ public class OstostapahtumaController {
     @Autowired
     LippuRepository lippuRepository;
 
+    // Muuntaa DTO:n EntityModel-muotoon ja liittää siihen HATEOAS-linkit
     private EntityModel<OstostapahtumaDTO> toEntityModel(OstostapahtumaDTO ostostapahtumaDTO) {
         List<Long> lippuIdt = ostostapahtumaDTO.getLippuIdt();
         EntityModel<OstostapahtumaDTO> entityModel = EntityModel.of(ostostapahtumaDTO);
@@ -61,7 +62,7 @@ public class OstostapahtumaController {
         return entityModel;
 
     }
-
+    // Muuntaa entiteetin DTO:ksi
     private OstostapahtumaDTO toDTO(Ostostapahtuma ostostapahtuma) {
         List<Long> lippuIdt = new ArrayList<>();
         if (ostostapahtuma.getLiput() != null) {
@@ -77,12 +78,14 @@ public class OstostapahtumaController {
                 lippuIdt);
     }
 
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Hakee kaikki ostostapahtumat
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/ostostapahtumat")
     public ResponseEntity<Object> haeKaikkiOstostapahtumat() {
         List<Ostostapahtuma> ostostapahtumat = ostostapahtumaRepository.findAll();
         List<EntityModel<OstostapahtumaDTO>> ostostapahtumaModel = ostostapahtumat.stream()
-                .map(ostostapahtuma -> toEntityModel(toDTO(ostostapahtuma)))
+                .map(ostostapahtuma -> toEntityModel(toDTO(ostostapahtuma))) // Muunnetaan DTO-muotoon ja lisätään linkit
                 .collect(Collectors.toList());
         if (ostostapahtumaModel != null) {
             return ResponseEntity.ok(ostostapahtumaModel);
@@ -91,6 +94,8 @@ public class OstostapahtumaController {
         }
     }
 
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Hakee yksittäisen ostostapahtuman ID:n perusteella
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/ostostapahtumat/{id}")
     public ResponseEntity<Object> haeOstostapahtuma(@PathVariable Long id) {
@@ -104,15 +109,20 @@ public class OstostapahtumaController {
         }
     }
 
+
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Lisää uuden ostostapahtuman
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PostMapping("/ostostapahtumat")
     public ResponseEntity<?> lisaaOstostapahtuma(
             @Valid @RequestBody OstostapahtumaDTO ostostapahtumaDTO, BindingResult bindingResult) {
+        // Tarkistetaan validointi
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
+        // Haetaan käyttäjä ja luodaan uusi ostostapahtuma
         Kayttaja kayttaja = kayttajaRepository
                 .findByKayttajaId(ostostapahtumaDTO.getKayttajaId())
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -124,7 +134,10 @@ public class OstostapahtumaController {
         ostostapahtumaDTO.setOstostapahtumaId(uusiOstostapahtuma.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(ostostapahtumaDTO));
     }
+    
 
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Päivittää myyntiajan (vain kyseinen kenttä PATCH-muotoisesti)
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PatchMapping("/ostostapahtumat/{id}/myyntiaika")
     public ResponseEntity<EntityModel<OstostapahtumaDTO>> paivitaMyyntiaika(@PathVariable Long id,
@@ -140,11 +153,15 @@ public class OstostapahtumaController {
         return ResponseEntity.ok(savedOstostapahtumaDTO);
     }
 
+
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Muokkaa koko ostostapahtuman (PUT)
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PutMapping("/ostostapahtumat/{id}")
     public ResponseEntity<?> muokkaaOstostapahtumaa(
             @Valid @RequestBody OstostapahtumaDTO ostostapahtumaDTO, @PathVariable Long id,
             BindingResult bindingResult) {
+        //Tarkistetaan validointi
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
@@ -159,6 +176,7 @@ public class OstostapahtumaController {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", ("OstostapahtumaId ei voi olla tyhjä")));
         }
+        // Jos ostostapahtuma löytyy päivitetään tiedot ja tallennetaan muutokset
         if (ostostapahtumaRepository.existsById(id))
 
         {
@@ -174,11 +192,12 @@ public class OstostapahtumaController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    // Poistaa ostostapahtuman, jos siihen ei liity lippuja - Sallittu vain ADMIN-roolille
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/ostostapahtumat/{id}")
     public ResponseEntity<Object> poistaOstostapahtuma(@PathVariable Long id) {
         if (ostostapahtumaRepository.existsById(id)) {
+            //Tarkastetaan liittyykö ostostapahtumaan lippuja
             List<Lippu> liput = ostostapahtumaRepository.findById(id).get().getLiput();
             if (liput.isEmpty()) {
                 ostostapahtumaRepository.deleteById(id);

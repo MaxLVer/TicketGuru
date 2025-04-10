@@ -34,28 +34,29 @@ public class AsiakastyyppiController {
 
     @Autowired
     AsiakastyyppiRepository asiakastyyppiRepository;
-
+    // Muuntaa DTO:n HATEOAS-yhteensopivaksi EntityModeliksi, johon lisätään linkki kyseiseen resurssiin
     private EntityModel<AsiakastyyppiDTO> toEntityModel(AsiakastyyppiDTO asiakastyyppiDTO) {
         Link selfLink = linkTo(
                 methodOn(AsiakastyyppiController.class).haeAsiakastyyppi(asiakastyyppiDTO.getAsiakastyypiId()))
-                .withSelfRel();
+                .withSelfRel(); // Luo itseensä viittaava linkki
 
-        return EntityModel.of(asiakastyyppiDTO, selfLink);
+        return EntityModel.of(asiakastyyppiDTO, selfLink); // Palautetaan DTO + linkki
     }
-
+    // Muuntaa Asiakastyyppi-entiteetin DTO-muotoon
     private AsiakastyyppiDTO convertToDTO(Asiakastyyppi asiakastyyppi) {
         AsiakastyyppiDTO dto = new AsiakastyyppiDTO();
         dto.setAsiakastyypiId(asiakastyyppi.getAsiakastyyppiId());
         dto.setAsiakastyyppi(asiakastyyppi.getAsiakastyyppi());
         return dto;
     }
-
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Haetaan kaikki asiakastyypit
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/asiakastyypit")
     public ResponseEntity<List<EntityModel<AsiakastyyppiDTO>>> haeKaikkiAsiakastyypit() {
         List<Asiakastyyppi> asiakastyypit = asiakastyyppiRepository.findAll();
         List<EntityModel<AsiakastyyppiDTO>> asiakastyypitModel = asiakastyypit.stream()
-                .map(asiakastyyppi -> toEntityModel(convertToDTO(asiakastyyppi)))
+                .map(asiakastyyppi -> toEntityModel(convertToDTO(asiakastyyppi))) // Muunnetaan DTO-muotoon ja lisätään linkit
                 .collect(Collectors.toList());
 
         if (asiakastyypitModel != null) {
@@ -65,39 +66,44 @@ public class AsiakastyyppiController {
         }
 
     }
-
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Hakee yksittäisen asiakastyypin ID:n perusteella
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/asiakastyypit/{id}")
     public ResponseEntity<Object> haeAsiakastyyppi(@PathVariable Long id) {
         Asiakastyyppi asiakasTyyppi = asiakastyyppiRepository.findById(id).orElse(null);
         if (asiakasTyyppi != null) {
-            AsiakastyyppiDTO asiakastyyppiDTO = new AsiakastyyppiDTO(asiakasTyyppi);
-            return ResponseEntity.ok(toEntityModel(asiakastyyppiDTO));
+            AsiakastyyppiDTO asiakastyyppiDTO = new AsiakastyyppiDTO(asiakasTyyppi); // Muunnetaan DTO:ksi
+            return ResponseEntity.ok(toEntityModel(asiakastyyppiDTO)); // Palautetaan DTO ja linkit
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Asiakastyyppiä ei löydy id:llä " + id);
         }
     }
-
+    // Luo uuden asiakastyypin – sallittu vain ADMIN-roolille
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/asiakastyypit")
     public ResponseEntity<?> lisaaAsiakastyyppi(@Valid @RequestBody AsiakastyyppiDTO asiakastyyppiDTO,
             BindingResult bindingResult) {
+        // Tarkistetaan validointivirheet  
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
+        // Lisävarmistus ettei asiakastyyppi-kenttä ole tyhjä
         if (asiakastyyppiDTO.getAsiakastyyppi().isEmpty() || asiakastyyppiDTO.getAsiakastyyppi() == null) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", ("Asiakastyyppi ei voi olla tyhjä")));}
+        // Tallennetaan uusi asiakastyyppi
         Asiakastyyppi uusiAsiakastyyppi = new Asiakastyyppi();
         uusiAsiakastyyppi.setAsiakastyyppi(asiakastyyppiDTO.getAsiakastyyppi());
         asiakastyyppiRepository.save(uusiAsiakastyyppi);
+        // Asetetaan tallennetun entiteetin ID takaisin DTO:lle
         asiakastyyppiDTO.setAsiakastyypiId(uusiAsiakastyyppi.getAsiakastyyppiId());
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(asiakastyyppiDTO));
 
     }
-
+    // Poistaa asiakastyypin annetun ID:n perusteella – vain ADMIN:lle
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/asiakastyypit/{id}")
     public ResponseEntity<?> poistaAsiakastyyppi(@PathVariable("id") Long asiakastyyppiId) {
@@ -111,22 +117,24 @@ public class AsiakastyyppiController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    // Päivittää olemassa olevan asiakastyypin tiedot – vain ADMIN:ll
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/asiakastyypit/{id}")
     public ResponseEntity<?> muokkaaAsiakastyyppiä(
             @Valid @RequestBody Asiakastyyppi asiakastyyppi, BindingResult bindingResult,
             @PathVariable("id") Long asiakastyyppiId) {
-        
+        // Tarkistetaan validointivirheet
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
+        // Lisävarmistus ettei asiakastyyppi-kenttä ole tyhjä
         if (asiakastyyppi.getAsiakastyyppi().isEmpty()) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", ("Asiakastyyppi ei voi olla tyhjä")));
         }
+        // Jos ID:llä löytyy entiteetti, päivitetään se
         if (asiakastyyppiRepository.existsById(asiakastyyppiId)) {
             asiakastyyppi.setAsiakastyyppiId(asiakastyyppiId);
             Asiakastyyppi muokattuAsiakastyyppi = asiakastyyppiRepository.save(asiakastyyppi);
