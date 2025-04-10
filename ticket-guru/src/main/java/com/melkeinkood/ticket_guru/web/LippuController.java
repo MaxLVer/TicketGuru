@@ -39,6 +39,7 @@ public class LippuController {
     @Autowired
     TapahtumaLipputyyppiRepository tapahtumaLipputyyppiRepository;
 
+    // Muuntaa LippuDTO:n EntityModel-muotoon, lisäten HATEOAS-linkit
     private EntityModel<LippuDTO> toEntityModel(LippuDTO lippuDTO) {
 
         Link selfLink = linkTo(methodOn(LippuController.class).haeLippu(lippuDTO.getLippuId())).withSelfRel();
@@ -53,6 +54,7 @@ public class LippuController {
         return EntityModel.of(lippuDTO, selfLink, tapahtumaLink, tapahtumaLipputyyppiLink, ostostapahtumaLink);
     }
 
+    // Muuntaa Lippu-entiteetin DTO:ksi
     private LippuDTO convertToDTO(Lippu lippu) {
         LippuDTO dto = new LippuDTO();
         dto.setLippuId(lippu.getLippuId());
@@ -63,7 +65,8 @@ public class LippuController {
 
     }
 
-
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Hakee lipun ID:n perusteella
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/liput/{id}")
     public ResponseEntity<Object> haeLippu(@PathVariable Long id) {
@@ -76,12 +79,14 @@ public class LippuController {
         }
     }
 
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Hakee kaikki liput tietokannasta
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/liput")
     public ResponseEntity<List<EntityModel<LippuDTO>>> haeKaikkiLiput() {
         List<Lippu> liput = lippuRepository.findAll();
         List<EntityModel<LippuDTO>> liputModel = liput.stream()
-                .map(lippu -> toEntityModel(convertToDTO(lippu)))
+                .map(lippu -> toEntityModel(convertToDTO(lippu))) // Muunnetaan DTO-muotoon ja lisätään linkit
                 .collect(Collectors.toList());
         if (liputModel != null) {
             return ResponseEntity.ok(liputModel);
@@ -90,10 +95,12 @@ public class LippuController {
         }
     }
 
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Luo uuden lipun
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PostMapping("/liput")
     public ResponseEntity<?> luoLippu(@Valid @RequestBody LippuDTO lippuDTO, BindingResult bindingResult) {
-
+        // Tarkistaa validointivirheet
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
@@ -107,6 +114,7 @@ public class LippuController {
                     .body(Map.of("error", ("Tapahtumaa ei löydy id:llä " + lippuDTO.getTapahtumaId())));
         }
 
+        // Tarkistaa löytyykö tapahtuma, lipputyyppi ja ostostapahtuma annetulla ID:llä
         Optional<TapahtumaLipputyyppi> tapahtumaLipputyyppiOptional = tapahtumaLipputyyppiRepository
                 .findById(lippuDTO.getTapahtumaLipputyyppiId());
         if (tapahtumaLipputyyppiOptional.isEmpty()) {
@@ -124,7 +132,7 @@ public class LippuController {
         
         
         Ostostapahtuma ostostapahtuma = ostostapahtumaOptional.get();
-
+        // Luo ja tallentaa uuden lipun tietokantaan
         Lippu uusiLippu = new Lippu(
                 ostostapahtuma,
                 tapahtumaLipputyyppi,
@@ -134,6 +142,7 @@ public class LippuController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(convertToDTO(tallenttuLippu)));
     }
 
+    // Poistaa lipun ID:n perusteella – sallittu vain ADMIN-roolille
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/liput/{id}")
     public ResponseEntity<?> poistaLippu(@PathVariable("id") Long lippuId) {
@@ -144,22 +153,23 @@ public class LippuController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lippua ei löydy id:llä " + lippuId);
         }
     }
-
+    // Päivittää olemassa olevan lipun tietoja – sallittu vain ADMIN-roolille
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/liput/{id}")
     public ResponseEntity<?> muokkaaLippua(@Valid @RequestBody LippuDTO lippuDTO, BindingResult bindingResult, @PathVariable("id") Long lippuId
             ) {
+        // Tarkistetaan validointi
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
-
+        // Tarkistetaan että lippu löytyy
         Lippu olemassaOlevaLippu = lippuRepository.findById(lippuId).orElse(null);
         if (olemassaOlevaLippu == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lippua ei löydy id:llä " + lippuId);
         }
-
+        // Tarkistetaan liittyvät entiteetit
         Tapahtuma tapahtuma = tapahtumaRepository.findByTapahtumaId(lippuDTO.getTapahtumaId());
         if (tapahtuma == null) {
             return ResponseEntity.badRequest()
@@ -181,25 +191,16 @@ public class LippuController {
                     .body(Map.of("error", ("Ostostapahtumaa ei löydy ID:llä: " + lippuDTO.getOstostapahtumaId())));
         }
         Ostostapahtuma ostostapahtuma = ostostapahtumaOptional.get();
-
+        // Päivitetään olemassa olevan lipun kentät
         olemassaOlevaLippu.setTapahtuma(tapahtuma);
         olemassaOlevaLippu.setTapahtumaLipputyyppi(tapahtumaLipputyyppi);
         olemassaOlevaLippu.setOstostapahtuma(ostostapahtuma);
-
+        // Tallennetaan muutokset
         Lippu muokattuLippu = lippuRepository.save(olemassaOlevaLippu);
 
         return ResponseEntity.ok(toEntityModel(convertToDTO(muokattuLippu)));
 
-        /*
-         * if (lippuRepository.existsById(lippuId)) {
-         * lippu.setLippuId(lippuId);
-         * Lippu muokattuLippu = lippuRepository.save(lippu);
-         * return ResponseEntity.status(HttpStatus.OK).body(toEntityModel(convertToDTO(
-         * muokattuLippu)));
-         * } else {
-         * return ResponseEntity.notFound().build();
-         * }
-         */
+       
 
     }
 

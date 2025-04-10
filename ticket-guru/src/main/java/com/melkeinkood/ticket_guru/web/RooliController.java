@@ -27,14 +27,14 @@ public class RooliController {
 
     @Autowired
     private RooliRepository rooliRepo;
-
+    // Muuntaa DTO:n EntityModel-muotoon ja liittää siihen HATEOAS-linkit
     private EntityModel<RooliDTO> toEntityModel(RooliDTO rooliDTO){
         Link selfLink = linkTo(
             methodOn(RooliController.class).haeRooli(rooliDTO.getRooliId()))
             .withSelfRel();
             return EntityModel.of(rooliDTO, selfLink);
     }
-
+    // Muuntaa entiteetin DTO:ksi
     private RooliDTO convertToDTO(Rooli rooli){
         RooliDTO dto = new RooliDTO();
         dto.setRooliId(rooli.getRooliId());
@@ -42,13 +42,14 @@ public class RooliController {
         dto.setRooliSelite(rooli.getRooliSelite());
         return dto;
     }
-
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Haetaan kaikki roolit
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/roolit")
     public ResponseEntity<List<EntityModel<RooliDTO>>> haeKaikkiRoolit() {
         List<Rooli> roolit = rooliRepo.findAll();
         List<EntityModel<RooliDTO>> rooliModel =roolit.stream()
-        .map(rooli -> toEntityModel(convertToDTO(rooli)))
+        .map(rooli -> toEntityModel(convertToDTO(rooli))) // Muunnetaan DTO-muotoon ja lisätään linkit
         .collect(Collectors.toList());
         
         if(rooliModel != null){
@@ -57,7 +58,8 @@ public class RooliController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Hakee roolin Id:n perusteella
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/roolit/{id}")
     public ResponseEntity<Object> haeRooli(@PathVariable Long id) {

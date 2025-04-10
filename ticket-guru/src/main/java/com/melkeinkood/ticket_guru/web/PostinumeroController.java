@@ -34,26 +34,27 @@ public class PostinumeroController {
 
     @Autowired
     private PostinumeroRepository postinumeroRepo;
-
+    // Muuntaa DTO:n EntityModel-muotoon ja liittää siihen HATEOAS-linkit
     private EntityModel<PostinumeroDTO> toEntityModel(PostinumeroDTO postinumeroDTO) {
         Link selfLink = linkTo(methodOn(PostinumeroController.class).haePostinumero(postinumeroDTO.getPostinumeroId()))
                 .withSelfRel();
         return EntityModel.of(postinumeroDTO, selfLink);
     }
-
+    // Muuntaa entiteetin DTO:ksi
     private PostinumeroDTO toDTO(Postinumero postinumero) {
         return new PostinumeroDTO(
                 postinumero.getPostinumeroId(),
                 postinumero.getPostinumero(),
                 postinumero.getKaupunki());
     }
-
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Haetaan kaikki postinumerot
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/postinumerot")
     public ResponseEntity<List<EntityModel<PostinumeroDTO>>> getPostinumerot() {
         List<Postinumero> postinumerot = postinumeroRepo.findAll();
         List<EntityModel<PostinumeroDTO>> postinumeroModels = postinumerot.stream()
-                .map(postinumero -> toEntityModel(toDTO(postinumero)))
+                .map(postinumero -> toEntityModel(toDTO(postinumero))) // Muunnetaan DTO-muotoon ja lisätään linkit
                 .collect(Collectors.toList());
 
         if (postinumeroModels.isEmpty()) {
@@ -62,6 +63,8 @@ public class PostinumeroController {
         return ResponseEntity.ok(postinumeroModels);
     }
 
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Hakee postinumeron Id:n perusteella
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/postinumerot/{id}")
     public ResponseEntity<?> haePostinumero(@PathVariable Long id) {
@@ -72,26 +75,28 @@ public class PostinumeroController {
         return ResponseEntity.ok(toEntityModel(toDTO(optionalPostinumero.get())));
     }
 
+    // Lisää uuden postinumeron - Sallittu vain ADMIN-roolille
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/postinumerot")
     public ResponseEntity<?> lisaaPostinumero(@Valid @RequestBody PostinumeroDTO postinumeroDTO,
             BindingResult bindingResult) {
-
+        // Tarkistetaan validointi
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
+        // Tarkistetaan ettei postinumero ole tyhjä
         if (postinumeroDTO.getPostinumero().isEmpty() || postinumeroDTO.getPostinumero() == null) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", ("Postinumero ei voi olla tyhjä")));
         }
-
+        // Tarkistetaan ettei kaupunki ole tyhjä
         if (postinumeroDTO.getKaupunki().isEmpty() || postinumeroDTO.getKaupunki() == null) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", ("Kaupunki ei voi olla tyhjä")));
         }
-
+        // Luodaan uusi Postinumero-olio DTO:n perusteella ja tallennetaan se tietokantaan
         Postinumero uusiPostinumero = new Postinumero(
                 postinumeroDTO.getPostinumero(),
                 postinumeroDTO.getKaupunki());
@@ -101,6 +106,7 @@ public class PostinumeroController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(toDTO(savedPostinumero)));
     }
 
+    //Muokkaa olemassa olevaa postinumeroa Id:n perusteella - Sallittu vain ADMIN-roolille
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/postinumerot/{id}")
     public ResponseEntity<?> muokkaaPostinumero(@Valid @PathVariable Long id,
@@ -113,6 +119,7 @@ public class PostinumeroController {
                     .body(Map.of("message", "Postinumeroa ei löydy"));
         }
 
+        // Päivitetään olemassa oleva postinumero DTO:n tiedoilla ja tallennetaan muutokset tietokantaan
         Postinumero postinumero = optionalPostinumero.get();
 
         postinumero.setPostinumero(postinumeroDTO.getPostinumero());
@@ -122,7 +129,7 @@ public class PostinumeroController {
         Postinumero updatedPostinumero = postinumeroRepo.save(postinumero);
         return ResponseEntity.ok(toEntityModel(toDTO(updatedPostinumero)));
     }
-
+    // Poistaa postinumeron Id:n perusteella - Sallittu vain ADMIN-roolille
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/postinumerot/{id}")
     public ResponseEntity<String> deletePostinumero(@PathVariable Long id) {

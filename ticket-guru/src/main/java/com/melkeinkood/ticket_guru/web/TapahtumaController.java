@@ -36,7 +36,7 @@ public class TapahtumaController {
 
     @Autowired
     TapahtumapaikkaRepository tapahtumapaikkaRepository;
-
+    // Muuntaa DTO:n EntityModel-muotoon ja liittää siihen HATEOAS-linkit
     private EntityModel<TapahtumaDTO> toEntityModel(TapahtumaDTO tapahtumaDTO) {
         Link selfLink = linkTo(
                 methodOn(TapahtumaController.class)
@@ -49,7 +49,7 @@ public class TapahtumaController {
 
         return EntityModel.of(tapahtumaDTO, selfLink, tapahtumapaikkaLink);
     }
-
+    // Muuntaa entiteetin DTO:ksi
     private TapahtumaDTO toDTO(Tapahtuma tapahtuma) {
         return new TapahtumaDTO(
                 tapahtuma.getTapahtumaId(),
@@ -61,6 +61,8 @@ public class TapahtumaController {
                 tapahtuma.getJaljellaOlevaLippumaara());
     }
 
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Haetaan kaikki tapahtumat
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/tapahtumat")
     public ResponseEntity<List<EntityModel<TapahtumaDTO>>> haeKaikkiTapahtumat() {
@@ -73,7 +75,7 @@ public class TapahtumaController {
         List<Tapahtuma> tapahtumat = tapahtumaRepository.findAll();
 
         List<EntityModel<TapahtumaDTO>> tapahtumaModel = tapahtumat.stream()
-                .map(tapahtuma -> toEntityModel(toDTO(tapahtuma)))
+                .map(tapahtuma -> toEntityModel(toDTO(tapahtuma))) // Muunnetaan DTO-muotoon ja lisätään linkit
                 .collect(Collectors.toList());
 
         if (tapahtumaModel.isEmpty()) {
