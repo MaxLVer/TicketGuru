@@ -43,9 +43,8 @@ public class Lippu {
 
 
     
-
-    
-
+    @Column(unique = true, nullable = false)    
+private String koodi;
 
     
 
@@ -110,6 +109,14 @@ public class Lippu {
         this.tapahtuma = tapahtuma;
     }
 
+
+    public String getKoodi() {
+        return koodi;
+    }
+
+    public void setKoodi(String koodi) {
+        this.koodi = koodi;
+    }
     
     public LippuStatus getStatus() {
         return status;

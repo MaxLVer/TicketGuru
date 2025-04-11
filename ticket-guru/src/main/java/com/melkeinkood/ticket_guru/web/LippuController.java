@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,8 +62,13 @@ public class LippuController {
         dto.setOstostapahtumaId(lippu.getOstostapahtuma().getOstostapahtumaId());
         dto.setTapahtumaId(lippu.getTapahtuma().getTapahtumaId());
         dto.setTapahtumaLipputyyppiId(lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId());
+        dto.setKoodi(lippu.getKoodi());
         return dto;
 
+    }
+    // Generoi satunnainen merkkijono: 8 merkkiä, kirjaimia ja numeroita
+    public String generoiSatunnainenLippuKoodi() {
+    return UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
     }
 
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
@@ -94,6 +100,21 @@ public class LippuController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    //Hakee lippukoodilla
+    @CrossOrigin(origins = "http://localhost:3000") // Tai muu frontin osoite
+    @GetMapping("/liput/koodi/{koodi}")
+    public ResponseEntity<?> haeLippuKoodilla(@PathVariable("koodi") String koodi) {
+        Optional<Lippu> optionalLippu = lippuRepository.findByKoodi(koodi);
+            if (optionalLippu.isPresent()) {
+                Lippu lippu = optionalLippu.get();
+                LippuDTO dto = convertToDTO(lippu);
+                return ResponseEntity.ok(toEntityModel(dto));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", "Lippua ei löydy annetulla koodilla: " + koodi));
+    }
+}
 
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
     // Luo uuden lipun
@@ -132,11 +153,13 @@ public class LippuController {
         
         
         Ostostapahtuma ostostapahtuma = ostostapahtumaOptional.get();
+        String koodi = generoiSatunnainenLippuKoodi();
         // Luo ja tallentaa uuden lipun tietokantaan
         Lippu uusiLippu = new Lippu(
                 ostostapahtuma,
                 tapahtumaLipputyyppi,
                 tapahtuma);
+                uusiLippu.setKoodi(koodi);
         Lippu tallenttuLippu = lippuRepository.save(uusiLippu);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(convertToDTO(tallenttuLippu)));
