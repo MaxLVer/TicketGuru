@@ -1,5 +1,7 @@
 package com.melkeinkood.ticket_guru.model;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -35,19 +37,26 @@ public class Lippu {
     @JoinColumn(name = "tapahtumaId")
     private Tapahtuma tapahtuma;
 
+    @Enumerated(EnumType.STRING)
+    private LippuStatus status;
+
 
 
     
+
+    
+
 
     
 
 
     public Lippu(Long lippuId, Ostostapahtuma ostostapahtuma,
-            TapahtumaLipputyyppi tapahtumalipputyyppi, Tapahtuma tapahtuma) {
+            TapahtumaLipputyyppi tapahtumalipputyyppi, Tapahtuma tapahtuma, LippuStatus status) {
         this.lippuId = lippuId;
         this.ostostapahtuma = ostostapahtuma;
         this.tapahtumaLipputyyppi = tapahtumalipputyyppi;
         this.tapahtuma = tapahtuma;
+        this.status = status;
     }
 
     public Lippu(Ostostapahtuma ostostapahtuma,
@@ -101,6 +110,14 @@ public class Lippu {
         this.tapahtuma = tapahtuma;
     }
 
+    
+    public LippuStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LippuStatus status) {
+        this.status = status;
+    }
     
 
 }
