@@ -35,9 +35,8 @@ public class Lippu {
     @JoinColumn(name = "tapahtumaId")
     private Tapahtuma tapahtuma;
 
-
-
-    
+    @Column(unique = true, nullable = false)
+    private String koodi;
 
     
 
@@ -101,6 +100,14 @@ public class Lippu {
         this.tapahtuma = tapahtuma;
     }
 
+
+    public String getKoodi() {
+        return koodi;
+    }
+
+    public void setKoodi(String koodi) {
+        this.koodi = koodi;
+    }
     
 
 }
