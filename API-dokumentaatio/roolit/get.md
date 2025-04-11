@@ -18,9 +18,9 @@ Toiminto listaa kaikki roolit tai näyttää yhden roolin
 
 **Metodi**: `GET`
 
-**Vaatii tunnistautumisen** : TBD
-
-**Vaatii hyväksyntää** : TBD
+**Vaatii tunnistautumisen** : TRUE
+  
+**Vaatii hyväksyntää** : TBD  
 
 **Data ehdot**
 

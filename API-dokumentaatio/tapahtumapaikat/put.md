@@ -6,7 +6,7 @@ Tämä toiminto muokkaa valittua tapahtumapaikka-resurssia
 
 **Metodi**: `PUT`
 
-**Vaatii tunnistautumisen** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
 **Vaatii hyväksyntää** : TBD
 
@@ -15,10 +15,10 @@ Päivitä olemassa oleva tapahtumapaikka käyttämällä sen ID:tä.
 
 ```json
 {
-  "lahiosoite": "Päivitettykatu 25",
-  "postinumeroId": 123,
-  "tapahtumapaikanNimi": "Uusi Areena",
-  "kapasiteetti": 6000
+  "lahiosoite": STRING,
+  "postinumeroId": INTEGER,
+  "tapahtumapaikanNimi": STRING,
+  "kapasiteetti": INTEGER
 }
 ```
 ---
@@ -30,19 +30,32 @@ Päivitä olemassa oleva tapahtumapaikka käyttämällä sen ID:tä.
 
 **Sisältö esimerkki**:
 ```json
-{
-  "lahiosoite": "Päivitettykatu 25",
-  "postinumero": {
-    "postinumeroId": 123,
-    "postinumero": "STRING",
-    "kaupunki": "STRING"
-  },
-  "tapahtumapaikanNimi": "Uusi Areena",
-  "kapasiteetti": 6000,
-  "id": INT
-}
+  {
+    "tapahtumapaikkaId": INTEGER,
+    "lahiosoite": STRING,
+    "tapahtumapaikanNimi": STRING,
+    "kapasiteetti": INTEGER,
+    "postinumeroId": INTEGER,
+    "links": [
+      {
+        "rel": "self",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumapaikat/1"
+      },
+      {
+        "rel": "postinumero",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/postinumerot/1"
+      }
+    ]
+  }
 ```
+
 ---
+## Virhe Response
+
+**Tila** : Jos tapahtumapaikkaa ei löydy
+
+**Koodi** : `404 NOT FOUND`
+
 ### Virhe Response
 
 **Tila**: Jos postinumeroa ei löydy

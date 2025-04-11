@@ -6,7 +6,7 @@ Toiminto muokkaa tapahtuma lipputyyppiä.
 
 **Metodi**: `PUT`
 
-**Vaatii tunnistautumisen** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
 **Vaatii hyväksyntää** : TBD
 

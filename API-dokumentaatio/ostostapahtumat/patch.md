@@ -10,6 +10,10 @@ Toiminnon avulla voidaan päivittää ostostapahtuman myyntiaika tietokannassa.
 
 **Metodi**: `PATCH`
 
+**Vaatii tunnistautumisen** : TRUE
+  
+**Vaatii hyväksyntää** : TBD  
+
 **Data ehdot**
 
 - `myyntiaika` on pakollinen kenttä ja sen tulee olla validi `LocalDateTime`-muotoinen arvo (ISO 8601).

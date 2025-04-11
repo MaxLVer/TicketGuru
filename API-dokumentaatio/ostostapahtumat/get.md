@@ -21,7 +21,8 @@ Tämä toiminto listaa kaikki ostostapahtumat tai hakee yhden tietyn tapahtuman.
 
 **Metodi**: `GET`
 
-**Vaatii tunnistautumisen** : TBD  
+**Vaatii tunnistautumisen** : TRUE
+  
 **Vaatii hyväksyntää** : TBD  
 
 ---

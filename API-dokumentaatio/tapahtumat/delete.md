@@ -6,11 +6,11 @@ Poistaa tapahtuman.
 
 **URL Parameters** : `id` vastaa tietokannassa Tapahtumat-taulun primary keytä.
 
-**Method** : `DELETE`
+**Metodi** : `DELETE`
 
-**Auth required** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
-**Permissions required** : TBD
+**Vaatii hyväksyntää** : TBD
 
 **Data** : `{}`
 

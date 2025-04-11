@@ -20,7 +20,7 @@ Toiminto listaa kaikki asiakastyypit tai näyttää yhden asiakastyypin
 
 **Metodi**: `GET`
 
-**Vaatii tunnistautumisen** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
 **Vaatii hyväksyntää** : TBD
 

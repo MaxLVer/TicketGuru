@@ -6,7 +6,7 @@ Toiminto lisää käyttäjän tapahtuman.
 
 **Metodi**: `POST`
 
-**Vaatii tunnistautumisen** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
 **Vaatii hyväksyntää** : TBD
 
@@ -40,7 +40,7 @@ Lisää käyttäjän id, roolin id, kayttajanimen, salasanan, etunimen, sukunime
   "rooli": {
       "rooliId": 2,
       "nimike": "myyjä",
-      "rooli_selite": "Lipumyynti"
+      "rooli_selite": "Lipunmyynti"
     },
   },
 ```

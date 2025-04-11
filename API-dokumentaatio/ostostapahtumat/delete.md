@@ -6,7 +6,7 @@ Toiminto poistaa halutun ostostapahtuman, johon ei liity lippuja.
 
 **Metodi**: `DELETE`
 
-**Vaatii tunnistautumisen** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
 **Vaatii hyväksyntää** : TBD
 

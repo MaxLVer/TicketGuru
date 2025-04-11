@@ -6,26 +6,26 @@ Poistaa Asiakastyypin.
 
 **URL Parameters** : `id` vastaa tietokannassa Asiakastyypit-taulun primary keytä.
 
-**Method** : `DELETE`
+**Metodi** : `DELETE`
 
-**Auth required** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
-**Permissions required** : TBD
+**Vaatii hyväksyntää** : TBD
 
-**Data** : `{}`
+**Data ehdot** : `{}`
 
-## Success Response
+## Onnistunut response
 
-**Condition** : Asiakastyypin oltava tietokannssa.
+**Tila** : Asiakastyypin oltava tietokannssa.
 
-**Code** : `204 NO CONTENT`
+**Koodi** : `204 NO CONTENT`
 
-**Content** : `{}`
+**Sisältö esimerkki** : `{}`
 
-## Error Responses
+## Virhe Response
 
-**Condition** : Asiakastyyppiä ei ole tietokannassa
+**Tila** : Asiakastyyppiä ei ole tietokannassa
 
-**Code** : `404 NOT FOUND`
+**Koodi** : `404 NOT FOUND`
 
-**Content** : `{}`
+**Sisältö esimerkki** : `{}`

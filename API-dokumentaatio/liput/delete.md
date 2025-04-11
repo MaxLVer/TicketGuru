@@ -6,27 +6,27 @@ Poistaa lipun.
 
 **URL Parameters** : `id` vastaa tietokannassa liput-taulun primary keytä.
 
-**Method** : `DELETE`
+**Metodi** : `DELETE`
 
-**Auth required** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
-**Permissions required** : TBD
+**Vaatii hyväksyntää** : TBD
 
-**Data** : `{}`
+**Data ehdot** : `{}`
 
 ## Success Response
 
-**Condition** : lipun oltava tietokannssa.
+**Tila** : lipun oltava tietokannssa.
 
-**Code** : `204 NO CONTENT`
+**Koodi** : `204 NO CONTENT`
 
-**Content** : `{}`
+**Sisältö esimerkki** : `{}`
 
 ## Error Responses
 
-**Condition** : Lippua ei ole tietokannassa
+**Tila** : Lippua ei ole tietokannassa
 
-**Code** : `404 NOT FOUND`
+**Koodi** : `404 NOT FOUND`
 
-**Content** : `{}`
+**Sisältö esimerkki** : `{}`
 

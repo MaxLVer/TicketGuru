@@ -6,26 +6,26 @@ Poistaa käyttäjän.
 
 **URL Parameters** : `id` vastaa tietokannassa Käyttäjät-taulun primary keytä.
 
-**Method** : `DELETE`
+**Metodi** : `DELETE`
 
-**Auth required** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
-**Permissions required** : TBD
+**Vaatii hyväksyntää** : TBD
 
-**Data** : `{}`
+**Data ehdot** : `{}`
 
 # Success Response
 
-**Condition** : Käyttäjän oltava tietokannssa.
+**Tila** : Käyttäjän oltava tietokannssa.
 
-**Code** : `204 NO CONTENT`
+**Koodi** : `204 NO CONTENT`
 
-**Content** : `{}`
+**Sisältö esimerkki** : `{}`
 
 ## Error Responses
 
-**Condition** : Käyttäjää ei ole tietokannassa
+**Tila** : Käyttäjää ei ole tietokannassa
 
-**Code** : `404 NOT FOUND`
+**Koodi** : `404 NOT FOUND`
 
-**Content** : `{}`
+**Sisältö esimerkki** : `{}`

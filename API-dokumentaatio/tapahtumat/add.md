@@ -6,7 +6,7 @@ Toiminto lisää uuden tapahtuman.
 
 **Metodi**: `POST`
 
-**Vaatii tunnistautumisen** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
 **Vaatii hyväksyntää** : TBD
 

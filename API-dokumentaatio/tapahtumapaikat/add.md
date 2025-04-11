@@ -8,7 +8,7 @@ Toiminto lisää uuden tapahtumapaikan.
 
 **Metodi**: `POST`
 
-**Vaatii tunnistautumisen** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
 **Vaatii hyväksyntää** : TBD
 
@@ -17,10 +17,10 @@ Lisää uusi tapahtumapaikka, johon sisältyy muun muassa osoite, postinumero, k
 
 ```json
 {
-  "lahiosoite": "Uusikatu 20",
-  "postinumeroId": 123,
-  "tapahtumapaikanNimi": "Suuri Areena",
-  "kapasiteetti": 5000
+  "lahiosoite": STRING,
+  "postinumeroId": INTEGER,
+  "tapahtumapaikanNimi": STRING,
+  "kapasiteetti": INTEGER
 }
 ```
 
@@ -32,17 +32,23 @@ Lisää uusi tapahtumapaikka, johon sisältyy muun muassa osoite, postinumero, k
 
 **Sisältö esimerkki**:
 ```json
-{
-  "lahiosoite": "STRING",
-  "postinumero": {
-    "postinumeroId": INT,
-    "postinumero": "STRING",
-    "kaupunki": "STRING"
-  },
-  "tapahtumapaikanNimi": "STRING",
-  "kapasiteetti": INT,
-  "id": INT
-}
+  {
+    "tapahtumapaikkaId": INTEGER,
+    "lahiosoite": STRING,
+    "tapahtumapaikanNimi": STRING,
+    "kapasiteetti": INTEGER,
+    "postinumeroId": INTEGER,
+    "links": [
+      {
+        "rel": "self",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumapaikat/1"
+      },
+      {
+        "rel": "postinumero",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/postinumerot/1"
+      }
+    ]
+  }
 ```
 
 ### Virhe Response

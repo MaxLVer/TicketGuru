@@ -21,7 +21,8 @@ Tämä toiminto listaa kaikki tapahtumapaikat tai hakee yhden.
 
 **Metodi**: `GET`
 
-**Vaatii tunnistautumisen** : TBD  
+**Vaatii tunnistautumisen** : TRUE
+
 **Vaatii hyväksyntää** : TBD  
 
 ---
@@ -33,28 +34,40 @@ Tämä toiminto listaa kaikki tapahtumapaikat tai hakee yhden.
 **Koodi** : `200 OK`
 
 ```json
-{
-  "lahiosoite": "STRING",
-  "postinumero": {
-    "postinumeroId": INT,
-    "postinumero": "STRING",
-    "kaupunki": "STRING"
+  {
+    "tapahtumapaikkaId": INTEGER,
+    "lahiosoite": STRING,
+    "tapahtumapaikanNimi": STRING,
+    "kapasiteetti": INTEGER,
+    "postinumeroId": INTEGER,
+    "links": [
+      {
+        "rel": "self",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumapaikat/1"
+      },
+      {
+        "rel": "postinumero",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/postinumerot/1"
+      }
+    ]
   },
-  "tapahtumapaikanNimi": "STRING",
-  "kapasiteetti": INT,
-  "id": INT
-}
 {
-  "lahiosoite": "STRING",
-  "postinumero": {
-    "postinumeroId": INT,
-    "postinumero": "STRING",
-    "kaupunki": "STRING"
-  },
-  "tapahtumapaikanNimi": "STRING",
-  "kapasiteetti": INT,
-  "id": INT
-}
+    "tapahtumapaikkaId": INTEGER,
+    "lahiosoite": STRING,
+    "tapahtumapaikanNimi": STRING,
+    "kapasiteetti": INTEGER,
+    "postinumeroId": INTEGER,
+    "links": [
+      {
+        "rel": "self",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumapaikat/2"
+      },
+      {
+        "rel": "postinumero",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/postinumerot/1"
+      }
+    ]
+  }
 ```
 
 ## TAI
@@ -63,18 +76,25 @@ Tämä toiminto listaa kaikki tapahtumapaikat tai hakee yhden.
 **Koodi** : `200 OK`
 
 ```json
-{
-  "lahiosoite": "STRING",
-  "postinumero": {
-    "postinumeroId": INT,
-    "postinumero": "STRING",
-    "kaupunki": "STRING"
-  },
-  "tapahtumapaikanNimi": "STRING",
-  "kapasiteetti": INT,
-  "id": INT
-}
+  {
+    "tapahtumapaikkaId": INTEGER,
+    "lahiosoite": STRING,
+    "tapahtumapaikanNimi": STRING,
+    "kapasiteetti": INTEGER,
+    "postinumeroId": INTEGER,
+    "links": [
+      {
+        "rel": "self",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumapaikat/1"
+      },
+      {
+        "rel": "postinumero",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/postinumerot/1"
+      }
+    ]
+  }
 ```
+
 
 ## Virhe Response
 

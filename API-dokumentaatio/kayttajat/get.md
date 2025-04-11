@@ -10,7 +10,7 @@ Toiminto listaa kaikki käyttäjät tai näyttää yhden käyttäjäm
 
 **Metodi**: `GET`
 
-**Vaatii tunnistautumisen** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
 **Vaatii hyväksyntää** : TBD
 

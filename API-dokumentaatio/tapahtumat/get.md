@@ -19,7 +19,7 @@ Toiminto listaa kaikki tapahtumat tai näyttää yhden tapahtuman
 
 **Metodi**: `GET`
 
-**Vaatii tunnistautumisen** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
 **Vaatii hyväksyntää** : TBD
 
@@ -28,6 +28,26 @@ Toiminto listaa kaikki tapahtumat tai näyttää yhden tapahtuman
 **Tila** : Yksi tai useampi tapahtuma on näkyvissä käyttäjälle
 
 **Koodi** : `200 OK`
+
+```json
+{
+    "tapahtumaId": INTEGER,
+    "tapahtumapaikkaId": INTEGER,
+    "tapahtumaAika": DATETIME,
+    "tapahtumaNimi": STRING,
+    "kuvaus": STRING,
+    "kokonaislippumaara": INTEGER,
+    "jaljellaOlevaLippumaara": INTEGER,
+    "_links": {
+        "self": {
+            "href": "http://localhost:8080/tapahtumat/1"
+        },
+        "tapahtumapaikka": {
+            "href": "http://localhost:8080/tapahtumapaikat/1"
+        }
+    }
+}
+```
 
 ## TAI
 

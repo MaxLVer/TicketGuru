@@ -21,7 +21,7 @@ Tämä toiminto listaa kaikki tapahtuma lipputyypit tai hakee yhden tietyn tapah
 
 **Metodi**: `GET`
 
-**Vaatii tunnistautumisen** : TBD  
+**Vaatii tunnistautumisen** : TRUE  
 
 **Vaatii hyväksyntää** : TBD  
 
@@ -33,10 +33,77 @@ Tämä toiminto listaa kaikki tapahtuma lipputyypit tai hakee yhden tietyn tapah
 
 **Koodi** : `200 OK`
 
+**Sisältö esimerkki**
+```json
+  {
+    "tapahtumaLipputyyppiId": 3,
+    "tapahtumaId": 5,
+    "asiakastyyppiId": 1,
+    "hinta": 100.00,
+    "links": [
+      {
+        "rel": "self",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumalipputyypit/3"
+      },
+      {
+        "rel": "tapahtuma",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumat/5"
+      },
+      {
+        "rel": "asiakastyyppi",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/asiakastyypit/1"
+      }
+    ]
+  },
+  {
+    "tapahtumaLipputyyppiId": 4,
+    "tapahtumaId": 5,
+    "asiakastyyppiId": 2,
+    "hinta": 150.00,
+    "links": [
+      {
+        "rel": "self",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumalipputyypit/4"
+      },
+      {
+        "rel": "tapahtuma",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumat/5"
+      },
+      {
+        "rel": "asiakastyyppi",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/asiakastyypit/2"
+      }
+    ]
+  }
+```
+
 ## TAI
 ### Onnistunut pyyntö – yksi
 
 **Koodi** : `200 OK`
+
+```json
+{
+    "tapahtumaLipputyyppiId": 4,
+    "tapahtumaId": 5,
+    "asiakastyyppiId": 2,
+    "hinta": 150.00,
+    "links": [
+      {
+        "rel": "self",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumalipputyypit/4"
+      },
+      {
+        "rel": "tapahtuma",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumat/5"
+      },
+      {
+        "rel": "asiakastyyppi",
+        "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/asiakastyypit/2"
+      }
+    ]
+  }
+```
 
 ## Virhe Response
 

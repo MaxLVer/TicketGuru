@@ -6,9 +6,9 @@ Toiminto muokkaa ostostapahtumaa.
 
 **Metodi**: `PUT`
 
-**Vaatii tunnistautumisen** : TBD
-
-**Vaatii hyväksyntää** : TBD
+**Vaatii tunnistautumisen** : TRUE
+  
+**Vaatii hyväksyntää** : TBD  
 
 **Data ehdot**
 Muokkaa esimerkiksi käyttäjän id toiseksi

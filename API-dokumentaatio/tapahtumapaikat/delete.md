@@ -5,7 +5,7 @@ Tämä toiminto poistaa tapahtumapaikan
 
 **Metodi**: `DELETE`
 
-**Vaatii tunnistautumisen** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
 **Vaatii hyväksyntää** : TBD
 
