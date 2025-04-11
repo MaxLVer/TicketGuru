@@ -1,5 +1,8 @@
 package com.melkeinkood.ticket_guru.model;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -8,15 +11,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 
-
-
 @Entity
 @Table(name = "lippu")
 public class Lippu {
-
-    
-
-    
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,18 +32,20 @@ public class Lippu {
     @JoinColumn(name = "tapahtumaId")
     private Tapahtuma tapahtuma;
 
+    @Enumerated(EnumType.STRING)
+    private LippuStatus status;
+
     @Column(unique = true, nullable = false)
     private String koodi;
 
-    
-
-
     public Lippu(Long lippuId, Ostostapahtuma ostostapahtuma,
-            TapahtumaLipputyyppi tapahtumalipputyyppi, Tapahtuma tapahtuma) {
+            TapahtumaLipputyyppi tapahtumalipputyyppi, Tapahtuma tapahtuma, LippuStatus status, String koodi) {
         this.lippuId = lippuId;
         this.ostostapahtuma = ostostapahtuma;
         this.tapahtumaLipputyyppi = tapahtumalipputyyppi;
         this.tapahtuma = tapahtuma;
+        this.status = status;
+        this.koodi = koodi;
     }
 
     public Lippu(Ostostapahtuma ostostapahtuma,
@@ -55,8 +54,6 @@ public class Lippu {
         this.tapahtumaLipputyyppi = tapahtumalipputyyppi;
         this.tapahtuma = tapahtuma;
     }
-
-
 
     public Lippu() {
         super();
@@ -69,10 +66,6 @@ public class Lippu {
     public void setLippuId(Long lippuId) {
         this.lippuId = lippuId;
     }
-
-
-
-
 
     public Ostostapahtuma getOstostapahtuma() {
         return ostostapahtuma;
@@ -94,12 +87,9 @@ public class Lippu {
         return tapahtuma;
     }
 
-
-
     public void setTapahtuma(Tapahtuma tapahtuma) {
         this.tapahtuma = tapahtuma;
     }
-
 
     public String getKoodi() {
         return koodi;
@@ -108,6 +98,13 @@ public class Lippu {
     public void setKoodi(String koodi) {
         this.koodi = koodi;
     }
-    
+
+    public LippuStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LippuStatus status) {
+        this.status = status;
+    }
 
 }
