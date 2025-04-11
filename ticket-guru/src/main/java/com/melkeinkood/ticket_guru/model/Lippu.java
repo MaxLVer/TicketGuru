@@ -35,7 +35,7 @@ public class Lippu {
     @Enumerated(EnumType.STRING)
     private LippuStatus status;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = true)
     private String koodi;
 
     public Lippu(Long lippuId, Ostostapahtuma ostostapahtuma,
