@@ -20,31 +20,31 @@ Toiminnon avulla voidaan päivittää lipun status tietokannassa.
 
 ## Onnistunut response
 
-**Tila** : Tietue löytyy ja myyntiaika on päivitetty onnistuneesti
+**Tila** : Tietue löytyy ja myyntiaika on päivitetty onnistuneesti(myyntiaika kesken)
 
 **Koodi** : `200 OK`
 
 **Esimerkki sisältö** :
 ```json
 {
-    "lippuId": 1,
-    "tunniste": "LIPPU300",
-    "voimassaoloaika": "2025-10-11T12:00:00",
-    "tapahtumaId": 1,
+    "lippuId": 102,
+    "tapahtumaId": 4,
     "ostostapahtumaId": 1,
-    "tapahtumaLipputyyppiId": 1,
+    "tapahtumaLipputyyppiId": 4,
+    "koodi": "B57E8B6C",
+    "status": "KÄYTETTY",
     "_links": {
         "self": {
-            "href": "http://localhost:8080/liput/1"
+            "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/liput/102"
         },
         "tapahtuma": {
-            "href": "http://localhost:8080/tapahtumat/1"
+            "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumat/4"
         },
         "tapahtumalipputyyppi": {
-            "href": "http://localhost:8080/tapahtumalipputyypit/1"
+            "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/tapahtumalipputyypit/4"
         },
         "ostostapahtuma": {
-            "href": "http://localhost:8080/ostostapahtumat/1"
+            "href": "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/ostostapahtumat/1"
         }
     }
 }
