@@ -3,6 +3,8 @@
 ### Julkiset endpointit
 Julkiset endpointit, jotka eivät vaadi tunnistautumista
 
+### Autentikointi
+
 - [Sisään kirjautuminen](kayttajat/autentikointi/login.md): POST
 - [Ulos kirjautuminen](kayttajat/autentikointi/logout.md): POST
 
@@ -10,6 +12,7 @@ Julkiset endpointit, jotka eivät vaadi tunnistautumista
 Suljetut endpointit, jotka vaativat voimassaolevan Tokenin(sisäänkirjautuminen).
 Määräaikaisesti julkiset
 ---
+### Käyttäjät
 - [Hae käyttäjät / Hae yksi käyttäjä](kayttajat/get.md): GET
 - [Luo käyttäjä](kayttajat/add.md): POST
 - [Muokkaa käyttäjää](kayttajat/put.md): PUT
