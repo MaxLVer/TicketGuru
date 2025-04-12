@@ -120,10 +120,8 @@ public class LippuController {
         }
     }
 
-
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
     // Päivittää lipun statuksen (vain kyseinen kenttä PATCH-muotoisesti)
-    @CrossOrigin(origins = "http://localhost:3000") // Tai muu frontin osoite
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PatchMapping("/liput/{id}")
     public ResponseEntity<EntityModel<LippuDTO>> paivitaStatus(@PathVariable Long id) {
@@ -250,6 +248,4 @@ public class LippuController {
         return ResponseEntity.ok(toEntityModel(convertToDTO(muokattuLippu)));
 
     }
-
-
 }

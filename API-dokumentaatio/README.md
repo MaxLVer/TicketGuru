@@ -28,6 +28,7 @@ Määräaikaisesti julkiset
 - [Näytä liput / Hae yksi lippu](liput/get.md): GET
 - [Lisää lippu](liput/add.md): POST
 - [Muokkaa Lippua](liput/put.md): PUT
+- [Päivitä status](liput/patch.md): PATCH
 - [Poista lippu](liput/delete.md): DELETE
 ---
 ### Ostostapahtumat

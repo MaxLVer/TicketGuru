@@ -16,7 +16,6 @@ public class LippuDTO {
     private String koodi;
     private LippuStatus status;
 
-
     public LippuDTO(Long lippuId, Long tapahtumaId,
             Long ostostapahtumaId,
             Long tapahtumaLipputyyppiId,
@@ -26,7 +25,7 @@ public class LippuDTO {
         this.ostostapahtumaId = ostostapahtumaId;
         this.tapahtumaLipputyyppiId = tapahtumaLipputyyppiId;
         this.koodi = koodi;
-        this.status=status;
+        this.status = status;
     }
 
     public LippuDTO() {
@@ -75,6 +74,7 @@ public class LippuDTO {
     public LippuStatus getStatus() {
         return status;
     }
+
     public void setStatus(LippuStatus status) {
         this.status = status;
     }
