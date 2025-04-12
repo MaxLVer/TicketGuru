@@ -26,6 +26,7 @@ Määräaikaisesti julkiset
 ---
 ### Liput
 - [Näytä liput / Hae yksi lippu](liput/get.md): GET
+- [Näytä lippu / Hae lippu koodin perusteella](liput/addbycode.md): GET
 - [Lisää lippu](liput/add.md): POST
 - [Muokkaa Lippua](liput/put.md): PUT
 - [Päivitä status](liput/patch.md): PATCH
