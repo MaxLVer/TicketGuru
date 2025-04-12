@@ -23,7 +23,6 @@ import com.melkeinkood.ticket_guru.model.Ostostapahtuma;
 import com.melkeinkood.ticket_guru.model.Tapahtuma;
 import com.melkeinkood.ticket_guru.model.TapahtumaLipputyyppi;
 import com.melkeinkood.ticket_guru.model.dto.LippuDTO;
-import com.melkeinkood.ticket_guru.model.dto.LuoLippuDTO;
 import com.melkeinkood.ticket_guru.repositories.*;
 
 import jakarta.validation.Valid;
@@ -65,6 +64,7 @@ public class LippuController {
         dto.setTapahtumaId(lippu.getTapahtuma().getTapahtumaId());
         dto.setTapahtumaLipputyyppiId(lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId());
         dto.setKoodi(lippu.getKoodi());
+        dto.setStatus(lippu.getStatus());
         return dto;
 
     }
@@ -131,7 +131,7 @@ public class LippuController {
         if (lippu == null) {
             return ResponseEntity.notFound().build();
         }
-        lippu.setStatus(LippuStatus.MYYTY);
+        lippu.setStatus(LippuStatus.KAYTETTY);
         Lippu savedLippu = lippuRepository.save(lippu);
         EntityModel<LippuDTO> savedLippuDTO = toEntityModel(convertToDTO(savedLippu));
         return ResponseEntity.ok(savedLippuDTO);
@@ -141,7 +141,7 @@ public class LippuController {
     // Luo uuden lipun
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PostMapping("/liput")
-    public ResponseEntity<?> luoLippu(@Valid @RequestBody LuoLippuDTO lippuDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> luoLippu(@Valid @RequestBody LippuDTO lippuDTO, BindingResult bindingResult) {
         // Tarkistaa validointivirheet
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -172,16 +172,22 @@ public class LippuController {
         }
 
         Ostostapahtuma ostostapahtuma = ostostapahtumaOptional.get();
-        String koodi = generoiSatunnainenLippuKoodi();
-        // Luo ja tallentaa uuden lipun tietokantaan
-        Lippu uusiLippu = new Lippu(
-                ostostapahtuma,
-                tapahtumaLipputyyppi,
-                tapahtuma);
-        uusiLippu.setKoodi(koodi);
-        Lippu tallenttuLippu = lippuRepository.save(uusiLippu);
+        // Jos tunniste annettu, käytetään sitä. Muuten generoidaan koodi.
+        String koodi = lippuDTO.getKoodi();
+        if (koodi == null || koodi.isBlank()) {
+            koodi = generoiSatunnainenLippuKoodi();
+        }
+    
+        // Luodaan uusi Lippu-olio
+    Lippu uusiLippu = new Lippu(ostostapahtuma, tapahtumaLipputyyppi, tapahtuma);
+    uusiLippu.setKoodi(koodi);  // Asetetaan koodi
+    uusiLippu.setStatus(LippuStatus.MYYTY);  // Asetetaan status
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(convertToDTO(tallenttuLippu)));
+    // Tallennetaan uusi lippu tietokantaan
+    Lippu tallenttuLippu = lippuRepository.save(uusiLippu);
+
+    // Palautetaan luotu lippu DTO:n muodossa
+    return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(convertToDTO(tallenttuLippu)));
     }
 
     // Poistaa lipun ID:n perusteella – sallittu vain ADMIN-roolille
