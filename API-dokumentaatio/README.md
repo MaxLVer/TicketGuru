@@ -3,7 +3,8 @@
 ### Julkiset endpointit
 Julkiset endpointit, jotka eivät vaadi tunnistautumista
 
-- Login(ei vielä valmis)
+- [Sisään kirjautuminen](kayttajat/autentikointi/login.md): POST
+- [Ulos kirjautuminen](kayttajat/autentikointi/)
 
 ### Endpointit jotka vaativat tunnistautumisen
 Suljetut endpointit, jotka vaativat voimassaolevan Tokenin(sisäänkirjautuminen).

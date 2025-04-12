@@ -2,11 +2,11 @@
 
 Toiminto lisää käyttäjän tapahtuman.
 
-**URL** : `/kayttajat/`
+**URL** : `/kayttajat/luo`
 
 **Metodi**: `POST`
 
-**Vaatii tunnistautumisen** : TRUE
+**Vaatii tunnistautumisen** : FALSE (Väliaikainen)
 
 **Vaatii hyväksyntää** : TBD
 
@@ -55,3 +55,15 @@ Lisää käyttäjän id, roolin id, kayttajanimen, salasanan, etunimen, sukunime
 **Tila** : Jos kenttiä puuttuu.
 
 **Koodi** : `400 BAD REQUEST`
+
+## Virhe respone
+
+**Tila** : Jos token on virheellinen
+
+**Koodi** : `401 UNAUTHORIZED`
+
+```json
+{
+  "error": "Virheellinen token"
+}
+```

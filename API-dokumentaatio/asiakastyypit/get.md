@@ -63,3 +63,15 @@ Toiminto listaa kaikki asiakastyypit tai näyttää yhden asiakastyypin
 **Tila** : asiakastyyppiä ei löydy.
 
 **Koodi** : `404 NOT FOUND`
+
+## Virhe respone
+
+**Tila** : Jos token on virheellinen
+
+**Koodi** : `401 UNAUTHORIZED`
+
+```json
+{
+  "error": "Virheellinen token"
+}
+```

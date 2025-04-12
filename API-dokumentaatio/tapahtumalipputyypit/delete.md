@@ -28,3 +28,12 @@ Toiminto poistaa tapahtuma lipputyypin id:llä.
 
 **Sisältö** : `{}`
 
+**Tila** : Jos token on virheellinen
+
+**Koodi** : `401 UNAUTHORIZED`
+
+```json
+{
+  "error": "Virheellinen token"
+}
+```

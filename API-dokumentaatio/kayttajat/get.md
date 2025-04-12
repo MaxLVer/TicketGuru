@@ -45,3 +45,15 @@ Toiminto listaa kaikki käyttäjät tai näyttää yhden käyttäjäm
 **Koodi** : `200 OK`
 
 **Sisältö** : `{}`
+
+## Virhe respone
+
+**Tila** : Jos token on virheellinen
+
+**Koodi** : `401 UNAUTHORIZED`
+
+```json
+{
+  "error": "Virheellinen token"
+}
+```

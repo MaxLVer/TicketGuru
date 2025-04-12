@@ -66,3 +66,13 @@ Toiminto lisää uuden tapahtuma lipputyypin.
 **Tila** : Jos JSON on virheellinen tai se puuttuu.
 
 **Koodi** : `400 BAD REQUEST`
+
+**Tila** : Jos token on virheellinen
+
+**Koodi** : `401 UNAUTHORIZED`
+
+```json
+{
+  "error": "Virheellinen token"
+}
+```

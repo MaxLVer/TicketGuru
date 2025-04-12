@@ -61,3 +61,15 @@ Lisää lipun tunniste, voimassaoloaika, ostostapahtuman id, tapahtuman id ja ta
 **Tila** : Jos kenttiä puuttuu tai niissä on virheitä.
 
 **Koodi** : `400 BAD REQUEST`
+
+## Virhe respone
+
+**Tila** : Jos token on virheellinen
+
+**Koodi** : `401 UNAUTHORIZED`
+
+```json
+{
+  "error": "Virheellinen token"
+}
+```
