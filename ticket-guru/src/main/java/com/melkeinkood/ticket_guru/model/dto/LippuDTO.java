@@ -16,11 +16,13 @@ public class LippuDTO {
 
     public LippuDTO(Long lippuId, Long tapahtumaId,
             Long ostostapahtumaId,
-            Long tapahtumaLipputyyppiId) {
+            Long tapahtumaLipputyyppiId,
+            String koodi) {
         this.lippuId = lippuId;
         this.tapahtumaId = tapahtumaId;
         this.ostostapahtumaId = ostostapahtumaId;
         this.tapahtumaLipputyyppiId = tapahtumaLipputyyppiId;
+        this.koodi = koodi;
     }
 
     public LippuDTO() {
