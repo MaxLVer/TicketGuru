@@ -9,8 +9,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 
@@ -109,14 +107,6 @@ public class Lippu {
 
     public void setStatus(LippuStatus status) {
         this.status = status;
-    }
-
-    public String getTunniste() {
-        return tunniste;
-    }
-
-    public void setTunniste(String tunniste) {
-        this.tunniste = tunniste;
     }
 
 }
