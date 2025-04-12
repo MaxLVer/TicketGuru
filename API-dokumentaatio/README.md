@@ -10,11 +10,16 @@ Julkiset endpointit, jotka eivät vaadi tunnistautumista
 Suljetut endpointit, jotka vaativat voimassaolevan Tokenin(sisäänkirjautuminen).
 Määräaikaisesti julkiset
 ---
+- [Hae käyttäjät / Hae yksi käyttäjä](kayttajat/get.md): GET
+- [Luo käyttäjä](kayttajat/add.md): POST
+- [Muokkaa käyttäjää](kayttajat/put.md): PUT
+- [Poista käyttäjä](kayttajat/delete.md): DELETE
+---
 ### Tapahtumat
 - [Näytä tapahtumat / Hae yksi tapahtuma](tapahtumat/get.md): GET
 - [Luo tapahtuma](tapahtumat/add.md): POST
-- [Poista tapahtuma](tapahtumat/delete.md):DELETE 
 - [Muokkaa tapahtumaa](tapahtumat/put.md): PUT
+- [Poista tapahtuma](tapahtumat/delete.md): DELETE 
 ---
 ### Liput
 - [Näytä liput / Hae yksi lippu](liput/get.md): GET
