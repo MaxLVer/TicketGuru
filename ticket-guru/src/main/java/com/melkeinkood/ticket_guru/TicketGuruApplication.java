@@ -2,6 +2,7 @@ package com.melkeinkood.ticket_guru;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -112,7 +113,10 @@ public class TicketGuruApplication {
 			Ostostapahtuma ostostapahtuma1 = (new Ostostapahtuma(null, kayttaja1));
 			ostostapahtumaRepository.save(ostostapahtuma1);
 
-			Lippu lippu1 = (new Lippu(ostostapahtuma1, lipputyyppi1, tapahtuma1));
+			String koodi = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+
+			Lippu lippu1 = new Lippu(ostostapahtuma1, lipputyyppi1, tapahtuma1);
+			lippu1.setKoodi(koodi);
 			lippuRepository.save(lippu1);
 
 			Tapahtuma tapahtuma = tapahtumaRepository.findById(1L).orElseThrow(() -> new RuntimeException("Tapahtuma not found"));
