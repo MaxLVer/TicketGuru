@@ -1,5 +1,7 @@
 package com.melkeinkood.ticket_guru.model.dto;
 
+import com.melkeinkood.ticket_guru.model.LippuStatus;
+
 import jakarta.validation.constraints.NotNull;
 
 public class LippuDTO {
@@ -13,19 +15,18 @@ public class LippuDTO {
     private Long tapahtumaLipputyyppiId;
     @NotNull(message = "Koodi ei saa olla tyhjä")
     private String koodi;
-    private String status;
-
+    private LippuStatus status;
 
     public LippuDTO(Long lippuId, Long tapahtumaId,
             Long ostostapahtumaId,
             Long tapahtumaLipputyyppiId,
-            String koodi, String status) {
+            String koodi, LippuStatus status) {
         this.lippuId = lippuId;
         this.tapahtumaId = tapahtumaId;
         this.ostostapahtumaId = ostostapahtumaId;
         this.tapahtumaLipputyyppiId = tapahtumaLipputyyppiId;
         this.koodi = koodi;
-        this.status=status;
+        this.status = status;
     }
 
     public LippuDTO() {
@@ -71,10 +72,11 @@ public class LippuDTO {
         this.koodi = koodi;
     }
 
-    public String getStatus() {
+    public LippuStatus getStatus() {
         return status;
     }
-    public void setStatus(String status) {
+    
+    public void setStatus(LippuStatus status) {
         this.status = status;
     }
 }

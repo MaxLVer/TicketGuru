@@ -65,6 +65,7 @@ public class LippuController {
         dto.setTapahtumaId(lippu.getTapahtuma().getTapahtumaId());
         dto.setTapahtumaLipputyyppiId(lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId());
         dto.setKoodi(lippu.getKoodi());
+        dto.setStatus(lippu.getStatus());
         return dto;
 
     }
@@ -120,10 +121,8 @@ public class LippuController {
         }
     }
 
-
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
     // Päivittää lipun statuksen (vain kyseinen kenttä PATCH-muotoisesti)
-    @CrossOrigin(origins = "http://localhost:3000") // Tai muu frontin osoite
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PatchMapping("/liput/{id}")
     public ResponseEntity<EntityModel<LippuDTO>> paivitaStatus(@PathVariable Long id) {
@@ -131,7 +130,7 @@ public class LippuController {
         if (lippu == null) {
             return ResponseEntity.notFound().build();
         }
-        lippu.setStatus(LippuStatus.MYYTY);
+        lippu.setStatus(LippuStatus.KAYTETTY);
         Lippu savedLippu = lippuRepository.save(lippu);
         EntityModel<LippuDTO> savedLippuDTO = toEntityModel(convertToDTO(savedLippu));
         return ResponseEntity.ok(savedLippuDTO);
@@ -244,6 +243,4 @@ public class LippuController {
         return ResponseEntity.ok(toEntityModel(convertToDTO(muokattuLippu)));
 
     }
-
-
 }
