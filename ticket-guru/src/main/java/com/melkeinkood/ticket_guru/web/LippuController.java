@@ -23,6 +23,7 @@ import com.melkeinkood.ticket_guru.model.Ostostapahtuma;
 import com.melkeinkood.ticket_guru.model.Tapahtuma;
 import com.melkeinkood.ticket_guru.model.TapahtumaLipputyyppi;
 import com.melkeinkood.ticket_guru.model.dto.LippuDTO;
+import com.melkeinkood.ticket_guru.model.dto.LuoLippuDTO;
 import com.melkeinkood.ticket_guru.repositories.*;
 
 import jakarta.validation.Valid;
@@ -122,7 +123,7 @@ public class LippuController {
     // Luo uuden lipun
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PostMapping("/liput")
-    public ResponseEntity<?> luoLippu(@Valid @RequestBody LippuDTO lippuDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> luoLippu(@Valid @RequestBody LuoLippuDTO lippuDTO, BindingResult bindingResult) {
         // Tarkistaa validointivirheet
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
