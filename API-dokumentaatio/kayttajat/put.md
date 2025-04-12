@@ -45,3 +45,15 @@ Toiminnon avulla voidaan muokata yhtä tietokannassa olevaa käyttäjää
 **Koodi** : `404 NOT FOUND`
 
 **Sisältö** : `{}`
+
+## Virhe respone
+
+**Tila** : Jos token on virheellinen
+
+**Koodi** : `401 UNAUTHORIZED`
+
+```json
+{
+  "error": "Virheellinen token"
+}
+```

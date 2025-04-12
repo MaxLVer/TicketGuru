@@ -45,3 +45,15 @@ Lisää asiakastyyppi
 **Tila** : Jos kenttiä puuttuu tai niissä on virheitä.
 
 **Koodi** : `400 BAD REQUEST`
+
+## Virhe respone
+
+**Tila** : Jos token on virheellinen
+
+**Koodi** : `401 UNAUTHORIZED`
+
+```json
+{
+  "error": "Virheellinen token"
+}
+```

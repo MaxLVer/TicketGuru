@@ -2,7 +2,7 @@
 
 Toiminto kirjaa käyttäjän sisään sovellukseen.
 
-**URL** : `/kayttajat/`
+**URL** : `/kayttajat/kirjaudu`
 
 **Metodi**: `POST`
 
@@ -17,7 +17,6 @@ Lisää käyttäjänimi, salasana (ja rooliId).
 {
   "kayttajanimi": STRING,
   "salasana": STRING,
-  "rooliId": INTEGER
 }
 ```
 ## Onnistunut response
@@ -38,3 +37,4 @@ Lisää käyttäjänimi, salasana (ja rooliId).
 **Tila** : Jos käyttäjänimi tai salasana on virheellinen
 
 **Koodi** : `403 FORBIDDEN`
+

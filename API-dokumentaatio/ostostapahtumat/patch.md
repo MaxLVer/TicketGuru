@@ -54,3 +54,15 @@ Toiminnon avulla voidaan päivittää ostostapahtuman myyntiaika tietokannassa.
 **Tila** : Jos JSON on virheellinen tai se puuttuu.
 
 **Koodi** : `400 BAD REQUEST`
+
+## Virhe respone
+
+**Tila** : Jos token on virheellinen
+
+**Koodi** : `401 UNAUTHORIZED`
+
+```json
+{
+  "error": "Virheellinen token"
+}
+```
