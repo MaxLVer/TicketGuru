@@ -129,7 +129,7 @@ public class LippuController {
         if (lippu == null) {
             return ResponseEntity.notFound().build();
         }
-        lippu.setStatus(LippuStatus.KAYTETTY);
+        lippu.setStatus(LippuStatus.KÄYTETTY);
         Lippu savedLippu = lippuRepository.save(lippu);
         EntityModel<LippuDTO> savedLippuDTO = toEntityModel(convertToDTO(savedLippu));
         return ResponseEntity.ok(savedLippuDTO);

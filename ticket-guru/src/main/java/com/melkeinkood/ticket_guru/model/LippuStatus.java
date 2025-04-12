@@ -4,6 +4,6 @@ public enum LippuStatus {
 
     
     MYYTY,
-    KAYTETTY
+    KÄYTETTY
 
 }
