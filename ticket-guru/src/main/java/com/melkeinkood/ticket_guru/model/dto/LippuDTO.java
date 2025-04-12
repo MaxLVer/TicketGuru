@@ -13,7 +13,6 @@ public class LippuDTO {
     private Long ostostapahtumaId;
     @NotNull(message = "TapahtumaLipputyyppiId ei saa olla tyhjä")
     private Long tapahtumaLipputyyppiId;
-    @NotNull(message = "Koodi ei saa olla tyhjä")
     private String koodi;
     private LippuStatus status;
 
@@ -75,7 +74,7 @@ public class LippuDTO {
     public LippuStatus getStatus() {
         return status;
     }
-    
+
     public void setStatus(LippuStatus status) {
         this.status = status;
     }

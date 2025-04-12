@@ -8,6 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 
@@ -19,7 +22,8 @@ public class Lippu {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "lippuId")
     private Long lippuId;
-
+ 
+    
     @ManyToOne
     @JoinColumn(name = "ostostapahtumaId")
     private Ostostapahtuma ostostapahtuma;
@@ -105,6 +109,14 @@ public class Lippu {
 
     public void setStatus(LippuStatus status) {
         this.status = status;
+    }
+
+    public String getTunniste() {
+        return tunniste;
+    }
+
+    public void setTunniste(String tunniste) {
+        this.tunniste = tunniste;
     }
 
 }
