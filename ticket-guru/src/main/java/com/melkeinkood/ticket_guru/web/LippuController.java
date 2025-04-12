@@ -65,6 +65,7 @@ public class LippuController {
         dto.setTapahtumaId(lippu.getTapahtuma().getTapahtumaId());
         dto.setTapahtumaLipputyyppiId(lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId());
         dto.setKoodi(lippu.getKoodi());
+        dto.setStatus(lippu.getStatus());
         return dto;
 
     }
@@ -236,7 +237,7 @@ public class LippuController {
         if (lippu == null) {
             return ResponseEntity.notFound().build();
         }
-        lippu.setStatus(LippuStatus.MYYTY);
+        lippu.setStatus(LippuStatus.KÄYTETTY);
         Lippu savedLippu = lippuRepository.save(lippu);
         EntityModel<LippuDTO> savedLippuDTO = toEntityModel(convertToDTO(savedLippu));
         return ResponseEntity.ok(savedLippuDTO);
