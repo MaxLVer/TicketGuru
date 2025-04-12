@@ -106,8 +106,9 @@ public class LippuController {
 
     // Hakee lippukoodilla
     @CrossOrigin(origins = "http://localhost:3000") // Tai muu frontin osoite
-    @GetMapping("/liput/koodi/{koodi}")
-    public ResponseEntity<?> haeLippuKoodilla(@PathVariable("koodi") String koodi) {
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
+    @GetMapping(value = "/liput", params = "koodi")
+    public ResponseEntity<?> haeLippuKoodilla(@RequestParam("koodi") String koodi) {
         Optional<Lippu> optionalLippu = lippuRepository.findByKoodi(koodi);
         if (optionalLippu.isPresent()) {
             Lippu lippu = optionalLippu.get();
@@ -117,6 +118,23 @@ public class LippuController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Lippua ei löydy annetulla koodilla: " + koodi));
         }
+    }
+
+
+    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
+    // Päivittää lipun statuksen (vain kyseinen kenttä PATCH-muotoisesti)
+    @CrossOrigin(origins = "http://localhost:3000") // Tai muu frontin osoite
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
+    @PatchMapping("/liput/{id}")
+    public ResponseEntity<EntityModel<LippuDTO>> paivitaStatus(@PathVariable Long id) {
+        Lippu lippu = lippuRepository.findById(id).orElse(null);
+        if (lippu == null) {
+            return ResponseEntity.notFound().build();
+        }
+        lippu.setStatus(LippuStatus.MYYTY);
+        Lippu savedLippu = lippuRepository.save(lippu);
+        EntityModel<LippuDTO> savedLippuDTO = toEntityModel(convertToDTO(savedLippu));
+        return ResponseEntity.ok(savedLippuDTO);
     }
 
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
@@ -227,19 +245,5 @@ public class LippuController {
 
     }
 
-    // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
-    // Päivittää lipun statuksen (vain kyseinen kenttä PATCH-muotoisesti)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
-    @PatchMapping("/liput/{id}")
-    public ResponseEntity<EntityModel<LippuDTO>> paivitaStatus(@PathVariable Long id) {
-        Lippu lippu = lippuRepository.findById(id).orElse(null);
-        if (lippu == null) {
-            return ResponseEntity.notFound().build();
-        }
-        lippu.setStatus(LippuStatus.MYYTY);
-        Lippu savedLippu = lippuRepository.save(lippu);
-        EntityModel<LippuDTO> savedLippuDTO = toEntityModel(convertToDTO(savedLippu));
-        return ResponseEntity.ok(savedLippuDTO);
-    }
 
 }
