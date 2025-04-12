@@ -17,7 +17,6 @@ Lisää käyttäjänimi, salasana (ja rooliId).
 {
   "kayttajanimi": STRING,
   "salasana": STRING,
-  "rooliId": INTEGER
 }
 ```
 ## Onnistunut response
