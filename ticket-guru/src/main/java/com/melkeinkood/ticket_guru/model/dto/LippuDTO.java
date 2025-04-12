@@ -13,16 +13,19 @@ public class LippuDTO {
     private Long tapahtumaLipputyyppiId;
     @NotNull(message = "Koodi ei saa olla tyhjä")
     private String koodi;
+    private String status;
+
 
     public LippuDTO(Long lippuId, Long tapahtumaId,
             Long ostostapahtumaId,
             Long tapahtumaLipputyyppiId,
-            String koodi) {
+            String koodi, String status) {
         this.lippuId = lippuId;
         this.tapahtumaId = tapahtumaId;
         this.ostostapahtumaId = ostostapahtumaId;
         this.tapahtumaLipputyyppiId = tapahtumaLipputyyppiId;
         this.koodi = koodi;
+        this.status=status;
     }
 
     public LippuDTO() {
@@ -66,5 +69,12 @@ public class LippuDTO {
     
     public void setKoodi(String koodi) {
         this.koodi = koodi;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
