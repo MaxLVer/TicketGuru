@@ -2,7 +2,7 @@
 
 Poistaa lipun.
 
-**URL** : `/liputt/{id}`
+**URL** : `/liput/{id}`
 
 **URL Parameters** : `id` vastaa tietokannassa liput-taulun primary keytä.
 
