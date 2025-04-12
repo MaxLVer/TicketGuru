@@ -33,3 +33,15 @@ Toiminto poistaa halutun ostostapahtuman, johon ei liity lippuja.
 **Koodi** : `409 CONFLICT`
 
 **Sisältö** : `{}`
+
+## Virhe respone
+
+**Tila** : Jos token on virheellinen
+
+**Koodi** : `401 UNAUTHORIZED`
+
+```json
+{
+  "error": "Virheellinen token"
+}
+```
