@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title>Lipun tarkistus</title>
+    <style>
+        #qrcode {
+            margin: 20px auto;
+            margin-left: 1em;
+        }
+
+        #lipputiedot {
+            margin: 20px auto;
+            margin-left: 1em;
+        }
+        
+        #otsikko {
+            margin: 20px auto;
+            margin-left: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="otsikko">
+        <h1>Lipun tarkistus</h1>
+
+        <label for="code">Lippukoodi:</label>
+        <input type="text" id="code" />
+        <button onclick="haeLippu()">Hae lippu</button>
+    </div>
+    <div id="lipputiedot"></div>
+    <div id="qrcode"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        async function haeLippu() {
+        const koodi = document.getElementById("code").value;
+        const resultDiv = document.getElementById("lipputiedot");
+        const qrDiv = document.getElementById("qrcode");
+        resultDiv.innerHTML = "Haetaan...";
+        qrDiv.innerHTML = "";
+
+        try {
+            const response = await fetch(
+                `https://ticketguru-huipputiimi-ticketguru-huipputiimi.2.rahtiapp.fi/api/tickets/ticket?ticketvalidationcode=${koodi}`,
+                {
+                    headers: {
+                        "Authorization": "Basic " + btoa("vendor:vendor")
+                    }
+                }
+            );
+
+            if (response.ok) {
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <p><strong>Lipun ID:</strong> ${data.ticketId}</p>
+                    <p><strong>Tapahtuma:</strong> ${data.event.name}</p>
+                    <p><strong>Kuvaus:</strong> ${data.event.description}</p>
+                    <p><strong>Tapahtumapaikka:</strong> ${data.event.venue.name}</p>
+                    <p><strong>Myyntiaika:</strong> ${data.saleDateTime}</p>
+                    <p><strong>Hinta:</strong> ${data.ticketType.formattedPrice}</p>
+                    <p><strong>Lipputyyppi:</strong> ${data.ticketType.name}</p>
+                    <p><strong>Käyt:</strong> ${data.used}</p>
+                    <p><strong>Status:</strong> ${data.used ? "Käytetty" : "Ei käytetty"}</p>
+                    <button onclick="merkitseKaytetyksi(${data.ticketId})" ${data.used ? "disabled" : ""}>
+                        Merkitse käytetyksi
+                    </button>
+                    <br><br>
+                    <button onclick="naytaQRCode('https://ticketguru-huipputiimi-ticketguru-huipputiimi.2.rahtiapp.fi/api/tickets/ticket?ticketvalidationcode=${koodi}')">Näytä QR-koodi</button>
+                    <button onclick="piilotaQRCode()">Piilota QR-koodi</button>
+                `;
+            } else if (response.status === 404) {
+                resultDiv.innerHTML = "<p style='color:red;'>Lippua ei löytynyt.</p>";
+            } else {
+                resultDiv.innerHTML = "<p style='color:red;'>Virhe haettaessa lippua.</p>";
+            }
+        } catch (err) {
+            resultDiv.innerHTML = "<p style='color:red;'>Verkkovirhe.</p>";
+        }
+    }
+
+    function naytaQRCode(koodi) {
+        const qrDiv = document.getElementById("qrcode");
+        new QRCode(qrDiv, {
+            text: koodi,
+            width: 200,
+            height: 200,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    }
+    
+    function piilotaQRCode() {
+        const qrDiv = document.getElementById("qrcode");
+        qrDiv.innerHTML = "";
+    }
+
+
+    async function merkitseKaytetyksi(ticketId) {
+        const resultDiv = document.getElementById("lipputiedot");
+
+        try {
+            const response = await fetch(
+                `https://ticketguru-huipputiimi-ticketguru-huipputiimi.2.rahtiapp.fi/api/tickets/${ticketId}/use`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Basic " + btoa("vendor:vendor")
+                    }
+                }
+            );
+
+            if (response.status === 204) {
+                resultDiv.innerHTML += "<p style='color:green;'>Lippu merkitty käytetyksi!</p>";
+            } else if (response.status === 404) {
+                resultDiv.innerHTML += "<p style='color:red;'>Lippua ei löytynyt käytettäväksi.</p>";
+            } else {
+                resultDiv.innerHTML += "<p style='color:red;'>Virhe merkitessä lippua.</p>";
+            }
+        } catch (err) {
+            resultDiv.innerHTML += "<p style='color:red;'>Verkkovirhe.</p>";
+        }
+    }
+    </script>
+</body>
+
+</html>
