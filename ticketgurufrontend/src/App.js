@@ -9,7 +9,8 @@ const App = () => {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/protected" element={<ProtectedPage />} />     
+      <Route path="/protected" element={<ProtectedPage />} /> 
+      <Route path="/lipunmyynti" element={<ProtectedPage />} />      
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
