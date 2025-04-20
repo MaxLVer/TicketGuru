@@ -1,29 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { getProtectedData } from '../api/auth';
+import React from 'react';
+import { Navigate } from 'react-router-dom';
 
 const ProtectedPage = () => {
-  const [data, setData] = useState(null);
+  const token = localStorage.getItem('jwtToken');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await getProtectedData();
-      setData(result);
-    };
-
-    fetchData();
-  }, []);
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
 
   return (
-    <div>
-      <h1>Protected Page</h1>
-      {data ? (
-        <div>
-          <h2>Protected Data:</h2>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+    <div style={{ textAlign: 'center', marginTop: 100 }}>
+      <h2>This is a protected page</h2>
+      <p>You can only see this if you're logged in.</p>
     </div>
   );
 };

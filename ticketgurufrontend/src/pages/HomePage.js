@@ -1,20 +1,12 @@
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
 
 const HomePage = () => {
-  const history = useHistory();
-
-  useEffect(() => {
-    const token = localStorage.getItem('jwtToken');
-    if (!token) {
-      history.push('/login');
-    }
-  }, [history]);
+  const token = localStorage.getItem('jwtToken');
 
   return (
-    <div>
-      <h1>Welcome to the Home Page</h1>
-      {/* Your home page content */}
+    <div style={{ textAlign: 'center', marginTop: 100 }}>
+      <h1>Welcome to Home Page</h1>
+      {token ? <p>You're logged in</p> : <p>Please login to continue.</p>}
     </div>
   );
 };
