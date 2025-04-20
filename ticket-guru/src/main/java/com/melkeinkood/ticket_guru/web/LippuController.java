@@ -105,7 +105,7 @@ public class LippuController {
     }
 
     // Hakee lippukoodilla
-    @CrossOrigin(origins = "http://localhost:5173") // Tai muu frontin osoite
+    @CrossOrigin(origins = "http://localhost:8080") // Tai muu frontin osoite
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping(value = "/liput", params = "koodi")
     public ResponseEntity<?> haeLippuKoodilla(@RequestParam("koodi") String koodi) {
@@ -122,7 +122,7 @@ public class LippuController {
 
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
     // Päivittää lipun statuksen (vain kyseinen kenttä PATCH-muotoisesti)
-    @CrossOrigin(origins = "http://localhost:5173")
+    @CrossOrigin(origins = "http://localhost:8080")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PatchMapping("/liput/{id}")
     public ResponseEntity<EntityModel<LippuDTO>> paivitaStatus(@PathVariable Long id) {
@@ -138,6 +138,7 @@ public class LippuController {
 
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
     // Luo uuden lipun
+    @CrossOrigin(origins = "http://localhost:8080") // Tai muu frontin osoite
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PostMapping("/liput")
     public ResponseEntity<?> luoLippu(@Valid @RequestBody LippuDTO lippuDTO, BindingResult bindingResult) {
