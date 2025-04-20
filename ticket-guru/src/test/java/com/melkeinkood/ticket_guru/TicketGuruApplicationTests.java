@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
+import com.melkeinkood.ticket_guru.model.Kayttaja;
+import com.melkeinkood.ticket_guru.model.dto.KayttajaDTO;
 import com.melkeinkood.ticket_guru.model.dto.LippuDTO;
 
 @SpringBootTest
@@ -23,6 +25,15 @@ class TicketGuruApplicationTests {
 
 	@Test
 	void contextLoads() {
+	}
+
+
+	@Test
+	public void testiKirjaudu(){
+		String url = "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/kayttajat/kirjaudu";
+		KayttajaDTO kayttajaDTO = new KayttajaDTO(null, null, "test1", "test12345678", null, null);
+		ResponseEntity<ResponseEntity> response = restTemplate.postForEntity(url, kayttajaDTO, ResponseEntity.class);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
 	@Test
