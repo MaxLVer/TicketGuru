@@ -163,7 +163,7 @@ public class KayttajatController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(responseDTO));
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
     @PostMapping("/kayttajat/kirjaudu")
     public JwtResponseDTO AuthenticateAndGetToken(@RequestBody LoginRequestDTO authRequestDTO,
             HttpServletResponse response) {
