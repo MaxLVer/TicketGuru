@@ -8,10 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 
 import com.melkeinkood.ticket_guru.auth.dto.JwtResponseDTO;
 import com.melkeinkood.ticket_guru.auth.dto.LoginRequestDTO;
@@ -20,8 +20,12 @@ import com.melkeinkood.ticket_guru.model.dto.LippuDTO;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TicketGuruApplicationTests {
 
-	@LocalServerPort
-    private int port;
+	
+	@DynamicPropertySource
+	static void setProperties(DynamicPropertyRegistry registry) {
+		registry.add("server.port", () -> 5173);
+	}
+
 
 	@Autowired
 	private TestRestTemplate testRestTemplate;
@@ -40,7 +44,6 @@ class TicketGuruApplicationTests {
 		String url = "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/Liput";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(token);
-		headers.setContentType(MediaType.APPLICATION_JSON);
 		LippuDTO lippuDTO = new LippuDTO(null, 4L, 4L, 4L, "testi123", null);
 		HttpEntity<LippuDTO> request = new HttpEntity<>(lippuDTO, headers);
 		System.out.println(request);

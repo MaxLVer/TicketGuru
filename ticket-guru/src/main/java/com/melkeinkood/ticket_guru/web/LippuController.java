@@ -136,7 +136,6 @@ public class LippuController {
 
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
     // Luo uuden lipun
-    @CrossOrigin(origins = "http://localhost:8080") // Tai muu frontin osoite
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PostMapping("/liput")
     public ResponseEntity<?> luoLippu(@Valid @RequestBody LippuDTO lippuDTO, BindingResult bindingResult) {
