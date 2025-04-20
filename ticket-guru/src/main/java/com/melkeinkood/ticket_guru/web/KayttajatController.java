@@ -65,14 +65,6 @@ public class KayttajatController {
     @Autowired
     private RefreshTokenService refreshTokenService;
 
-        @RequestMapping(value = "/**", method = RequestMethod.OPTIONS)
-    public ResponseEntity<?> handleOptions(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "*");
-        return ResponseEntity.ok().build();
-    }
-
     private EntityModel<KayttajaDTO> toEntityModel(KayttajaDTO kayttajaDTO) {
         Link selfLink = linkTo(
                 methodOn(KayttajatController.class)
