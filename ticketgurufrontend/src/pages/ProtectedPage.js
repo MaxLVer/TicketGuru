@@ -1,17 +1,44 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 
 const ProtectedPage = () => {
-  const token = localStorage.getItem('jwtToken');
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
 
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
+  //Pääosin testaamaan toimiiko Admin-oikeudet.
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwtToken');
+    
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/tapahtumat`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setData(data);
+        } else {
+          setError('Failed to fetch data');
+        }
+      } catch (err) {
+        setError('An error occurred');
+      }
+    };
+
+    if (token) {
+      fetchData();
+    } else {
+      setError('No token found');
+    }
+  }, []);
 
   return (
-    <div style={{ textAlign: 'center', marginTop: 100 }}>
-      <h2>This is a protected page</h2>
-      <p>You can only see this if you're logged in.</p>
+    <div>
+      {error && <p>{error}</p>}
+      {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>Loading...</p>}
     </div>
   );
 };
