@@ -164,9 +164,10 @@ public class KayttajatController {
     }
    
     @PostMapping("/kayttajat/kirjaudu")
-    public JwtResponseDTO AuthenticateAndGetToken(@RequestBody LoginRequestDTO authRequestDTO,
+    public ResponseEntity<?> AuthenticateAndGetToken(@RequestBody LoginRequestDTO authRequestDTO,
             HttpServletResponse response) {
         // autentikointi kirjautumistiedoilla
+        try {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authRequestDTO.getKayttajanimi(), authRequestDTO.getSalasana()));
         // jos onnistuneesti:
@@ -181,19 +182,26 @@ public class KayttajatController {
                     .secure(false)
                     .path("/")
                     .maxAge(jwtService.getJwtExpirationInMS() / 1000)
+                    .sameSite("Lax")
                     .build();
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
             // palautetaan access ja refreshtoken
-            return JwtResponseDTO.builder()
+            JwtResponseDTO jwtResponse = JwtResponseDTO.builder()
                     .accessToken(accessToken)
-                    .token(refreshToken.getToken()).build();
+                    .token(refreshToken.getToken())
+                    .build();
 
+            return ResponseEntity.ok(jwtResponse);
         } else {
-            // jos epäonnistuneesti:
-            throw new UsernameNotFoundException("virheellinen käyttäjäpyyntö");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Väärät tunnukset"));
+        } 
+    }   catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Kirjautuminen epäonnistui"));
         }
 
-    }
+}
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/kayttajat/uloskirjaudu")
