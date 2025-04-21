@@ -166,6 +166,8 @@ public class KayttajatController {
     @PostMapping("/kayttajat/kirjaudu")
     public ResponseEntity<?> AuthenticateAndGetToken(@RequestBody LoginRequestDTO authRequestDTO,
             HttpServletResponse response) {
+                System.out.println("Login attempt: " + authRequestDTO.getKayttajanimi());
+
         // autentikointi kirjautumistiedoilla
         try {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
