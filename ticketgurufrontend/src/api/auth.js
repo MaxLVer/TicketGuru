@@ -9,6 +9,7 @@ export const login = async (username, password) => {
         'X-Custom-Header': 'trigger-cors',
         Accept: '*/*',
       },
+      credentials: 'include',
       body: JSON.stringify({ username, password }),
     });
 

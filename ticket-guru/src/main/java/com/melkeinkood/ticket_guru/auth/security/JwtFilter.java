@@ -40,6 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     // List of endpoints that do not require token validation
         if (path.equals("/kayttajat/luo") || path.equals("/kayttajat/kirjaudu") || path.equals("/kayttajat/uloskirjaudu")) {
+            System.out.println("Skipping JWT validation for: " + path);
         filterChain.doFilter(request, response);
             return;
     }
@@ -66,6 +67,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
                 response.getWriter().write("{\"error\": \"Token puuttuu\"}");
+                System.out.println(" Token missing in the request");
                 return;
             }
     
@@ -81,11 +83,13 @@ public class JwtFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authenticationToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    System.out.println("Token validated successfully");
                 } else {
                     // If the token is invalid, respond with 403 Forbidden
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     response.setContentType("application/json");
                     response.getWriter().write("{\"error\": \"Virheellinen token\"}");
+                    System.out.println("Invalid token");
                     return;
                 }
             } catch (Exception e) {
@@ -93,6 +97,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
                 response.getWriter().write("{\"error\": \"Virheellinen token\"}");
+                System.out.println("Token validation failed: " + e.getMessage());
                 return;
             }
         //jatka filterchainiä
