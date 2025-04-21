@@ -136,7 +136,6 @@ public class LippuController {
 
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
     // Luo uuden lipun
-    @CrossOrigin(origins = "http://localhost:8080") // Tai muu frontin osoite
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PostMapping("/liput")
     public ResponseEntity<?> luoLippu(@Valid @RequestBody LippuDTO lippuDTO, BindingResult bindingResult) {
@@ -175,17 +174,17 @@ public class LippuController {
         if (koodi == null || koodi.isBlank()) {
             koodi = generoiSatunnainenLippuKoodi();
         }
-    
+
         // Luodaan uusi Lippu-olio
-    Lippu uusiLippu = new Lippu(ostostapahtuma, tapahtumaLipputyyppi, tapahtuma);
-    uusiLippu.setKoodi(koodi);  // Asetetaan koodi
-    uusiLippu.setStatus(LippuStatus.MYYTY);  // Asetetaan status
+        Lippu uusiLippu = new Lippu(ostostapahtuma, tapahtumaLipputyyppi, tapahtuma);
+        uusiLippu.setKoodi(koodi); // Asetetaan koodi
+        uusiLippu.setStatus(LippuStatus.MYYTY); // Asetetaan status
 
-    // Tallennetaan uusi lippu tietokantaan
-    Lippu tallenttuLippu = lippuRepository.save(uusiLippu);
+        // Tallennetaan uusi lippu tietokantaan
+        Lippu tallenttuLippu = lippuRepository.save(uusiLippu);
 
-    // Palautetaan luotu lippu DTO:n muodossa
-    return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(convertToDTO(tallenttuLippu)));
+        // Palautetaan luotu lippu DTO:n muodossa
+        return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(convertToDTO(tallenttuLippu)));
     }
 
     // Poistaa lipun ID:n perusteella – sallittu vain ADMIN-roolille

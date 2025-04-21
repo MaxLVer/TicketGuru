@@ -1,27 +1,34 @@
 package com.melkeinkood.ticket_guru;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 
-import com.melkeinkood.ticket_guru.model.Kayttaja;
-import com.melkeinkood.ticket_guru.model.dto.KayttajaDTO;
+import com.melkeinkood.ticket_guru.auth.dto.JwtResponseDTO;
+import com.melkeinkood.ticket_guru.auth.dto.LoginRequestDTO;
 import com.melkeinkood.ticket_guru.model.dto.LippuDTO;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TicketGuruApplicationTests {
 
+	
+	@DynamicPropertySource
+	static void setProperties(DynamicPropertyRegistry registry) {
+		registry.add("server.port", () -> 5173);
+	}
+
+
 	@Autowired
-	private RestTemplate restTemplate;
+	private TestRestTemplate testRestTemplate;
 
 	@Test
 	void contextLoads() {
@@ -29,23 +36,19 @@ class TicketGuruApplicationTests {
 
 
 	@Test
-	public void testiKirjaudu(){
-		String url = "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/kayttajat/kirjaudu";
-		KayttajaDTO kayttajaDTO = new KayttajaDTO(null, null, "test1", "test12345678", null, null);
-		ResponseEntity<ResponseEntity> response = restTemplate.postForEntity(url, kayttajaDTO, ResponseEntity.class);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-	}
-
-	@Test
 	public void testiTeeLippu() {
-		String token = "aktiivinen token"; // tähän tulisi oikea aktiivinen token
+		LoginRequestDTO loginRequestDTO = new LoginRequestDTO("test1", "test12345678");
+		ResponseEntity<JwtResponseDTO> response = testRestTemplate.postForEntity("https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/kayttajat/kirjaudu", loginRequestDTO, JwtResponseDTO.class);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		String token = response.getBody().getAccessToken(); 
 		String url = "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi/Liput";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(token);
-		LippuDTO lippuDTO = new LippuDTO(null, 1L, 1L, 1L, "testi123", null);
+		LippuDTO lippuDTO = new LippuDTO(null, 4L, 4L, 4L, "testi123", null);
 		HttpEntity<LippuDTO> request = new HttpEntity<>(lippuDTO, headers);
+		System.out.println(request);
 
-		ResponseEntity<ResponseEntity> response = restTemplate.postForEntity(url, request, ResponseEntity.class);
-		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		ResponseEntity<LippuDTO> vaste = testRestTemplate.postForEntity(url, request, LippuDTO.class);
+		assertEquals(HttpStatus.CREATED, vaste.getStatusCode());
 	}
 }
