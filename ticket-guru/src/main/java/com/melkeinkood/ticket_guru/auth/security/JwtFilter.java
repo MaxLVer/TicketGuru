@@ -41,6 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
     // List of endpoints that do not require token validation
         if (path.equals("/kayttajat/luo") || path.equals("/kayttajat/kirjaudu") || path.equals("/kayttajat/uloskirjaudu")) {
             System.out.println("Skipping JWT validation for: " + path);
+            System.out.println("Requested path: " + request.getRequestURI());
         filterChain.doFilter(request, response);
             return;
     }
