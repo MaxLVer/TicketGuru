@@ -1,47 +1,37 @@
-export const login = async (username, password) => {
-  try {
-    console.log('🔐 Attempting login...');
+export const login = (username, password) => {
+  console.log('🔐 Attempting login...');
 
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/kayttajat/kirjaudu`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Custom-Header': 'trigger-cors',
-        Accept: '*/*',
-      },
-      credentials: 'include',
-      body: JSON.stringify({ "kayttajanimi": username, "salasana": password }),
-    });
+  // Make the POST request to the login endpoint
+  return fetch(`${process.env.REACT_APP_API_URL}/kayttajat/kirjaudu`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: '*/*',
+    },
+    credentials: 'include',
+    body: JSON.stringify({ kayttajanimi: username, salasana: password }),
+  })
+    .then(response => {
+      // Check if the response status is OK (status code 200)
+      if (!response.ok) {
+        return Promise.reject('Invalid username or password');
+      }
 
-    console.log('📡 Response received:', response);
-
-    const rawText = await response.text();
-    let data = {}
-    console.log('Raw response text:', rawText);
-
-    try {
-      data = JSON.parse(rawText);
-    } catch (e) {
-      console.warn('No JSON body in response');
-    }
-
-
-    if (!response.ok) {
-      console.error('❌ Login failed:', data.message);
-      throw new Error(data.message || 'Login failed');
-    }
-
-    console.log('✅ Login successful:', data);
-
-    // Save tokens (adjust keys based on your backend's response format)
-    localStorage.setItem('jwtToken', data.accessToken);
-    if (data.refreshToken) {
+      // Parse the JSON response
+      return response.json();
+    })
+    .then(data => {
+      // Save the tokens to localStorage if the login is successful
+      localStorage.setItem('jwtToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
-    }
 
-    return data;
-  } catch (error) {
-    console.error('💥 Error during login:', error.message);
-    throw error;
-  }
+      // Return the data (you can return status 'ok' or any other info)
+      console.log('✅ Login successful for', username);
+      return { status: 'ok', data };  // Return status 'ok' and data
+    })
+    .catch(error => {
+      // Handle errors (login failed or other errors)
+      console.error('❌ Login failed:', error);
+      return { status: 'error', message: error };  // Return status 'error' with the error message
+    });
 };
