@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { securedFetch } from '../api/securedFetch';
 
 const ProtectedPage = () => {
   const [data, setData] = useState(null);
@@ -7,32 +8,17 @@ const ProtectedPage = () => {
   //Pääosin testaamaan toimiiko Admin-oikeudet.
 
   useEffect(() => {
-    const token = localStorage.getItem('jwtToken');
-    
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/tapahtumat`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setData(data);
-        } else {
-          setError('Failed to fetch data');
-        }
+        const response = await securedFetch('/tapahtumat');
+        const result = await response.json();
+        setData(result);
       } catch (err) {
-        setError('An error occurred');
+        setError('An error occurred: ' + err.message);
       }
     };
 
-    if (token) {
-      fetchData();
-    } else {
-      setError('No token found');
-    }
+    fetchData();
   }, []);
 
   return (
