@@ -198,7 +198,7 @@ public class KayttajatController {
         } 
     }   catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Kirjautuminen epäonnistui"));
+                    .body(Map.of("error", "Kirjautuminen epäonnistui" + e.getMessage()));
         }
 
 }
