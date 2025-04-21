@@ -26,15 +26,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     UserDetailsServiceImpl userDetailsServiceImpl;
-
     //Metodia käytetään per request filterointiin ja JWT validointiin
     @Override
     protected void doFilterInternal(
+        
         HttpServletRequest request, 
         HttpServletResponse response, 
         FilterChain filterChain
     ) throws ServletException, IOException {
-
+        System.out.println(" Requested path: " + request.getRequestURI());
         // Get the request path
         String path = request.getRequestURI();
 
