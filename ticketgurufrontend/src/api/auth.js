@@ -10,7 +10,7 @@ export const login = async (username, password) => {
         Accept: '*/*',
       },
       credentials: 'include',
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ "kayttajanimi": username, "salasana": password }),
     });
 
     console.log('📡 Response received:', response);
@@ -34,7 +34,7 @@ export const login = async (username, password) => {
     console.log('✅ Login successful:', data);
 
     // Save tokens (adjust keys based on your backend's response format)
-    localStorage.setItem('jwtToken', data.token || data.accessToken);
+    localStorage.setItem('jwtToken', data.accessToken);
     if (data.refreshToken) {
       localStorage.setItem('refreshToken', data.refreshToken);
     }

@@ -181,10 +181,10 @@ public class KayttajatController {
             // Lisää access token cookieksi
             ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
                     .httpOnly(true)
-                    .secure(false)
+                    .secure(true)
+                    .sameSite("None")
                     .path("/")
                     .maxAge(jwtService.getJwtExpirationInMS() / 1000)
-                    .sameSite("Lax")
                     .build();
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
             // palautetaan access ja refreshtoken
@@ -212,10 +212,10 @@ public class KayttajatController {
         // Poista token laittamalla expiration aika 0
         ResponseCookie deleteAccessTokenCookie = ResponseCookie.from("accessToken", "")
                 .httpOnly(true)
-                .secure(false) // Laita false jos local dev
+                .secure(true) // Laita false jos local dev
                 .path("/")
                 .maxAge(0)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
 
         // tyhjän evästeen säätäminen
