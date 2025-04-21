@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import LoginPage from './pages/loginpage';
+import LoginPage from './pages/LoginPage';
 import ProtectedPage from './pages/ProtectedPage';
 import AppBar from './components/Appbar';
 import Lipunmyynti from './pages/Lipunmyynti';

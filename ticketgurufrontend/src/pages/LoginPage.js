@@ -8,14 +8,20 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const nav = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    try {
-      await login(username, password);
-      nav.push('/');
-    } catch (err) {
-      setError('Invalid username or password');
-    }
+    
+    login(username, password)
+      .then(result => {
+        if (result.status === 'ok') {
+          nav('/')
+        } else {
+          setError("Väärä käyttäjänimi tai salasana")  // Show error message
+        }
+      })
+      .catch(error => {
+        console.error('Unexpected error:', error);
+      });
   };
 
   return (
