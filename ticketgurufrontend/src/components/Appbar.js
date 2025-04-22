@@ -28,7 +28,7 @@ export default function Appbar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Spring Boot React Full Stack Application 
+            TicketGuru 
           </Typography>
          
         </Toolbar>

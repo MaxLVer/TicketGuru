@@ -9,7 +9,10 @@ const HomePage = () => {
     <div style={{ textAlign: 'center', marginTop: 100 }}>
       <h1>Welcome to Home Page</h1>
       {token ? (
+        <div>
         <p>You're logged in</p>
+        <Link to="/lipunmyynti" style={{ textDecoration: 'none' }}><Button variant="contained" color="primary">Lipunmyynti</Button></Link>
+        </div>
       ) : (
         <p>
           <Link to="/login" style={{ textDecoration: 'none' }}>
