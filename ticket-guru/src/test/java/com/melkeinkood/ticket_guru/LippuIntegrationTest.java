@@ -3,8 +3,7 @@ package com.melkeinkood.ticket_guru;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.Set;
-
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
 
 import com.melkeinkood.ticket_guru.auth.dto.JwtResponseDTO;
 import com.melkeinkood.ticket_guru.auth.dto.LoginRequestDTO;
@@ -30,8 +28,6 @@ public class LippuIntegrationTest {
     private final String BASE_URL = "https://ticket-guru-git-ohjelmistoprojekti-1.2.rahtiapp.fi";
 
     private String accessToken;
-
-
 
     @BeforeEach
     public void kirjauduSisaan() {
@@ -59,8 +55,8 @@ public class LippuIntegrationTest {
 
     @Test
     void testiLuoUusiLippu() {
-        
-        LippuDTO uusiLippu = new LippuDTO(null, 4L, 4L, 4L, "testi123", null);
+
+        LippuDTO uusiLippu = new LippuDTO(null, 4L, 4L, 4L, "testauslipukekoodi12345", null);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -69,17 +65,15 @@ public class LippuIntegrationTest {
         HttpEntity<LippuDTO> request = new HttpEntity<>(uusiLippu, headers);
 
         ResponseEntity<LippuDTO> vastaus = testRestTemplate.exchange(
-        BASE_URL + "/liput",
-        HttpMethod.POST,
-        request,
-        LippuDTO.class
-);
+                BASE_URL + "/liput",
+                HttpMethod.POST,
+                request,
+                LippuDTO.class);
 
         assertEquals(HttpStatus.CREATED, vastaus.getStatusCode(), "Lipun luonti epäonnistui");
         assertNotNull(vastaus.getBody(), "Vastaus on tyhjä");
-        System.out.println("Luotu lippu: " + vastaus.getBody());
+
     }
-    
 
     @Test
     public void testiHaeLiput() {
@@ -92,5 +86,34 @@ public class LippuIntegrationTest {
 
         assertEquals(HttpStatus.OK, vastaus.getStatusCode());
         System.out.println("Response: " + vastaus.getBody());
+    }
+
+    @AfterEach
+    void poistaTestilippu() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(accessToken);
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
+        String lippuHakuUrl = BASE_URL + "/liput?koodi=testauslipukekoodi12345";
+        ResponseEntity<LippuDTO> vastaus = testRestTemplate.exchange(
+                lippuHakuUrl,
+                HttpMethod.GET,
+                request,
+                LippuDTO.class);
+
+        if (vastaus.getStatusCode() == HttpStatus.OK && vastaus.getBody() != null) {
+            Long lippuId = vastaus.getBody().getLippuId();
+
+            String lippuPoistoUrl = BASE_URL + "/liput/" + lippuId;
+            ResponseEntity<Void> poisto = testRestTemplate.exchange(
+                    lippuPoistoUrl,
+                    HttpMethod.DELETE,
+                    request,
+                    Void.class);
+
+            System.out.println("Poistettu testilippu id: " + lippuId + " - Status: " + poisto.getStatusCode());
+        } else {
+            System.out.println("Testilippua ei löytynyt poistettavaksi.");
+        }
     }
 }
