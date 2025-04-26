@@ -174,6 +174,12 @@ public class LippuController {
         if (koodi == null || koodi.isBlank()) {
             koodi = generoiSatunnainenLippuKoodi();
         }
+        // Tarkastetaan löytyykö samalla koodilla oleva lippu tietokannasta
+        Optional<Lippu> existingLippu = lippuRepository.findByKoodi(lippuDTO.getKoodi());
+        if (existingLippu.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Lippukoodi on jo käytössä: " + lippuDTO.getKoodi()));
+        }
 
         // Luodaan uusi Lippu-olio
         Lippu uusiLippu = new Lippu(ostostapahtuma, tapahtumaLipputyyppi, tapahtuma);
