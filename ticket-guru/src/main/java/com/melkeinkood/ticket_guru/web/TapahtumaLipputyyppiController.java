@@ -108,11 +108,6 @@ public class TapahtumaLipputyyppiController {
 public ResponseEntity<List<TapahtumaLipputyyppiDTO>> haeLipputyypitTapahtumalle(@PathVariable Long tapahtumaId) {
     List<TapahtumaLipputyyppi> tapahtumaLipputyypit = tapahtumaLipputyyppiRepo.findByTapahtuma_TapahtumaId(tapahtumaId);
 
-    if (tapahtumaLipputyypit.isEmpty()) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Collections.emptyList());
-    }
-
     List<TapahtumaLipputyyppiDTO> tapahtumaLipputyyppiDTOt = tapahtumaLipputyypit.stream()
             .map(this::toDTO)
             .collect(Collectors.toList());
