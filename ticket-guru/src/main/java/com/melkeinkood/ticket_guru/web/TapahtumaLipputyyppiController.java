@@ -104,6 +104,19 @@ public class TapahtumaLipputyyppiController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
+@GetMapping("/tapahtumat/{tapahtumaId}/lipputyypit")
+public ResponseEntity<List<TapahtumaLipputyyppiDTO>> haeLipputyypitTapahtumalle(@PathVariable Long tapahtumaId) {
+    List<TapahtumaLipputyyppi> tapahtumaLipputyypit = tapahtumaLipputyyppiRepo.findByTapahtuma_TapahtumaId(tapahtumaId);
+
+    List<TapahtumaLipputyyppiDTO> tapahtumaLipputyyppiDTOt = tapahtumaLipputyypit.stream()
+            .map(this::toDTO)
+            .collect(Collectors.toList());
+
+    return ResponseEntity.ok(tapahtumaLipputyyppiDTOt);
+}
+
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @PostMapping("/tapahtumalipputyypit")
     public ResponseEntity<?> lisaaTapahtumaLipputyyppi(
             @Valid @RequestBody TapahtumaLipputyyppiDTO tapahtumaLipputyyppiDTO, BindingResult bindingResult) {
