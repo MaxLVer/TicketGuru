@@ -37,10 +37,15 @@ const TicketSaleApp = () => {
     haeTapahtumat();
   }, []);
 
- // Lataa asiakastyypit API:sta
+  // Lataa asiakastyypit API:sta
   const haeAsiakastyypit = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/asiakastyypit`);
+      const token = localStorage.getItem("jwtToken");
+      const response = await axios.get(`${API_BASE_URL}/asiakastyypit`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setAsiakastyypit(response.data);
     } catch (error) {
       if (error.response && error.response.status === 403) {
@@ -51,7 +56,7 @@ const TicketSaleApp = () => {
     }
   };
 
-  
+
   const muutaAsiakasTieto = (e) => {
     const { name, value } = e.target;
     setAsiakas((prev) => ({ ...prev, [name]: value }));
@@ -70,10 +75,10 @@ const TicketSaleApp = () => {
       return;
     }
 
-    if (!valittuTapahtuma.tapahtumaLipputyyppiId) {
+    /* if (!valittuTapahtuma.tapahtumaLipputyyppiId) {
       alert("Tälle tapahtumalle ei ole määritelty lipputyyppiä. Lisää lipputyyppi ensin.");
       return;
-    }
+    } */
 
     setIsLoading(true);
     setOstoStatus(null);
@@ -83,31 +88,32 @@ const TicketSaleApp = () => {
 
       //Luodaan lähetettävä lippu objekti
       const lippu = {
-          tapahtumaId: valittuTapahtuma.tapahtumaId,
-          tapahtumaLipputyyppiId: valittuLipputyyppiId,
-          maara: Number(lippujenMaara),
-          ostostapahtumaId: ostostapahtumaId,
-          asiakas: {
-            etunimi: asiakas.etunimi,
-            sukunimi: asiakas.sukunimi,
+        tapahtumaId: valittuTapahtuma.tapahtumaId,
+        tapahtumaLipputyyppiId: valittuLipputyyppiId,
+        maara: Number(lippujenMaara),
+        ostostapahtumaId: ostostapahtumaId,
+        asiakas: {
+          etunimi: asiakas.etunimi,
+          sukunimi: asiakas.sukunimi,
+        },
+      };
+
+      console.log("Lähetettävä lippu:", lippu);
+
+      //Lähetetään pyyntö API:lle
+      const res = await axios.post(
+        `${API_BASE_URL}/liput`,
+        lippu,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        };
-
-        console.log("Lähetettävä lippu:", lippu);
-
-        //Lähetetään pyyntö API:lle
-        const res = await axios.post(
-          `${API_BASE_URL}/liput`,
-          lippu,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        }
+      );
 
       // Jos pyyntö onnistui, käsitellään vastaus
       setOstoStatus("onnistui");
+      console.log(res.data);
       // Tallennetaan lipputiedot vastausobjektista
       setLipputiedot(res.data);
     } catch (error) {
@@ -119,7 +125,7 @@ const TicketSaleApp = () => {
       // Näytetään virheilmoitus käyttäjälle
       setOstoStatus("virhe");
       alert("Lippujen osto epäonnistui. Tarkista tiedot ja yritä uudelleen.");
-      } finally {
+    } finally {
       // Poistetaan lataus-tilan päivitys
       setIsLoading(false);
     }
@@ -193,23 +199,29 @@ const TicketSaleApp = () => {
   };
 
   useEffect(() => {
+    
     const haeTapahtumaLipputyypit = async () => {
+      const token = localStorage.getItem("jwtToken");
       if (!valittuTapahtuma?.tapahtumaId) return;
-  
+
       try {
-        const response = await axios.get(`${API_BASE_URL}/tapahtumat/${valittuTapahtuma.tapahtumaId}/lipputyypit`);
+        const response = await axios.get(`${API_BASE_URL}/tapahtumat/${valittuTapahtuma.tapahtumaId}/lipputyypit`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setTapahtumaLipputyypit(response.data);
       } catch (error) {
         console.error("Lipputyyppejä ei saatu haettua", error);
       }
     };
-  
+
     haeAsiakastyypit();
     if (valittuTapahtuma) {
       haeTapahtumaLipputyypit();
     }
   }, [valittuTapahtuma]); // No need to include `haeTapahtumaLipputyypit` in dependencies anymore
-  
+
 
 
   // const lisaaLiputTapahtumaan = async () => {
@@ -336,34 +348,39 @@ const TicketSaleApp = () => {
             <Form.Group className="mb-2">
               <Form.Label>Lipputyyppi</Form.Label>
               <Form.Control
-  as="select"
-  value={valittuLipputyyppiId || ""}
-  onChange={(e) => setValittuLipputyyppiId(e.target.value)}
->
-  {!tapahtumaLipputyypit.length ? (
-    <option value="">Ladataan lipputyyppejä...</option>
-  ) : (
-    <>
-      <option value="" disabled>
-        Valitse lipputyyppi
-        </option>
-      {tapahtumaLipputyypit.map((lt) => {
-        // Etsitään asiakastyyppi tästä lipputyyppistä
-        const asiakasTyyppi = asiakastyypit.find(
-          (a) => a.asiakastyypiId === lt.asiakastyyppiId
-        );
+                as="select"
+                value={valittuLipputyyppiId || ""}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setValittuLipputyyppiId(value ? parseInt(value) : null);
+                  //Debuggaus logi
+                  //console.log("Valittu id on " + valittuLipputyyppiId)
+                }}
+              >
+                {!tapahtumaLipputyypit.length ? (
+                  <option value="">Ladataan lipputyyppejä...</option>
+                ) : (
+                  <>
+                    <option value="" disabled>
+                      Valitse lipputyyppi
+                    </option>
+                    {tapahtumaLipputyypit.map((lt) => {
+                      // Etsitään asiakastyyppi tästä lipputyyppistä
+                      const asiakasTyyppi = asiakastyypit.find(
+                        (a) => a.asiakastyypiId === lt.asiakastyyppiId
+                      );
 
-        return (
-          <option key={lt.tapahtumaLipputyyppiId} value={lt.tapahtumaLipputyyppiId}>
-            {asiakasTyyppi
-              ? `${asiakasTyyppi.nimi} - ${lt.nimi} (${lt.hinta}€)`
-              : `${lt.nimi} (${lt.hinta}€)`}
-          </option>
-     );
-    })}
-  </>
-)}
-</Form.Control>
+                      return (
+                        <option key={lt.tapahtumaLipputyyppiId} value={lt.tapahtumaLipputyyppiId}>
+                          {asiakasTyyppi
+                            ? `${asiakasTyyppi.asiakastyyppi} -  (${lt.hinta}€)`
+                            : `${lt.nimi} (${lt.hinta}€)`}
+                        </option>
+                      );
+                    })}
+                  </>
+                )}
+              </Form.Control>
             </Form.Group>
 
             <Form.Group className="mb-3">
