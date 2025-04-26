@@ -15,6 +15,9 @@ const TicketSaleApp = () => {
   const [ostoStatus, setOstoStatus] = useState(null);
   const [lipputiedot, setLipputiedot] = useState(null);
   const [ostostapahtumaId, setOstostapahtumaId] = useState(null);
+  const [tapahtumaLipputyypit, setTapahtumaLipputyypit] = useState([]);
+const [valittuLipputyyppiId, setValittuLipputyyppiId] = useState(null);
+
   const [uudetLiput, setUudetLiput] = useState(0); // Uudet liput määrän tallentaminen
 
   useEffect(() => {
@@ -53,18 +56,19 @@ const TicketSaleApp = () => {
   
       // Lähetetään pyyntö API:lle
       const res = await axios.post(`${API_BASE_URL}/liput`, {
-        tapahtumaId: valittuTapahtuma.id,
-        maara: Number(lippujenMaara),  // Varmistetaan, että määrä on numero
+        tapahtumaId: valittuTapahtuma.tapahtumaId,
+        tapahtumaLipputyyppiId: valittuTapahtuma.tapahtumaLipputyyppiId,
+        maara: Number(lippujenMaara),
         ostostapahtumaId: ostostapahtumaId,
         asiakas: {
           etunimi: asiakas.etunimi,
           sukunimi: asiakas.sukunimi,
         },
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  }, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
   
       // Jos pyyntö onnistui, käsitellään vastaus
       setOstoStatus("onnistui");
@@ -86,7 +90,11 @@ const TicketSaleApp = () => {
   
 
   const valitseTapahtumaJaLuoOstostapahtuma = async (tapahtuma) => {
-    setValittuTapahtuma(tapahtuma);
+    setValittuTapahtuma({
+      ...tapahtuma,
+      lipputyyppiId: tapahtuma.lipputyypit?.[0]?.tapahtumaLipputyyppiId || tapahtuma.lipputyyppiId,
+    });
+    
     setIsLoading(true);
   
     try {
@@ -127,58 +135,70 @@ const TicketSaleApp = () => {
       console.log(" Vastaus ostostapahtumasta:", response.data);
   
       setOstostapahtumaId(response.data.ostostapahtumaId); 
+
+      const lipputyyppiRes = await axios.get(`${API_BASE_URL}/tapahtumat/${tapahtuma.tapahtumaId}/lipputyypit`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+          withCredentials: true,
+
+        },
+  );
+      setTapahtumaLipputyypit(lipputyyppiRes.data);
+
     } catch (error) {
       console.error(" Ostostapahtuman luonti epäonnistui:", error);
       alert("Ostostapahtuman luonti epäonnistui!");
     } finally {
       setIsLoading(false);
     }
-  };
-  
 
-  const lisaaLiputTapahtumaan = async () => {
-    if (!uudetLiput || uudetLiput <= 0 || !valittuTapahtuma) return;
+    
+  };
+
+  // const lisaaLiputTapahtumaan = async () => {
+  //   if (!uudetLiput || uudetLiput <= 0 || !valittuTapahtuma) return;
   
-    setIsLoading(true);
-    try {
-      const token = localStorage.getItem("jwtToken");
+  //   setIsLoading(true);
+  //   try {
+  //     const token = localStorage.getItem("jwtToken");
   
-      const payload = {
-        tapahtumaId: valittuTapahtuma.id,
-        tapahtumaLipputyyppiId: valittuTapahtuma.lipputyyppiId,
-        maara: uudetLiput,
-        ostostapahtumaId: "ostostapahtumaId_placeholder",
-        status: "MYYTY",
-        asiakas: {
-          etunimi: asiakas.etunimi,
-          sukunimi: asiakas.sukunimi,
-        },
-      };
+  //     const payload = {
+  //       tapahtumaId: valittuTapahtuma.lippuId,
+  //       tapahtumaLipputyyppiId: valittuTapahtuma.tapahtumaLipputyyppiId,
+  //       maara: uudetLiput,
+  //       ostostapahtumaId: "ostostapahtumaId_placeholder",
+  //       status: "MYYTY",
+  //       asiakas: {
+  //         etunimi: asiakas.etunimi,
+  //         sukunimi: asiakas.sukunimi,
+  //       },
+  //     };
   
-      console.log("Ostetaan liput payloadilla:", payload);
+  //     console.log("Ostetaan liput payloadilla:", payload);
   
-      await axios.post(`${API_BASE_URL}/liput/lisaa`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  //     await axios.post(`${API_BASE_URL}/liput/lisaa`, payload, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
  
-      // Päivitetään tapahtumat uudella lippumäärällä
-      const res = await axios.get(`${API_BASE_URL}/tapahtumat`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  //     // Päivitetään tapahtumat uudella lippumäärällä
+  //     const res = await axios.get(`${API_BASE_URL}/tapahtumat`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
 
-      setTapahtumat(res.data);
-      alert("Lippuja lisätty tapahtumalle!");
-    } catch (error) {
-      console.error("Lippujen lisääminen epäonnistui:", error);
-      alert("Lippujen lisääminen epäonnistui!");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     setTapahtumat(res.data);
+  //     alert("Lippuja lisätty tapahtumalle!");
+  //   } catch (error) {
+  //     console.error("Lippujen lisääminen epäonnistui:", error);
+  //     alert("Lippujen lisääminen epäonnistui!");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <div className="container mt-5">
@@ -248,6 +268,23 @@ const TicketSaleApp = () => {
                 placeholder="Sukunimi"
               />
             </Form.Group>
+
+            <Form.Group className="mb-2">
+            <Form.Label>Lipputyyppi</Form.Label>
+            <Form.Control
+            as="select"
+            value={valittuLipputyyppiId || ""}
+            onChange={(e) => setValittuLipputyyppiId(e.target.value)}
+            >
+            <option value="" disabled>Valitse lipputyyppi</option>
+            {tapahtumaLipputyypit.map((lt) => (
+            <option key={lt.id} value={lt.id}>
+            {lt.nimi} ({lt.hinta}€)
+            </option>
+                ))}
+            </Form.Control>
+            </Form.Group>
+
 
             <Form.Group className="mb-3">
               <Form.Label>Lippujen määrä</Form.Label>
