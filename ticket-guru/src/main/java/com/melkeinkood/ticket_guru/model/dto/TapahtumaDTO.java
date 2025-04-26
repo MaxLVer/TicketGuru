@@ -28,7 +28,7 @@ public class TapahtumaDTO {
 
     public TapahtumaDTO() {}
 
-    public TapahtumaDTO(long tapahtumaId, long tapahtumapaikkaId, LocalDateTime tapahtumaAika, String tapahtumaNimi, String kuvaus, int kokonaislippumaara, int jaljellaOlevaLippumaara) {
+    public TapahtumaDTO(Long tapahtumaId, Long tapahtumapaikkaId, LocalDateTime tapahtumaAika, String tapahtumaNimi, String kuvaus, int kokonaislippumaara, int jaljellaOlevaLippumaara) {
         this.tapahtumaId = tapahtumaId;
         this.tapahtumapaikkaId = tapahtumapaikkaId;
         this.tapahtumaAika = tapahtumaAika;

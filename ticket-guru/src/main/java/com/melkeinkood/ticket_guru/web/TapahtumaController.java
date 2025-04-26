@@ -25,6 +25,8 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -168,14 +170,15 @@ public class TapahtumaController {
         return ResponseEntity.ok("Tapahtuma päivitetty.");
     }
 
+    
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/tapahtumat/{id}")
-    public ResponseEntity<String> deleteTapahtuma(@PathVariable Long id) {
-        if (!tapahtumaRepository.existsById(id)) {
+    public ResponseEntity<?> deleteTapahtuma(@PathVariable ("id") Long tapahtumaId) {
+        if (!tapahtumaRepository.existsById(tapahtumaId)) {
             return ResponseEntity.notFound().build();
         }
 
-        tapahtumaRepository.deleteById(id);
-        return ResponseEntity.ok("Tapahtuma id:llä " + id + " on poistettu.");
+        tapahtumaRepository.deleteById(tapahtumaId);
+        return ResponseEntity.noContent().build();
     }
 }
