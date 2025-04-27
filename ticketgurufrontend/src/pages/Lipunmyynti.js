@@ -13,7 +13,7 @@ const TicketSaleApp = () => {
   const [asiakas, setAsiakas] = useState({ etunimi: "", sukunimi: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [ostoStatus, setOstoStatus] = useState(null);
-  const [lipputiedot, setLipputiedot] = useState(null);
+  const [lipputiedot, setLipputiedot] = useState({ etunimi: "", sukunimi: "", tapahtumaNimi: "", kokonaisMaara: 0 });
   const [ostostapahtumaId, setOstostapahtumaId] = useState(null);
   const [tapahtumaLipputyypit, setTapahtumaLipputyypit] = useState([]);
   const [valittuLipputyyppiId, setValittuLipputyyppiId] = useState(null);
@@ -62,6 +62,11 @@ const TicketSaleApp = () => {
     setAsiakas((prev) => ({ ...prev, [name]: value }));
   };
 
+  const tyhjennäKentät = () => {
+    setAsiakas({etunimi:"", sukunimi:""});
+    setValittuLipputyyppiId(null);
+    setLippujenMaara(1);
+  };
   // Osta liput
   const ostaLiput = async () => {
     // Tarkistetaan, että tarvittavat kentät ovat täytettyjä
@@ -115,7 +120,15 @@ const TicketSaleApp = () => {
       setOstoStatus("onnistui");
       console.log(res.data);
       // Tallennetaan lipputiedot vastausobjektista
-      setLipputiedot(res.data);
+      // Vastausobjektista ei löydy tietoja, jotka on asetettu näytettäväksi(katso API-dokumentaatio)
+      // Nyt lipputiedot otetaan suoraan syötteestä
+      //setLipputiedot(res.data);
+      
+      setLipputiedot({etunimi:asiakas.etunimi, sukunimi:asiakas.sukunimi, tapahtumaNimi:valittuTapahtuma.tapahtumaNimi, kokonaisMaara:Number(lippu.maara)});
+      setTimeout(() => {
+        tyhjennäKentät();
+      }, 0);
+      console.log(lipputiedot)
     } catch (error) {
       // Jos pyyntö epäonnistuu, tarkistetaan virhe
       console.error(
@@ -409,17 +422,17 @@ const TicketSaleApp = () => {
           <Alert variant="success">
             <h4>Osto onnistui!</h4>
             <p>
-              <strong>Etunimi:</strong> {lipputiedot?.asiakas?.etunimi}
+              <strong>Etunimi:</strong> {lipputiedot?.etunimi}
             </p>
             <p>
-              <strong>Sukunimi:</strong> {lipputiedot?.asiakas?.sukunimi}
+              <strong>Sukunimi:</strong> {lipputiedot?.sukunimi}
             </p>
             <p>
               <strong>Tapahtuma:</strong>{" "}
-              {lipputiedot?.tapahtuma?.tapahtumaNimi}
+              {valittuTapahtuma?.tapahtumaNimi}
             </p>
             <p>
-              <strong>Lippuja:</strong> {lipputiedot?.maara}
+              <strong>Lippuja:</strong> {lipputiedot?.kokonaisMaara}
             </p>
             {lipputiedot?.qrUrl && (
               <>
