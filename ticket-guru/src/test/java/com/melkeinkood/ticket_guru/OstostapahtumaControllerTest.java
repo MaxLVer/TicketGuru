@@ -17,7 +17,6 @@ import java.util.Optional;
 import org.springframework.http.MediaType;
 
 import com.melkeinkood.ticket_guru.model.Kayttaja;
-import com.melkeinkood.ticket_guru.model.Lippu;
 import com.melkeinkood.ticket_guru.model.Ostostapahtuma;
 import com.melkeinkood.ticket_guru.repositories.KayttajaRepository;
 import com.melkeinkood.ticket_guru.repositories.LippuRepository;
@@ -29,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 public class OstostapahtumaControllerTest {
-     @Autowired
+    @Autowired
     private MockMvc mockMvc;
 
     @MockBean
@@ -48,6 +47,7 @@ public class OstostapahtumaControllerTest {
     @WithMockUser(authorities = {"ADMIN"}) // Tämä lisää "feikki-käyttäjän" testille
     void testHaeKaikkiOstostapahtumat_Returns200AndList() throws Exception {
     // Mockataan yksi ostostapahtuma
+    //Testi hakee kaikki ostostapahtumat
     Ostostapahtuma tapahtuma = new Ostostapahtuma();
     tapahtuma.setOstostapahtumaId(1L);
     tapahtuma.setMyyntiaika(LocalDateTime.now());
@@ -65,6 +65,7 @@ public class OstostapahtumaControllerTest {
 @Test
 @WithMockUser(authorities = {"ADMIN"}) 
 void testHaeOstostapahtuma_EiLoydy_Returns404() throws Exception {
+    //Testi hakee yhden ostostapahtuman
     when(ostostapahtumaRepository.findById(99L)).thenReturn(Optional.empty());
 
     mockMvc.perform(get("/ostostapahtumat/99"))
@@ -75,6 +76,7 @@ void testHaeOstostapahtuma_EiLoydy_Returns404() throws Exception {
 @Test
 @WithMockUser(authorities = {"ADMIN"}) 
 void testLisaaOstostapahtuma_Onnistuu_Returns201() throws Exception {
+    //Testi lisää ostostapahtuman
     Kayttaja kayttaja = new Kayttaja();
     kayttaja.setKayttajaId(1L);
 

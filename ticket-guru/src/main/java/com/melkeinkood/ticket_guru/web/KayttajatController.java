@@ -268,7 +268,7 @@ public class KayttajatController {
                     .body(Map.of("error", "Käyttäjää ei löydy"));
         }
         kayttajaRepo.deleteById(id);
-        return ResponseEntity.ok("Käyttäjä " + id + " on poistettu.");
+        return ResponseEntity.noContent().build();
 
     }
 
