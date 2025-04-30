@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { Button, Form, Card, Col, Row, Alert } from "react-bootstrap";
+import { Button, Form, Card, Col, Row, Alert, Spinner } from "react-bootstrap";
 import { QRCodeSVG } from "qrcode.react";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
@@ -146,7 +146,14 @@ const TicketSaleApp = () => {
   };
 
   const valitseTapahtumaJaLuoOstostapahtuma = async (tapahtuma) => {
-    setValittuTapahtuma({
+    const token = localStorage.getItem("jwtToken");
+  if (!token) {
+    alert("Kirjaudu sisään uudelleen. Token puuttuu.");
+    return;
+  }
+
+    try{ 
+      setValittuTapahtuma({
       ...tapahtuma,
       lipputyyppiId:
         tapahtuma.lipputyypit?.[0]?.tapahtumaLipputyyppiId ||
@@ -155,18 +162,7 @@ const TicketSaleApp = () => {
 
     setIsLoading(true);
 
-    try {
-      const token = localStorage.getItem("jwtToken");
-
-      const parseJwt = (token) => {
-        try {
-          return JSON.parse(atob(token.split(".")[1]));
-        } catch (e) {
-          return null;
-        }
-      };
-
-      const decoded = parseJwt(token);
+      const decoded = jwtDecode(token);
       const kayttajaId = decoded?.kayttajaId || decoded?.sub;
 
       if (!kayttajaId) {
@@ -268,7 +264,8 @@ const TicketSaleApp = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`
-          }
+          },
+          withCredentials: true,
         }
       );
   
