@@ -1,5 +1,6 @@
 package com.melkeinkood.ticket_guru.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -191,6 +192,67 @@ public class LippuController {
 
         // Palautetaan luotu lippu DTO:n muodossa
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(convertToDTO(tallenttuLippu)));
+    }
+
+    // Useamman lipun osto
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
+    @PostMapping("/liput/kori")
+    public ResponseEntity<?> luoLiputOstoskorista(@Valid @RequestBody List<LippuDTO> liput,
+            BindingResult bindingResult) {
+        List<Object> tulokset = new ArrayList<>();
+
+        System.out.println("Ostoskorin sisältö: " + liput);
+
+        for (LippuDTO lippuDTO : liput) {
+            Map<String, String> virheet = new HashMap<>();
+
+            Tapahtuma tapahtuma = tapahtumaRepository.findByTapahtumaId(lippuDTO.getTapahtumaId());
+            if (tapahtuma == null) {
+                virheet.put("tapahtumaId", "Tapahtumaa ei loydy id:lla " + lippuDTO.getTapahtumaId());
+            }
+
+            Optional<TapahtumaLipputyyppi> tapahtumaLipputyyppiOpt = tapahtumaLipputyyppiRepository
+                    .findById(lippuDTO.getTapahtumaLipputyyppiId());
+            if (tapahtumaLipputyyppiOpt.isEmpty()) {
+                virheet.put("tapahtumaLipputyyppiId",
+                        "Tapahtumalipputyyppia ei loydy id:lla " + lippuDTO.getTapahtumaLipputyyppiId());
+            }
+
+            Optional<Ostostapahtuma> ostosOpt = ostostapahtumaRepository.findById(lippuDTO.getOstostapahtumaId());
+            if (ostosOpt.isEmpty()) {
+                virheet.put("ostostapahtumaId", "Ostostapahtumaa ei loydy id:lla " + lippuDTO.getOstostapahtumaId());
+            }
+
+            String koodi = lippuDTO.getKoodi();
+            if (koodi == null || koodi.isBlank()) {
+                koodi = generoiSatunnainenLippuKoodi();
+            } else {
+                Optional<Lippu> existingLippu = lippuRepository.findByKoodi(koodi);
+                if (existingLippu.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Map.of("error", "Lippukoodi on jo käytössä: " + koodi));
+                }
+            }
+
+            Optional<Lippu> olemassaOleva = lippuRepository.findByKoodi(koodi);
+            if (olemassaOleva.isPresent()) {
+                virheet.put("koodi", "Lippukoodi on jo kaytossa: " + koodi);
+            }
+
+            if (!virheet.isEmpty()) {
+                tulokset.add(Map.of("virheet", virheet, "lahtoarvot", lippuDTO));
+                continue;
+            }
+
+            // Luo ja tallenna lippu
+            Lippu uusiLippu = new Lippu(ostosOpt.get(), tapahtumaLipputyyppiOpt.get(), tapahtuma);
+            uusiLippu.setKoodi(koodi);
+            uusiLippu.setStatus(LippuStatus.MYYTY);
+
+            Lippu tallennettu = lippuRepository.save(uusiLippu);
+            tulokset.add(convertToDTO(tallennettu));
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(tulokset);
     }
 
     // Poistaa lipun ID:n perusteella – sallittu vain ADMIN-roolille

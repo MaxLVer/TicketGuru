@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { Button, Form, Card, Col, Row, Spinner, Alert } from "react-bootstrap";
+import { Button, Form, Card, Col, Row, Alert } from "react-bootstrap";
 import { QRCodeSVG } from "qrcode.react";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
@@ -18,7 +18,8 @@ const TicketSaleApp = () => {
   const [tapahtumaLipputyypit, setTapahtumaLipputyypit] = useState([]);
   const [valittuLipputyyppiId, setValittuLipputyyppiId] = useState(null);
   const [asiakastyypit, setAsiakastyypit] = useState([]);
-  const [uudetLiput, setUudetLiput] = useState(0); // Uudet liput määrän tallentaminen
+  const [ostosKori, setOstosKori] = useState([]);
+
 
   useEffect(() => {
     const haeTapahtumat = async () => {
@@ -211,6 +212,91 @@ const TicketSaleApp = () => {
     }
   };
 
+  //OSTOSKORI
+  const lisaaOstoskoriin = () => {
+    if (!asiakas.etunimi || !asiakas.sukunimi || !valittuTapahtuma || !valittuLipputyyppiId || !lippujenMaara) {
+      alert("Tayta kaikki tiedot ennen lisaamista.");
+      return;
+    }
+  
+    const uusiRivi = {
+      tapahtumaId: valittuTapahtuma.tapahtumaId,
+      tapahtumaNimi: valittuTapahtuma.tapahtumaNimi,
+      tapahtumaLipputyyppiId: valittuLipputyyppiId,
+      maara: Number(lippujenMaara),
+      asiakas: { ...asiakas }
+    };
+  
+    setOstosKori(prev => [...prev, uusiRivi]);
+  
+    tyhjennäKentät();
+  };
+
+  const poistaKorista = (index) => {
+    setOstosKori(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const ostaKokoKori = async () => {
+    if (ostosKori.length === 0) {
+      alert("Ostoskorissa ei ole lippuja.");
+      return;
+    }
+  
+    setIsLoading(true);
+    setOstoStatus(null);
+  
+    try {
+      const token = localStorage.getItem("jwtToken");
+  
+      // Luodaan lähetettävä ostoskori-data
+      const data = ostosKori.map(rivi => ({
+        tapahtumaId: rivi.tapahtumaId,
+        tapahtumaLipputyyppiId: rivi.tapahtumaLipputyyppiId,
+        maara: rivi.maara,
+        ostostapahtumaId: ostostapahtumaId,
+        koodi: rivi.koodi || "",  // Jos koodi puuttuu, varmista sen arvo!
+        status: "MYYTY" // tai määrittele oletusarvo, jos status on pakollinen
+      }));
+  
+      console.log("Lahetettava ostoskori:", data);
+  
+      console.log("Token:", token); // tarkistusta varten
+      
+      const res = await axios.post(
+        `${API_BASE_URL}/liput/kori`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+  
+      setOstoStatus("onnistui");
+      console.log(res.data);
+  
+      setLipputiedot({
+        etunimi: ostosKori[0].asiakas.etunimi,
+        sukunimi: ostosKori[0].asiakas.sukunimi,
+        tapahtumaNimi: "Useita tapahtumia",
+        kokonaisMaara: ostosKori.reduce((sum, rivi) => sum + rivi.maara, 0)
+      });
+  
+      setTimeout(() => {
+        setOstosKori([]);
+        setValittuTapahtuma(null);
+        setValittuLipputyyppiId('');
+        setLippujenMaara('');
+      }, 0);
+    } catch (err) {
+      console.error("Osto epaonnistui:", err.response || err.message || err);
+      setOstoStatus("virhe");
+      alert("Ostoskorin osto ei onnistunut. Tarkista tiedot ja yrita uudelleen.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     
     const haeTapahtumaLipputyypit = async () => {
@@ -236,55 +322,24 @@ const TicketSaleApp = () => {
   }, [valittuTapahtuma]); // No need to include `haeTapahtumaLipputyypit` in dependencies anymore
 
 
-
-  // const lisaaLiputTapahtumaan = async () => {
-  //   if (!uudetLiput || uudetLiput <= 0 || !valittuTapahtuma) return;
-
-  //   setIsLoading(true);
-  //   try {
-  //     const token = localStorage.getItem("jwtToken");
-
-  //     const payload = {
-  //       tapahtumaId: valittuTapahtuma.lippuId,
-  //       tapahtumaLipputyyppiId: valittuTapahtuma.tapahtumaLipputyyppiId,
-  //       maara: uudetLiput,
-  //       ostostapahtumaId: "ostostapahtumaId_placeholder",
-  //       status: "MYYTY",
-  //       asiakas: {
-  //         etunimi: asiakas.etunimi,
-  //         sukunimi: asiakas.sukunimi,
-  //       },
-  //     };
-
-  //     console.log("Ostetaan liput payloadilla:", payload);
-
-  //     await axios.post(`${API_BASE_URL}/liput/lisaa`, payload, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     // Päivitetään tapahtumat uudella lippumäärällä
-  //     const res = await axios.get(`${API_BASE_URL}/tapahtumat`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     setTapahtumat(res.data);
-  //     alert("Lippuja lisätty tapahtumalle!");
-  //   } catch (error) {
-  //     console.error("Lippujen lisääminen epäonnistui:", error);
-  //     alert("Lippujen lisääminen epäonnistui!");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   return (
     <div className="container mt-5">
       <h1>Lipunmyynti</h1>
 
+    <div className="container mt-4">
+      <h4>Ostoskorissa:</h4>
+      <ul>
+        {ostosKori.map((rivi, i) => (
+          <li key={i}>
+            {rivi.tapahtumaNimi} ({rivi.maara} kpl) - {rivi.asiakas.etunimi} {rivi.asiakas.sukunimi} {''}
+            <Button variant="danger" size="sm" onClick={() => poistaKorista(i)}>Poista</Button>
+          </li>
+        ))}
+      </ul>
+      <Button onClick={ostaKokoKori} disabled={ostosKori.length === 0 || isLoading}>
+              Osta
+            </Button>
+    </div>
       {!valittuTapahtuma && (
         <Row>
           {tapahtumat.map((t) => (
@@ -317,23 +372,6 @@ const TicketSaleApp = () => {
         <div className="mt-4">
           <h3>{valittuTapahtuma.tapahtumaNimi}</h3>
           <p>{valittuTapahtuma.kuvaus}</p>
-          {/* 
-           ADMININ LIPPUJEN LISÄÄMISOHJAUS 
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Lisää lippuja tapahtumalle</Form.Label>
-              <Form.Control
-                type="number"
-                value={uudetLiput}
-                onChange={(e) => setUudetLiput(e.target.value)}
-                placeholder="Syötä lippujen määrä"
-              />
-            </Form.Group>
-
-            <Button onClick={lisaaLiputTapahtumaan} disabled={isLoading}>
-              {isLoading ? <Spinner size="sm" animation="border" /> : "Lisää liput"}
-            </Button>
-          </Form> */}
 
           <Form>
             <Form.Group className="mb-2">
@@ -410,8 +448,18 @@ const TicketSaleApp = () => {
               {isLoading ? (
                 <Spinner size="sm" animation="border" />
               ) : (
-                "Osta liput"
-              )}
+                "(Vanha/Toimiva) Osta liput"
+              )}</Button>
+
+            <Button onClick={lisaaOstoskoriin} disabled={isLoading}>
+              Lisaa koriin
+            </Button>
+
+            <Button onClick={ostaKokoKori} disabled={ostosKori.length === 0 || isLoading}>
+              Osta
+            </Button>
+            <Button variant="outline-danger" onClick={() => setValittuTapahtuma(null)}>
+              Peruuta
             </Button>
           </Form>
         </div>
