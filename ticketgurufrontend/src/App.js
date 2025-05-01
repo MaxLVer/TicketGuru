@@ -5,6 +5,8 @@ import LoginPage from './pages/LoginPage';
 import ProtectedPage from './pages/ProtectedPage';
 import AppBar from './components/Appbar';
 import Lipunmyynti from './pages/Lipunmyynti';
+import YhteenvetOstoskori from './pages/YhteenvetOstoskori';
+import Kuittisivu from './pages/Kuittisivu';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -18,6 +20,8 @@ const App = () => {
       <Route path="/protected" element={<ProtectedPage />} /> 
       <Route path="/lipunmyynti" element={<Lipunmyynti />} />      
       <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="/yhteenveto" element={<YhteenvetOstoskori />} /> 
+      <Route path="/kuitti" element={<Kuittisivu />} /> 
     </Routes>
     </>
   );
