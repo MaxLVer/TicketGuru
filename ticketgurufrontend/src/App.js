@@ -8,6 +8,7 @@ import Lipunmyynti from './pages/Lipunmyynti';
 import YhteenvetOstoskori from './pages/YhteenvetOstoskori';
 import Kuittisivu from './pages/Kuittisivu';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import TapahtumaLista from './pages/Tapahtumat';
 
 
 const App = () => {
@@ -21,7 +22,8 @@ const App = () => {
       <Route path="/lipunmyynti" element={<Lipunmyynti />} />      
       <Route path="*" element={<Navigate to="/" replace />} />
       <Route path="/yhteenveto" element={<YhteenvetOstoskori />} /> 
-      <Route path="/kuitti" element={<Kuittisivu />} /> 
+      <Route path="/kuitti" element={<Kuittisivu />} />
+      <Route path="/tapahtumat" element={<TapahtumaLista />} /> 
     </Routes>
     </>
   );

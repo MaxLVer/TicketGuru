@@ -12,6 +12,7 @@ const HomePage = () => {
         <div>
         <p>You're logged in</p>
         <Link to="/lipunmyynti" style={{ textDecoration: 'none' }}><Button variant="contained" color="primary">Lipunmyynti</Button></Link>
+        <Link to="/tapahtumat" style={{ textDecoration: 'none' }}><Button variant="contained" color="primary">Tapahtumat</Button></Link>
         </div>
       ) : (
         <p>
