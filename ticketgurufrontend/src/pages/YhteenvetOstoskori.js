@@ -3,28 +3,39 @@ import { useLocation } from "react-router-dom";
 import { Button, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-//KESKEN: Ei palauta vielä kuittia, koska en enää jaksa
 
 const CartSummaryPage = () => {
   const location = useLocation();
   const { ostosKori = [] } = location.state || {};
 
   const poistaKorista = (index) => {
-    // Esimerkki: voit näyttää alertin tai käsitellä poiston eri tavalla
     alert(`Poistetaan rivi ${index}`);
   };
 
   const ostaKokoKori = () => {
-    alert("Ostetaan koko kori");
-  };
+    return {
+        onnistui: true,
+        liput: ostosKori,
+        aikaleima: new Date().toISOString()
+      };
+    };
 
   const navigate = useNavigate();
 
   const handleOstaKaikki = async () => {
     try {
       const lipputiedot = await ostaKokoKori(); // Palauttaa tiedot onnistuneesta ostosta
+
+      const combinedReceipt = lipputiedot.liput.map((item) => ({
+        tapahtumaNimi: item.tapahtumaNimi,
+        lipputyyppi: item.tapahtumaLipputyyppiId,
+        asiakasNimi: `${item.asiakas.etunimi} ${item.asiakas.sukunimi}`,
+        lippujenMaara: item.maara,
+      }));
+
+      console.log("Siirretään kuitti:", combinedReceipt);
       navigate("/kuitti", {
-        state: { lipputiedot }
+        state: { kuitti: combinedReceipt }
       });
     } catch (error) {
       console.error("Osto epäonnistui:", error);

@@ -1,34 +1,42 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { Alert, Button } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom';
+import { Alert, Button, Card, Col, Row, Spinner } from "react-bootstrap";
 import { QRCodeSVG } from "qrcode.react";
 
 const KuittiPage = () => {
   const location = useLocation();
-  const lipputiedot = location.state?.lipputiedot;
+  const navigate = useNavigate();
+  const { kuitti } = location.state || {};
 
-  if (!lipputiedot) {
-    return <p>Ei lippuja näytettäväksi.</p>;
+  if (!kuitti || kuitti.length === 0) {
+    return (
+      <div className="container mt-4">
+        <h4>Kuitti puuttuu</h4>
+        <p>Ei saatavilla olevia tietoja.</p>
+        <Button onClick={() => navigate("/")}>Palaa etusivulle</Button>
+      </div>
+    );
   }
 
   return (
-    <div className="mt-4">
-      <Alert variant="success">
-        <h4>Osto onnistui!</h4>
-        <p><strong>Etunimi:</strong> {lipputiedot.etunimi}</p>
-        <p><strong>Sukunimi:</strong> {lipputiedot.sukunimi}</p>
-        <p><strong>Tapahtuma:</strong> {lipputiedot.tapahtumaNimi}</p>
-        <p><strong>Lippuja:</strong> {lipputiedot.kokonaisMaara}</p>
-        {lipputiedot.qrUrl && (
-          <>
-            <h5>QR-koodi:</h5>
-            <QRCodeSVG value={lipputiedot.qrUrl} size={200} />
-          </>
-        )}
-      </Alert>
-      <Button variant="secondary" onClick={() => window.location.reload()}>
-        Osta lisää
-      </Button>
+    <div className="container mt-4">
+      <h3>Ostostapahtuma</h3>
+      {kuitti.map((rivi, index) => (
+        <Card key={index} className="mb-3">
+          <Card.Body>
+          <Card.Title>{rivi.tapahtumaNimi}</Card.Title>
+<p><strong>Asiakas:</strong> {rivi.asiakasNimi}</p>
+<p><strong>Lippuja:</strong> {rivi.lippujenMaara}</p>
+<p><strong>Lipputyyppi-ID:</strong> {rivi.lipputyyppi}</p>
+<div style={{ marginTop: "1rem" }}>
+        <QRCodeSVG value={JSON.stringify(rivi)} size={128} />
+      </div>
+
+          </Card.Body>
+        </Card>
+      ))}
+      <Button onClick={() => navigate("/")}>Takaisin etusivulle</Button>
     </div>
   );
 };
