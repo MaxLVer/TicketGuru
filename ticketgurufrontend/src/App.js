@@ -24,6 +24,7 @@ const App = () => {
       <Route path="/yhteenveto" element={<YhteenvetOstoskori />} /> 
       <Route path="/kuitti" element={<Kuittisivu />} />
       <Route path="/tapahtumat" element={<TapahtumaLista />} /> 
+  
     </Routes>
     </>
   );
