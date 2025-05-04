@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react";
-import { Button } from "@mui/material";
 import dayjs from "dayjs";
 import axios from "axios";
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 
 import "ag-grid-community/styles/ag-theme-material.css";
+
+import NaytaOstostapahtuma from "./NaytaOstostapahtuma";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -38,14 +39,14 @@ function Myyntitapahtumat() {
         },
         { field: "ostostapahtumaId", headerName: "#" },
         { field: "summa", headerName: "Kokonaishinta" },
-        
+
         { field: "lippuIdt", headerName: "liput" },
         {
             field: '_links.self.href',
             headerName: '',
             sortable: false,
             filter: false,
-            cellRenderer: params => <Button>Näytä</Button>
+            cellRenderer: params => <NaytaOstostapahtuma API_BASE_URL valittuOstostapahtuma={params.data} />
         },
     ]);
 
