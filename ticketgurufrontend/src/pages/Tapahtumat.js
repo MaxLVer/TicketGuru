@@ -30,7 +30,7 @@ function TapahtumaLista () {
       }, []);
       const [columnDefs, setColumnDefs] = useState([
         { field: "kuvaus" },
-        { field: "tapahtumaAika", headerName: "Aika" },
+        { field: "tapahtumaAika", headerName: "Aika", },
         { field: "tapahtumaNimi", headerName: "Nimi" },
         {
             field: '_links.self.href',
