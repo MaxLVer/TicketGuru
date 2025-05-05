@@ -3,6 +3,7 @@ package com.melkeinkood.ticket_guru.web;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -65,16 +66,19 @@ public class OstostapahtumaController {
     // Muuntaa entiteetin DTO:ksi
     private OstostapahtumaDTO toDTO(Ostostapahtuma ostostapahtuma) {
         List<Long> lippuIdt = new ArrayList<>();
+        BigDecimal summa = BigDecimal.ZERO;
         if (ostostapahtuma.getLiput() != null) {
             List<Lippu> liput = ostostapahtuma.getLiput();
             for (Lippu lippu : liput) {
                 lippuIdt.add(lippu.getLippuId());
+                summa = summa.add(lippu.getTapahtumaLipputyyppi().getHinta());
             }
         }
         return new OstostapahtumaDTO(
                 ostostapahtuma.getOstostapahtumaId(),
                 ostostapahtuma.getMyyntiaika(),
                 ostostapahtuma.getKayttaja().getKayttajaId(),
+                summa,
                 lippuIdt);
     }
 
