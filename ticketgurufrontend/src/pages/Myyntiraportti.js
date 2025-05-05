@@ -1,89 +1,116 @@
-
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Button, Typography, Table, TableHead, TableBody, TableRow, TableCell, Paper } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 function Myyntiraportti() {
-  const { id } = useParams(); // tapahtumaId
+  const { tapahtumaId } = useParams();
   const [raportti, setRaportti] = useState([]);
-  const [tapahtuma, setTapahtuma] = useState(null);
-  const navigate = useNavigate();
+  const [tapahtumaNimi, setTapahtumaNimi] = useState("");
 
+  console.log("TapahtumaId:", tapahtumaId);
+  
   useEffect(() => {
-    const haeData = async () => {
+    const haeRaportti = async () => {
       try {
         const token = localStorage.getItem("jwtToken");
 
-        const tapahtumaRes = await axios.get(`${API_BASE_URL}/tapahtumat/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setTapahtuma(tapahtumaRes.data);
+        
+const res = await axios.get(`${API_BASE_URL}/liput`, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+localStorage.getItem("jwtToken")
 
-        const raporttiRes = await axios.get(`${API_BASE_URL}/raportti/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
+        // Hae kaikki tiedot
+        const [liputRes, lipputyypitRes, asiakastyypitRes, tapahtumatRes] = await Promise.all([
+          axios.get(`${API_BASE_URL}/liput`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${API_BASE_URL}/tapahtumalipputyypit`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${API_BASE_URL}/asiakastyypit`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${API_BASE_URL}/tapahtumat`, { headers: { Authorization: `Bearer ${token}` } })
+        ]);
+
+        const kaikkiLiput = liputRes.data;
+        const lipputyypit = lipputyypitRes.data;
+        const asiakastyypit = asiakastyypitRes.data;
+        const kaikkiTapahtumat = tapahtumatRes.data;
+
+        const tapahtuma = kaikkiTapahtumat.find(t => t.tapahtumaId === parseInt(tapahtumaId));
+        if (tapahtuma) setTapahtumaNimi(tapahtuma.tapahtumaNimi);
+
+        // Suodata liput tapahtumalle
+        const liput = kaikkiLiput.filter(lippu => lippu.tapahtumaId === parseInt(tapahtumaId));
+        const kooste = {};
+
+        liput.forEach((lippu) => {
+          const lipputyyppi = lipputyypit.find(lt => lt.tapahtumaLipputyyppiid === lippu.tapahtumaLipputyyppiid);
+          if (!lipputyyppi) return;
+
+          const asiakastyyppi = asiakastyypit.find(at => at.asiakastyypipid === lipputyyppi.asiakastyypipid);
+          const tyyppiNimi = asiakastyyppi ? asiakastyyppi.asiakastyyppi : "Tuntematon";
+
+          if (!kooste[tyyppiNimi]) {
+            kooste[tyyppiNimi] = { kpl: 0, summa: 0, hinta: lipputyyppi.hinta };
+          }
+
+          kooste[tyyppiNimi].kpl += 1;
+          kooste[tyyppiNimi].summa += lipputyyppi.hinta;
         });
-        setRaportti(raporttiRes.data); // olettaen että palauttaa [{lipputyyppi: "Aikuinen", kpl: 102, summa: 1530.00}, ...]
-      } catch (error) {
-        console.error("Virhe raportin haussa:", error);
+
+        const raporttiData = Object.entries(kooste).map(([lipputyyppi, data]) => ({
+          lipputyyppi,
+          kpl: data.kpl,
+          summa: data.summa
+        }));
+
+        setRaportti(raporttiData);
+      } catch (err) {
+        console.error("Myyntiraportin haku epäonnistui:", err);
       }
     };
 
-    haeData();
-  }, [id]);
+    haeRaportti();
+  }, [tapahtumaId]);
 
-  const yhteensaKpl = raportti.reduce((sum, r) => sum + r.kpl, 0);
-  const yhteensaSumma = raportti.reduce((sum, r) => sum + r.summa, 0);
+  
+        const navigate = useNavigate();
 
   return (
-    <Paper style={{ padding: 24 }}>
-      {tapahtuma && (
-        <>
-          <Typography variant="h5" gutterBottom>
-            {tapahtuma.tapahtumaNimi}, {tapahtuma.paikka}
-          </Typography>
-          <Typography variant="subtitle1">
-            {new Date(tapahtuma.tapahtumaAika).toLocaleString()}
-          </Typography>
-        </>
-      )}
-
-      <Typography variant="h6" style={{ marginTop: 24 }}>Myyntiraportti</Typography>
-
-      <Table style={{ marginTop: 12 }}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Lipputyyppi</TableCell>
-            <TableCell>Kpl</TableCell>
-            <TableCell>Yhteensä</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {raportti.map((rivi, index) => (
-            <TableRow key={index}>
-              <TableCell>{rivi.lipputyyppi}</TableCell>
-              <TableCell>{rivi.kpl}</TableCell>
-              <TableCell>{rivi.summa.toFixed(2)}€</TableCell>
+    <div style={{ padding: 24 }}>
+      <Typography variant="h4" gutterBottom>
+        Myyntiraportti – {tapahtumaNimi}
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Lipputyyppi</TableCell>
+              <TableCell>Myyty kpl</TableCell>
+              <TableCell>Myynti yhteensä (€)</TableCell>
             </TableRow>
-          ))}
-          <TableRow>
-            <TableCell><strong>Yhteensä</strong></TableCell>
-            <TableCell><strong>{yhteensaKpl}</strong></TableCell>
-            <TableCell><strong>{yhteensaSumma.toFixed(2)}€</strong></TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-
-      <Button
-        variant="contained"
-        style={{ marginTop: 20 }}
-        onClick={() => navigate(`/myyntitapahtumat/${id}`)}
-      >
-        Myyntitapahtumat
-      </Button>
-    </Paper>
+          </TableHead>
+          <TableBody>
+            {raportti.map((rivi, idx) => (
+              <TableRow key={idx}>
+                <TableCell>{rivi.lipputyyppi}</TableCell>
+                <TableCell>{rivi.kpl}</TableCell>
+                <TableCell>{rivi.summa}</TableCell>
+              </TableRow>
+            ))}
+            {raportti.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={3}>Ei myyntitietoja.</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+        <Button onClick={() => navigate("/tapahtumat")}>Palaa</Button>
+    </div>
   );
 }
 

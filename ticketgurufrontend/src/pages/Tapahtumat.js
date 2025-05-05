@@ -5,6 +5,7 @@ import axios from "axios";
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
 import TapahtumaLisays from "../components/TapahtumaLisays";
 import TapahtumaMuokkaus from "../components/TapahtumaMuokkaus";
+import { useNavigate } from "react-router-dom";
 
 import "ag-grid-community/styles/ag-theme-material.css";
 
@@ -45,11 +46,14 @@ function TapahtumaLista () {
             sortable: false,
             filter: false,
             cellRenderer: params => (
+              <>
                 <Button
                     onClick={() => handleOpenDialog(params)}
                 >
                     Muokkaa
                 </Button>
+                 <Button onClick={() => navigate(`/raportti/${params.data.tapahtumaId}`)}>Raportti</Button>
+                 </>
             )
         },
     ]);
@@ -77,6 +81,9 @@ function TapahtumaLista () {
         setOpenDialog(false);
         haeTapahtumat();
     };
+
+    
+      const navigate = useNavigate();
 
 
     return (
