@@ -9,6 +9,7 @@ import YhteenvetOstoskori from './pages/YhteenvetOstoskori';
 import Kuittisivu from './pages/Kuittisivu';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import TapahtumaLista from './pages/Tapahtumat';
+import Myyntitapahtumat from './pages/Myyntitapahtumat';
 
 
 const App = () => {
@@ -24,7 +25,7 @@ const App = () => {
       <Route path="/yhteenveto" element={<YhteenvetOstoskori />} /> 
       <Route path="/kuitti" element={<Kuittisivu />} />
       <Route path="/tapahtumat" element={<TapahtumaLista />} /> 
-  
+      <Route path="/myyntitapahtumat" element={<Myyntitapahtumat />} />
     </Routes>
     </>
   );
