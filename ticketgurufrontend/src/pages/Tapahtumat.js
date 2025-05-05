@@ -5,6 +5,7 @@ import axios from "axios";
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import TapahtumaLisays from "../components/TapahtumaLisays";
 import TapahtumaMuokkaus from "../components/TapahtumaMuokkaus";
+import { useNavigate } from "react-router-dom";
 
 import "ag-grid-community/styles/ag-theme-material.css";
 import TapahtumaTiedot from "../components/TapahtumaTiedot";
@@ -66,6 +67,15 @@ function TapahtumaLista() {
           </Button>
       )
   },
+  {
+    field: '_links.self.href',
+    headerName: '',
+    sortable: false,
+    filter: false,
+    cellRenderer: params => (
+<Button onClick={() => navigate(`/raportti/${params.data.tapahtumaId}`)}>Raportti</Button>
+    )
+},
 
     
   ]);
@@ -99,6 +109,7 @@ function TapahtumaLista() {
     haeTapahtumat();
   };
 
+    const navigate = useNavigate();
 
   return (
     <div className="TapahtumaLista" style={{ position: "relative" }}>
