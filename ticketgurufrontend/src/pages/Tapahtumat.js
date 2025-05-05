@@ -21,12 +21,52 @@ function TapahtumaLista() {
   const [tiedotDialogAuki, setTiedotDialogAuki] = useState(false);
   const [tiedotTapahtuma, setTiedotTapahtuma] = useState(null);
 
+<<<<<<< HEAD
   const haeTapahtumat = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const res = await axios.get(`${API_BASE_URL}/tapahtumat`, {
         headers: {
           Authorization: `Bearer ${token}`,
+=======
+    const haeTapahtumat = async () => {
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const res = await axios.get(`${API_BASE_URL}/tapahtumat`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setTapahtumat(res.data);
+      } catch (error) {
+        console.error("Tapahtumien haku epäonnistui:", error);
+      }
+    };
+
+    useEffect(() => {
+        haeTapahtumat();
+    }, []);
+
+    const [columnDefs, setColumnDefs] = useState([
+        { field: "tapahtumaNimi", headerName: "Nimi" },
+        { field: "kuvaus" },
+        { field: "tapahtumaAika", headerName: "Aika", },
+        {
+            field: '_links.self.href',
+            headerName: '',
+            sortable: false,
+            filter: false,
+            cellRenderer: params => (
+              <>
+                <Button
+                    onClick={() => handleOpenDialog(params)}
+                >
+                    Muokkaa
+                </Button>
+                 <Button onClick={() => navigate(`/raportti/${params.data.tapahtumaId}`)}>Raportti</Button>
+                 </>
+            )
+>>>>>>> feature
         },
       });
       setTapahtumat(res.data);
@@ -39,6 +79,7 @@ function TapahtumaLista() {
     haeTapahtumat();
   }, []);
 
+<<<<<<< HEAD
   const [columnDefs, setColumnDefs] = useState([
     { field: "tapahtumaNimi", headerName: "Nimi" },
     { field: "kuvaus" },
@@ -51,6 +92,39 @@ function TapahtumaLista() {
       cellRenderer: (params) => (
         <Button onClick={() => handleShowDetails(params.data)}>
           Näytä tiedot
+=======
+    
+      const navigate = useNavigate();
+
+
+    return (
+        <div className="TapahtumaLista" style={{ position: "relative" }}>
+            <div className="ag-theme-material" style={{ width: "100%", height: 800 }}>
+                <AgGridReact
+                    rowData={tapahtumat}
+                    columnDefs={columnDefs}
+                    defaultColDef={defaulColDef}
+                    autoSizeStrategy={autoSizeStrategy}
+                />
+            </div>
+
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={handleOpenDialog}
+                style={{
+                    position: "fixed",
+                    bottom: 20,
+                    right: 20,
+                    borderRadius: "50%",
+                    width: 60,
+                    height: 60,
+                    fontSize: 28,
+                    minWidth: 0
+                }}
+            >
+                +
+>>>>>>> feature
         </Button>
       )
     },
