@@ -6,7 +6,6 @@ import { QRCodeSVG } from "qrcode.react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 
-
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const TicketSaleApp = () => {
@@ -28,7 +27,7 @@ const TicketSaleApp = () => {
   const [valittuLipputyyppiId, setValittuLipputyyppiId] = useState(null);
   const [asiakastyypit, setAsiakastyypit] = useState([]);
   const [ostosKori, setOstosKori] = useState([]);
-  const [kuitti, setKuitti] = useState(null); 
+  const [kuitti, setKuitti] = useState(null);
 
   const navigate = useNavigate();
 
@@ -289,26 +288,25 @@ const TicketSaleApp = () => {
       setOstoStatus("onnistui");
       console.log(res.data);
 
-       // Create a combined receipt for all items in the cart
-    const combinedReceipt = ostosKori.map((item) => ({
-      tapahtumaNimi: item.tapahtumaNimi,
-      lipputyyppi: item.tapahtumaLipputyyppiId,
-      asiakasNimi: `${item.asiakas.etunimi} ${item.asiakas.sukunimi}`,
-      lippujenMaara: item.maara,
-    }));
+      // Create a combined receipt for all items in the cart
+      const combinedReceipt = ostosKori.map((item) => ({
+        tapahtumaNimi: item.tapahtumaNimi,
+        lipputyyppi: item.tapahtumaLipputyyppiId,
+        asiakasNimi: `${item.asiakas.etunimi} ${item.asiakas.sukunimi}`,
+        lippujenMaara: item.maara,
+      }));
 
-    setKuitti(combinedReceipt);
+      setKuitti(combinedReceipt);
 
-    // Clear the cart after purchase
-    setTimeout(() => {
-      setOstosKori([]);
-      setValittuTapahtuma(null);
-      setValittuLipputyyppiId(null);
-      setLippujenMaara(1);
-    }, 0);
+      // Clear the cart after purchase
+      setTimeout(() => {
+        setOstosKori([]);
+        setValittuTapahtuma(null);
+        setValittuLipputyyppiId(null);
+        setLippujenMaara(1);
+      }, 0);
 
-    navigate("/kuitti", { state: { kuitti: combinedReceipt } });
-
+      navigate("/kuitti", { state: { kuitti: combinedReceipt } });
     } catch (err) {
       console.error("Osto epaonnistui:", err.response || err.message || err);
       setOstoStatus("virhe");
@@ -352,36 +350,37 @@ const TicketSaleApp = () => {
 
   return (
     <>
- <div className="cart-box">
-  <h6>Ostoskorissa:</h6>
+      <div className="cart-box">
+        <h6>Ostoskorissa:</h6>
 
-  {ostosKori.length === 0 ? (
-    <p>Ostoskorisi on tyhjä.</p>
-  ) : (
-    <>
-      <ul className="cart-list">
-        {ostosKori.map((rivi, i) => (
-          <li key={i} className="cart-item">
-            <div className="cart-info">
-              {rivi.tapahtumaNimi} ({rivi.maara} kpl) – {rivi.asiakas.etunimi} {rivi.asiakas.sukunimi}
+        {ostosKori.length === 0 ? (
+          <p>Ostoskorisi on tyhjä.</p>
+        ) : (
+          <>
+            <ul className="cart-list">
+              {ostosKori.map((rivi, i) => (
+                <li key={i} className="cart-item">
+                  <div className="cart-info">
+                    {rivi.tapahtumaNimi} ({rivi.maara} kpl) –{" "}
+                    {rivi.asiakas.etunimi} {rivi.asiakas.sukunimi}
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <div className="cart-actions">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={siirryYhteenvetoon}
+                disabled={isLoading}
+              >
+                Osta
+              </Button>
             </div>
-          </li>
-        ))}
-      </ul>
-
-      <div className="cart-actions">
-        <Button
-          variant="primary"
-          size="sm"
-          onClick={siirryYhteenvetoon}
-          disabled={isLoading}
-        >
-          Osta
-        </Button>
+          </>
+        )}
       </div>
-    </>
-  )}
-</div>
       <div className="container mt-5">
         <h1>Lipunmyynti</h1>
 
@@ -493,7 +492,7 @@ const TicketSaleApp = () => {
               </Form.Group>
 
               <Button
-              className="me-2"
+                className="me-2"
                 onClick={() => {
                   lisaaOstoskoriin();
                   setValittuTapahtuma(null); // Tämä palauttaa käyttäjän lipunmyyntinäkymään
@@ -503,9 +502,7 @@ const TicketSaleApp = () => {
                 Lisaa koriin
               </Button>
 
-              <Button 
-              className="me-2"
-              onClick={ostaLiput} disabled={isLoading}>
+              <Button className="me-2" onClick={ostaLiput} disabled={isLoading}>
                 {isLoading ? <Spinner size="sm" animation="border" /> : "Osta"}
               </Button>
 
