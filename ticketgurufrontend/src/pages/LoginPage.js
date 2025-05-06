@@ -10,13 +10,13 @@ const LoginPage = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    
+
     login(username, password)
       .then(result => {
         if (result.status === 'ok') {
           nav('/')
         } else {
-          setError("Väärä käyttäjänimi tai salasana")  // Show error message
+          setError("Väärä käyttäjänimi tai salasana");
         }
       })
       .catch(error => {
@@ -47,6 +47,9 @@ const LoginPage = () => {
         <button type="submit">Login</button>
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
+      <button onClick={() => nav('/')} style={{ marginTop: 10 }}>
+        Home
+      </button>
     </div>
   );
 };

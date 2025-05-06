@@ -62,13 +62,21 @@ function TapahtumaLista() {
       sortable: false,
       filter: false,
       cellRenderer: params => (
-          <Button
-              onClick={() => handleOpenDialog(params)}
-          >
-              Muokkaa
-          </Button>
+        <Button onClick={() => handleOpenDialog(params.data)}>
+          Muokkaa
+        </Button>
       )
-  },
+    },{
+      field: '_links.self.href',
+      headerName: '',
+      sortable: false,
+      filter: false,
+      cellRenderer: params => (
+        <Button onClick={() => handleOpenDialog(params.data)}>
+          Muokkaa
+        </Button>
+      )
+    },
   {
     field: '_links.self.href',
     headerName: '',
