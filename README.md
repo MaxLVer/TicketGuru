@@ -173,7 +173,7 @@ Kaikki endpointit on kuvattu erillisessä dokumentaatiossa:
 - Deployment: CSC Rahti(OpenShift pohjainen)
 - Päälaitteet: Tietokone, tabletti, älypuhelin
 
-## Palvelintotoeutus ja deployment
+## Palvelintoteutus ja deployment
 - Sovellus buildataan Dockerin tai source-imagen avulla
 - Rahtissa käytetään Deployment YAML -tiedostoja, jotka määrittävät podit, service-tasot ja salaisuudet
 - PostgreSQL käynnistetään siemendatan kanssa
