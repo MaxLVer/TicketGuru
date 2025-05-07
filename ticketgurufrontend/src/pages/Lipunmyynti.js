@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { Button, Form, Card, Col, Row, Alert, Spinner } from "react-bootstrap";
 import { QRCodeSVG } from "qrcode.react";
 import "../App.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -14,25 +14,21 @@ const TicketSaleApp = () => {
   const [lippujenMaara, setLippujenMaara] = useState(1);
   const [asiakas, setAsiakas] = useState({ etunimi: "", sukunimi: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const [ostoStatus, setOstoStatus] = useState(null);
-  const [lipputiedot, setLipputiedot] = useState({
-    etunimi: "",
-    sukunimi: "",
-    tapahtumaNimi: "",
-    kokonaisMaara: 0,
-    qrUrl: "",
-  });
   const [ostostapahtumaId, setOstostapahtumaId] = useState(null);
   const [tapahtumaLipputyypit, setTapahtumaLipputyypit] = useState([]);
   const [valittuLipputyyppiId, setValittuLipputyyppiId] = useState(null);
   const [asiakastyypit, setAsiakastyypit] = useState([]);
   const [ostosKori, setOstosKori] = useState([]);
-  const [kuitti, setKuitti] = useState(null);
-
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    const tallennettuKori = location.state?.ostosKori;
+    if (Array.isArray(tallennettuKori)) {
+      setOstosKori(tallennettuKori);
+    }
     const haeTapahtumat = async () => {
+
       try {
         const token = localStorage.getItem("jwtToken");
         const res = await axios.get(`${API_BASE_URL}/tapahtumat`, {
@@ -46,7 +42,7 @@ const TicketSaleApp = () => {
       }
     };
     haeTapahtumat();
-  }, []);
+  }, [location.state]);
 
   // Lataa asiakastyypit API:sta
   const haeAsiakastyypit = async () => {
@@ -77,89 +73,9 @@ const TicketSaleApp = () => {
     setValittuLipputyyppiId(null);
     setLippujenMaara(1);
   };
-  // Osta liput
-  const ostaLiput = async () => {
-    // Tarkistetaan, että tarvittavat kentät ovat täytettyjä
-    if (
-      !asiakas.etunimi ||
-      !asiakas.sukunimi ||
-      !valittuTapahtuma ||
-      !lippujenMaara
-    ) {
-      alert("Tarkista, että kaikki kentät on täytetty oikein.");
-      return;
-    }
 
-    /* if (!valittuTapahtuma.tapahtumaLipputyyppiId) {
-      alert("Tälle tapahtumalle ei ole määritelty lipputyyppiä. Lisää lipputyyppi ensin.");
-      return;
-    } */
 
-    setIsLoading(true);
-    setOstoStatus(null);
-
-    try {
-      const token = localStorage.getItem("jwtToken");
-
-      //Luodaan lähetettävä lippu objekti
-      const lippu = {
-        tapahtumaId: valittuTapahtuma.tapahtumaId,
-        tapahtumaLipputyyppiId: valittuLipputyyppiId,
-        maara: Number(lippujenMaara),
-        ostostapahtumaId: ostostapahtumaId,
-        asiakas: {
-          etunimi: asiakas.etunimi,
-          sukunimi: asiakas.sukunimi,
-        },
-      };
-
-      console.log("Lähetettävä lippu:", lippu);
-
-      //Lähetetään pyyntö API:lle
-      const res = await axios.post(`${API_BASE_URL}/liput`, lippu, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      // Jos pyyntö onnistui, käsitellään vastaus
-      setOstoStatus("onnistui");
-      console.log(res.data);
-      // Tallennetaan lipputiedot vastausobjektista
-      // Vastausobjektista ei löydy tietoja, jotka on asetettu näytettäväksi(katso API-dokumentaatio)
-      // Nyt lipputiedot otetaan suoraan syötteestä
-      //setLipputiedot(res.data);
-
-      setLipputiedot({
-        etunimi: asiakas.etunimi,
-        sukunimi: asiakas.sukunimi,
-        tapahtumaNimi: valittuTapahtuma.tapahtumaNimi,
-        kokonaisMaara: Number(lippu.maara),
-        qrUrl: res.data.qrUrl,
-      });
-
-      navigate("/kuitti", { state: { lipputiedot } });
-
-      setTimeout(() => {
-        tyhjennäKentät();
-      }, 0);
-      console.log(lipputiedot);
-    } catch (error) {
-      // Jos pyyntö epäonnistuu, tarkistetaan virhe
-      console.error(
-        "Osto epäonnistui:",
-        error.response || error.message || error
-      );
-      // Näytetään virheilmoitus käyttäjälle
-      setOstoStatus("virhe");
-      alert("Lippujen osto epäonnistui. Tarkista tiedot ja yritä uudelleen.");
-    } finally {
-      // Poistetaan lataus-tilan päivitys
-      setIsLoading(false);
-    }
-  };
-
-  const valitseTapahtumaJaLuoOstostapahtuma = async (tapahtuma) => {
+  const valitseTapahtuma = async (tapahtuma) => {
     const token = localStorage.getItem("jwtToken");
     if (!token) {
       alert("Kirjaudu sisään uudelleen. Token puuttuu.");
@@ -176,33 +92,6 @@ const TicketSaleApp = () => {
 
       setIsLoading(true);
 
-      const decoded = jwtDecode(token);
-      const kayttajaId = decoded?.kayttajaId || decoded?.sub;
-
-      if (!kayttajaId) {
-        throw new Error("Käyttäjä-ID puuttuu tokenista.");
-      }
-
-      const payload = {
-        myyntiaika: new Date().toISOString(),
-        kayttajaId: 22,
-      };
-
-      console.log("Lähetetään payload:", payload);
-
-      const response = await axios.post(
-        `${API_BASE_URL}/ostostapahtumat`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      console.log(" Vastaus ostostapahtumasta:", response.data);
-
-      setOstostapahtumaId(response.data.ostostapahtumaId);
 
       const lipputyyppiRes = await axios.get(
         `${API_BASE_URL}/tapahtumat/${tapahtuma.tapahtumaId}/lipputyypit`,
@@ -239,6 +128,7 @@ const TicketSaleApp = () => {
       tapahtumaId: valittuTapahtuma.tapahtumaId,
       tapahtumaNimi: valittuTapahtuma.tapahtumaNimi,
       tapahtumaLipputyyppiId: valittuLipputyyppiId,
+      ostostapahtumaId: ostostapahtumaId,
       maara: Number(lippujenMaara),
       asiakas: { ...asiakas },
     };
@@ -248,75 +138,6 @@ const TicketSaleApp = () => {
     tyhjennäKentät();
   };
 
-  const poistaKorista = (index) => {
-    setOstosKori((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const ostaKokoKori = async () => {
-    if (ostosKori.length === 0) {
-      alert("Ostoskorissa ei ole lippuja.");
-      return;
-    }
-
-    setIsLoading(true);
-    setOstoStatus(null);
-
-    try {
-      const token = localStorage.getItem("jwtToken");
-
-      // Luodaan lähetettävä ostoskori-data
-      const data = ostosKori.map((rivi) => ({
-        tapahtumaId: rivi.tapahtumaId,
-        tapahtumaLipputyyppiId: rivi.tapahtumaLipputyyppiId,
-        maara: rivi.maara,
-        ostostapahtumaId: ostostapahtumaId,
-        koodi: rivi.koodi || "", // Jos koodi puuttuu, varmista sen arvo!
-        status: "MYYTY", // tai määrittele oletusarvo, jos status on pakollinen
-      }));
-
-      console.log("Lahetettava ostoskori:", data);
-
-      console.log("Token:", token); // tarkistusta varten
-
-      const res = await axios.post(`${API_BASE_URL}/liput/kori`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
-
-      setOstoStatus("onnistui");
-      console.log(res.data);
-
-      // Create a combined receipt for all items in the cart
-      const combinedReceipt = ostosKori.map((item) => ({
-        tapahtumaNimi: item.tapahtumaNimi,
-        lipputyyppi: item.tapahtumaLipputyyppiId,
-        asiakasNimi: `${item.asiakas.etunimi} ${item.asiakas.sukunimi}`,
-        lippujenMaara: item.maara,
-      }));
-
-      setKuitti(combinedReceipt);
-
-      // Clear the cart after purchase
-      setTimeout(() => {
-        setOstosKori([]);
-        setValittuTapahtuma(null);
-        setValittuLipputyyppiId(null);
-        setLippujenMaara(1);
-      }, 0);
-
-      navigate("/kuitti", { state: { kuitti: combinedReceipt } });
-    } catch (err) {
-      console.error("Osto epaonnistui:", err.response || err.message || err);
-      setOstoStatus("virhe");
-      alert(
-        "Ostoskorin osto ei onnistunut. Tarkista tiedot ja yrita uudelleen."
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
     const haeTapahtumaLipputyypit = async () => {
@@ -401,7 +222,7 @@ const TicketSaleApp = () => {
                       {t.jaljellaOlevaLippumaara} / {t.kokonaislippumaara}
                     </Card.Text>
                     <Button
-                      onClick={() => valitseTapahtumaJaLuoOstostapahtuma(t)}
+                      onClick={() => valitseTapahtuma(t)}
                     >
                       Valitse tapahtuma
                     </Button>
@@ -448,8 +269,6 @@ const TicketSaleApp = () => {
                   onChange={(e) => {
                     const value = e.target.value;
                     setValittuLipputyyppiId(value ? parseInt(value) : null);
-                    //Debuggaus logi
-                    //console.log("Valittu id on " + valittuLipputyyppiId)
                   }}
                 >
                   {!tapahtumaLipputyypit.length ? (
@@ -502,10 +321,6 @@ const TicketSaleApp = () => {
                 Lisaa koriin
               </Button>
 
-              <Button className="me-2" onClick={ostaLiput} disabled={isLoading}>
-                {isLoading ? <Spinner size="sm" animation="border" /> : "Osta"}
-              </Button>
-
               <Button
                 variant="outline-danger"
                 onClick={() => setValittuTapahtuma(null)}
@@ -516,43 +331,7 @@ const TicketSaleApp = () => {
           </div>
         )}
 
-        {ostoStatus === "onnistui" && lipputiedot && (
-          <div className="mt-4">
-            <Alert variant="success">
-              <h4>Osto onnistui!</h4>
-              <p>
-                <strong>Etunimi:</strong> {lipputiedot?.etunimi}
-              </p>
-              <p>
-                <strong>Sukunimi:</strong> {lipputiedot?.sukunimi}
-              </p>
-              <p>
-                <strong>Tapahtuma:</strong> {valittuTapahtuma?.tapahtumaNimi}
-              </p>
-              <p>
-                <strong>Lippuja:</strong> {lipputiedot?.kokonaisMaara}
-              </p>
-              {lipputiedot?.qrUrl && (
-                <>
-                  <h5>QR-koodi:</h5>
-                  <QRCodeSVG value={lipputiedot.qrUrl} size={200} />
-                </>
-              )}
-            </Alert>
-            <Button
-              variant="secondary"
-              onClick={() => window.location.reload()}
-            >
-              Osta lisää
-            </Button>
-          </div>
-        )}
 
-        {ostoStatus === "virhe" && (
-          <Alert variant="danger" className="mt-4">
-            Lippujen osto epäonnistui. Tarkista tiedot ja yritä uudelleen.
-          </Alert>
-        )}
       </div>
     </>
   );
