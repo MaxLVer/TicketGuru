@@ -1,34 +1,107 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Button, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const CartSummaryPage = () => {
   const location = useLocation();
-  const { ostosKori = [] } = location.state || {};
+  const navigate = useNavigate();
+  const [ostosKori, setOstosKori] = useState([]);
 
+  useEffect(() => {
+    const { ostosKori: kori } = location.state || {};
+    if (Array.isArray(kori)) {
+      setOstosKori(kori);
+    }
+  }, [location.state]);
+
+  // Toimiva poisto-funktio
   const poistaKorista = (index) => {
-    alert(`Poistetaan rivi ${index}`);
+    const uusiKori = [...ostosKori];
+    uusiKori.splice(index, 1);
+    setOstosKori(uusiKori);
   };
 
-  const ostaKokoKori = () => {
-    return {
-        onnistui: true,
-        liput: ostosKori,
-        aikaleima: new Date().toISOString()
-      };
+
+
+
+
+  // Luo uuden ostostapahtuman
+  const luoOstostapahtuma = async () => {
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      alert("Kirjaudu sisään uudelleen. Token puuttuu.");
+      return;
+    }
+    const decoded = jwtDecode(token);
+    const kayttajaId = decoded?.kayttajaId || decoded?.sub;
+    if (!kayttajaId) {
+      throw new Error("Käyttäjä-ID puuttuu tokenista.");
+    }
+
+    const payload = {
+      myyntiaika: new Date().toISOString(),
+      kayttajaId: 22,
     };
 
-  const navigate = useNavigate();
+    const response = await axios.post(
+      `${API_BASE_URL}/ostostapahtumat`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data?.ostostapahtumaId;
+  };
+
 
   const handleOstaKaikki = async () => {
-    try {
-      const lipputiedot = await ostaKokoKori(); // Palauttaa tiedot onnistuneesta ostosta
+    if (!ostosKori || ostosKori.length === 0) {
+      alert("Ostoskorisi on tyhjä tai sitä ei ladattu oikein.");
+      return;
+    }
 
-      const combinedReceipt = lipputiedot.liput.map((item) => ({
+    try {
+      const token = localStorage.getItem("jwtToken");
+
+      // Luo ostostapahtuma ja hae ID
+      const ostostapahtumaId = await luoOstostapahtuma();
+      if (!ostostapahtumaId) throw new Error("Ostostapahtuman luonti epäonnistui.");
+
+      // Luodaan taulukko lippujen määrän mukaan
+      const payload = ostosKori.flatMap(item =>
+        Array.from({ length: item.maara }).map(() => ({
+          tapahtumaLipputyyppiId: item.tapahtumaLipputyyppiId,
+          ostostapahtumaId: ostostapahtumaId,
+          tapahtumaId: item.tapahtumaId,
+          asiakas: item.asiakas
+        }))
+      );
+
+      // Lähetä payload
+      const response = await axios.post(`${API_BASE_URL}/liput/kori`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      const lipputiedot = response.data;
+
+      if (!lipputiedot || !Array.isArray(lipputiedot)) {
+        throw new Error("Palvelin ei palauttanut odotettua vastausta.");
+      }
+      // Lisätään tiedot kuittiin
+      const combinedReceipt = ostosKori.map((item) => ({
         tapahtumaNimi: item.tapahtumaNimi,
-        lipputyyppi: item.tapahtumaLipputyyppiId,
+        lipputyyppi: item.lipputyyppiNimi || item.tapahtumaLipputyyppiId,
         asiakasNimi: `${item.asiakas.etunimi} ${item.asiakas.sukunimi}`,
         lippujenMaara: item.maara,
       }));
@@ -37,8 +110,10 @@ const CartSummaryPage = () => {
       navigate("/kuitti", {
         state: { kuitti: combinedReceipt }
       });
+
     } catch (error) {
       console.error("Osto epäonnistui:", error);
+      alert("Osto epäonnistui. Tarkista virheilmoitus konsolista.");
     }
   };
 
@@ -75,6 +150,13 @@ const CartSummaryPage = () => {
         <Button variant="primary" onClick={handleOstaKaikki}>
           Osta kaikki
         </Button>
+      )}
+      {ostosKori.length > 0 && (
+        <div className="mt-3">
+          <Button variant="primary" onClick={() => navigate("/lipunmyynti", { state: { ostosKori } })}>
+            Takaisin lipunmyyntiin
+          </Button>
+        </div>
       )}
     </div>
   );
