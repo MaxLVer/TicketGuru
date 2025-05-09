@@ -167,7 +167,7 @@ Kaikki endpointit on kuvattu erillisessä dokumentaatiossa:
 ## Tekninen kuvaus
 
 ### Käytettävät teknologiat
-- Frontend:React + Vite
+- Frontend: React + Vite
 - Backend: Spring Boot, JWT-autentikointi
 - Tietokanat: PostreSQL
 - Deployment: CSC Rahti(OpenShift pohjainen)
@@ -185,53 +185,43 @@ Kaikki endpointit on kuvattu erillisessä dokumentaatiossa:
 - Tietokantayhteys suljettu ulkomaailmalta, pääsy vain backend-palvelulta
 - Syötteen validointi
 
-//Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
-//ratkaisut, esim.
-
-//-  Missä mikäkin järjestelmän komponentti ajetaan (tietokone, palvelinohjelma)
-//    ja komponenttien väliset yhteydet (vaikkapa tähän tyyliin:
-//    https://security.ufl.edu/it-workers/risk-assessment/creating-an-information-systemdata-flow-diagram/)
-//-   Palvelintoteutuksen yleiskuvaus: teknologiat, deployment-ratkaisut yms.
-//-   Keskeisten rajapintojen kuvaukset, esimerkit REST-rajapinta. Tarvittaessa voidaan rajapinnan käyttöä täsmentää
-//    UML-sekvenssikaavioilla.
-//-   Toteutuksen yleisiä ratkaisuja, esim. turvallisuus.
-//
-//Tämän lisäksi
-//
-//-   ohjelmakoodin tulee olla kommentoitua
-//-   luokkien, metodien ja muuttujien tulee olla kuvaavasti nimettyjä ja noudattaa
-//    johdonmukaisia nimeämiskäytäntöjä
-//-   ohjelmiston pitää olla organisoitu komponentteihin niin, että turhalta toistolta
-//    vältytään
 
 ## Testaus
 
-Tässä kohdin selvitetään, miten ohjelmiston oikea toiminta varmistetaan
-testaamalla projektin aikana: millaisia testauksia tehdään ja missä vaiheessa.
-Testauksen tarkemmat sisällöt ja testisuoritusten tulosten raportit kirjataan
-erillisiin dokumentteihin.
 
-Tänne kirjataan myös lopuksi järjestelmän tunnetut ongelmat, joita ei ole korjattu.
+Projektin testauksessa hyödynnettiin kolmen tason testejä:
+
+- Yksikkötestaus (Junit): Testasimme backendin logiikkaa yksittäisten metodien ja palvelukomponenttien tasolla varmistaaksemme niiden oikean toiminnan.
+
+- Integraatiotestaus (Junit + Spring Boot): Testasimme eri komponenttien (esim. controllerit, palvelut ja tietokantakerros) yhteistoimintaa käyttämällä Spring Bootin tarjoamia testityökaluja.
+
+- End-to-End -testaus (Cypress): Testasimme frontendin käyttöliittymän ja backendin toiminnan yhteispeliä simuloimalla käyttäjän toimintoja selainympäristössä.
+
+Testejä ajettiin kehityksen eri vaiheissa ja niitä päivitettiin uusien ominaisuuksien myötä. Testien avulla varmistettiin järjestelmän toimivuus ja regressioiden ehkäisy ennen tuotantoon vientiä.
 
 ## Asennustiedot
 
-Järjestelmän asennus on syytä dokumentoida kahdesta näkökulmasta:
+Järjestelmän käyttöä varten suositellaan seuraavia työkaluja asennusta:
 
--   järjestelmän kehitysympäristö: miten järjestelmän kehitysympäristön saisi
-    rakennettua johonkin toiseen koneeseen
+- Visual Studio Code tai muu koodieditori
+- Java 17 (tai muu yhteensopiva versio)
+- Node.js ja npm
+- PostgreSQL-tietokanta
+- Git
 
--   järjestelmän asentaminen tuotantoympäristöön: miten järjestelmän saisi
-    asennettua johonkin uuteen ympäristöön.
-
-Asennusohjeesta tulisi ainakin käydä ilmi, miten käytettävä tietokanta ja
-käyttäjät tulee ohjelmistoa asentaessa määritellä (käytettävä tietokanta,
-käyttäjätunnus, salasana, tietokannan luonti yms.).
+Projektin kloonaaminen GitHubista
+- Asenna Git koneellesi: https://git-scm.com/downloads
+- Avaa komentorivi ja siirry haluamaasi kansioon.
+- Kloonaa projektin repository komennolla: git clone
+- Siirry projektikansioon ja avaa se koodieditorissa
 
 ## Käynnistys- ja käyttöohje
 
-Tyypillisesti tässä riittää kertoa ohjelman käynnistykseen tarvittava URL sekä
-mahdolliset kirjautumiseen tarvittavat tunnukset. Jos järjestelmän
-käynnistämiseen tai käyttöön liittyy joitain muita toimenpiteitä tai toimintajärjestykseen liittyviä asioita, nekin kerrotaan tässä yhteydessä.
+Backendin käynnistäminen
+1. Avaa backend-projekti (esim. TicketGuruApplication) Visual Studio Codessa tai muussa IDE:ssä.
+2. Varmista, että PostgreSQL-tietokanta on käynnissä.
+3. Käynnistä Spring Boot -sovellus.
 
-Usko tai älä, tulet tarvitsemaan tätä itsekin, kun tauon jälkeen palaat
-järjestelmän pariin !
+Frontendin käynnistäminen
+1. Siirry frontendin kansioon
+2. Käynnistä frontend-sovellus: npm start
