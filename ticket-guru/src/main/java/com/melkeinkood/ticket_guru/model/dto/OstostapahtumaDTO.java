@@ -6,6 +6,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 
 
@@ -17,6 +18,7 @@ public class OstostapahtumaDTO {
     private LocalDateTime myyntiaika;
     private Long kayttajaId;
     private List<Long> liput;
+    private Set<Long> tapahtumaIdt;
     private BigDecimal summa;
 
     public OstostapahtumaDTO() {}
