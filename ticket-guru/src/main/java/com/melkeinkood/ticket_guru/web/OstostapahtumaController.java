@@ -43,7 +43,7 @@ public class OstostapahtumaController {
 
     // Muuntaa DTO:n EntityModel-muotoon ja liittää siihen HATEOAS-linkit
     private EntityModel<OstostapahtumaDTO> toEntityModel(OstostapahtumaDTO ostostapahtumaDTO) {
-        List<Long> lippuIdt = ostostapahtumaDTO.getLippuIdt();
+        List<Long> lippuIdt = ostostapahtumaDTO.getLiput();
         EntityModel<OstostapahtumaDTO> entityModel = EntityModel.of(ostostapahtumaDTO);
         Link kayttajaLink = linkTo(
                 methodOn(KayttajatController.class).haeKayttaja(ostostapahtumaDTO.getKayttajaId()))
@@ -75,11 +75,11 @@ public class OstostapahtumaController {
             }
         }
         return new OstostapahtumaDTO(
-                ostostapahtuma.getOstostapahtumaId(),
-                ostostapahtuma.getMyyntiaika(),
-                ostostapahtuma.getKayttaja().getKayttajaId(),
-                summa,
-                lippuIdt);
+            ostostapahtuma.getOstostapahtumaId(),
+            ostostapahtuma.getMyyntiaika(),
+            ostostapahtuma.getKayttaja().getKayttajaId(),
+            lippuIdt,
+            summa);
     }
 
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
