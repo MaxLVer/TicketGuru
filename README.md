@@ -64,7 +64,7 @@ Tapahtumakohtainen raportti jossa näkyy heti alkuun:
 
 ## Tietokanta
 
-![tietokantakaavio](./kuvat/Tietokanta4.jpg)
+![tietokantakaavio](./kuvat/Tietokanta5.jpg)
 
 > ### _Käyttäjät_
 > 
