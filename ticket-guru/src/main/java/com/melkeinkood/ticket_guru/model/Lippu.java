@@ -40,14 +40,18 @@ public class Lippu {
     @Column(unique = true, nullable = true)
     private String koodi;
 
+    @Column(name = "asiakas_nimi")
+private String asiakasNimi;
+
     public Lippu(Long lippuId, Ostostapahtuma ostostapahtuma,
-            TapahtumaLipputyyppi tapahtumalipputyyppi, Tapahtuma tapahtuma, LippuStatus status, String koodi) {
+            TapahtumaLipputyyppi tapahtumalipputyyppi, Tapahtuma tapahtuma, LippuStatus status, String koodi, String asiakasNimi) {
         this.lippuId = lippuId;
         this.ostostapahtuma = ostostapahtuma;
         this.tapahtumaLipputyyppi = tapahtumalipputyyppi;
         this.tapahtuma = tapahtuma;
         this.status = status;
         this.koodi = koodi;
+        this.asiakasNimi = asiakasNimi;
     }
 
     public Lippu(Ostostapahtuma ostostapahtuma,
@@ -109,4 +113,12 @@ public class Lippu {
         this.status = status;
     }
 
+    public String getAsiakasNimi() {
+        return asiakasNimi;
+    }
+    
+    public void setAsiakasNimi(String asiakasNimi) {
+        this.asiakasNimi = asiakasNimi;
+    }
+    
 }

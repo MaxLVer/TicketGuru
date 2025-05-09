@@ -41,6 +41,12 @@ public class OstostapahtumaController {
     @Autowired
     LippuRepository lippuRepository;
 
+    @Autowired
+    private TapahtumaRepository tapahtumaRepo;
+
+    @Autowired
+    private TapahtumaLipputyyppiRepository lipputyyppiRepo;
+
     // Muuntaa DTO:n EntityModel-muotoon ja liittää siihen HATEOAS-linkit
     private EntityModel<OstostapahtumaDTO> toEntityModel(OstostapahtumaDTO ostostapahtumaDTO) {
         List<Long> lippuIdt = ostostapahtumaDTO.getLiput();
@@ -108,17 +114,42 @@ public class OstostapahtumaController {
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin
     // Hakee yksittäisen ostostapahtuman ID:n perusteella
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
-    @GetMapping("/ostostapahtumat/{id}")
-    public ResponseEntity<Object> haeOstostapahtuma(@PathVariable Long id) {
-        Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id).orElse(null);
-        if (ostostapahtuma == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Collections.singletonMap("error", "Ostostapahtumaa ei löytynyt"));
-        } else {
-            ostostapahtuma.getLiput();
-            return ResponseEntity.ok(toEntityModel(toDTO(ostostapahtuma)));
+@GetMapping("/ostostapahtumat/laajennettu/{id}")
+public ResponseEntity<Object> haeOstostapahtuma(@PathVariable Long id) {
+    Ostostapahtuma ostostapahtuma = ostostapahtumaRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Ostostapahtumaa ei löytynyt"));
+
+    Set<String> tapahtumaNimet = new HashSet<>();
+    Set<String> lipputyyppienNimet = new HashSet<>();
+    BigDecimal summa = BigDecimal.ZERO;
+    List<Long> lippuIdt = new ArrayList<>();
+
+    if (ostostapahtuma.getLiput() != null) {
+        for (Lippu lippu : ostostapahtuma.getLiput()) {
+            TapahtumaLipputyyppi tlt = lippu.getTapahtumaLipputyyppi();
+            Tapahtuma tapahtuma = tlt.getTapahtuma();
+            Asiakastyyppi asiakastyyppi = tlt.getAsiakastyyppi();
+        
+            tapahtumaNimet.add(tapahtuma != null ? tapahtuma.getTapahtumaNimi() : "Tuntematon");
+            lipputyyppienNimet.add(asiakastyyppi != null ? asiakastyyppi.getAsiakastyyppi() : "Tuntematon");
+        
+            summa = summa.add(tlt.getHinta());
+            lippuIdt.add(lippu.getLippuId());
         }
     }
+
+    OstostapahtumaDTO dto = new OstostapahtumaDTO();
+    dto.setOstostapahtumaId(ostostapahtuma.getOstostapahtumaId());
+    dto.setMyyntiaika(ostostapahtuma.getMyyntiaika());
+    dto.setKayttajaId(ostostapahtuma.getKayttaja().getKayttajaId());
+    dto.setLiput(lippuIdt);
+    dto.setSumma(summa);
+    dto.setTapahtumaNimet(tapahtumaNimet);
+    dto.setLipputyyppienNimet(lipputyyppienNimet);
+
+    return ResponseEntity.ok(dto);
+}
+
 
 
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin

@@ -66,6 +66,7 @@ public class LippuController {
         dto.setTapahtumaLipputyyppiId(lippu.getTapahtumaLipputyyppi().getTapahtumaLipputyyppiId());
         dto.setKoodi(lippu.getKoodi());
         dto.setStatus(lippu.getStatus());
+        dto.setAsiakasNimi(lippu.getAsiakasNimi());
         return dto;
 
     }

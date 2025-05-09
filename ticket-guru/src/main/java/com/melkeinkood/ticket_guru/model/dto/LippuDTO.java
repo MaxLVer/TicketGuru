@@ -15,6 +15,7 @@ public class LippuDTO {
     private Long tapahtumaLipputyyppiId;
     private String koodi;
     private LippuStatus status;
+    private String asiakasNimi;
 
     public LippuDTO(Long lippuId, Long tapahtumaId,
             Long ostostapahtumaId,
@@ -77,5 +78,12 @@ public class LippuDTO {
 
     public void setStatus(LippuStatus status) {
         this.status = status;
+    }
+    public String getAsiakasNimi() {
+        return asiakasNimi;
+    }
+
+    public void setAsiakasNimi(String asiakasNimi) {
+        this.asiakasNimi = asiakasNimi;
     }
 }

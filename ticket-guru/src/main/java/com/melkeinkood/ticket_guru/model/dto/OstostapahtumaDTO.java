@@ -20,6 +20,8 @@ public class OstostapahtumaDTO {
     private List<Long> liput;
     private Set<Long> tapahtumaIdt;
     private BigDecimal summa;
+    private Set<String> tapahtumaNimet;
+    private Set<String> lipputyyppienNimet;
 
     public OstostapahtumaDTO() {}
 
