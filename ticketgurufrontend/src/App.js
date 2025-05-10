@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import TapahtumaLista from './pages/Tapahtumat';
 import Myyntitapahtumat from './pages/Myyntitapahtumat';
 import Myyntiraportti from './pages/Myyntiraportti';
+import LiputLista from './pages/LiputLista';
 
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
       <Route path="/tapahtumat" element={<TapahtumaLista />} /> 
       <Route path="/myyntitapahtumat" element={<Myyntitapahtumat />} />
       <Route path="/raportti/:tapahtumaId" element={<Myyntiraportti />} />
+      <Route path="/liput" element={<LiputLista />}/>
     </Routes>
     </>
   );
