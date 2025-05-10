@@ -43,7 +43,7 @@ public class OstostapahtumaController {
 
     // Muuntaa DTO:n EntityModel-muotoon ja liittää siihen HATEOAS-linkit
     private EntityModel<OstostapahtumaDTO> toEntityModel(OstostapahtumaDTO ostostapahtumaDTO) {
-        List<Long> lippuIdt = ostostapahtumaDTO.getLippuIdt();
+        List<Long> lippuIdt = ostostapahtumaDTO.getLiput();
         EntityModel<OstostapahtumaDTO> entityModel = EntityModel.of(ostostapahtumaDTO);
         Link kayttajaLink = linkTo(
                 methodOn(KayttajatController.class).haeKayttaja(ostostapahtumaDTO.getKayttajaId()))
@@ -67,19 +67,26 @@ public class OstostapahtumaController {
     private OstostapahtumaDTO toDTO(Ostostapahtuma ostostapahtuma) {
         List<Long> lippuIdt = new ArrayList<>();
         BigDecimal summa = BigDecimal.ZERO;
+
+        Set<Long> tapahtumaIdt = new HashSet<>();
+
         if (ostostapahtuma.getLiput() != null) {
-            List<Lippu> liput = ostostapahtuma.getLiput();
-            for (Lippu lippu : liput) {
-                lippuIdt.add(lippu.getLippuId());
-                summa = summa.add(lippu.getTapahtumaLipputyyppi().getHinta());
-            }
+        for (Lippu lippu : ostostapahtuma.getLiput()) {
+            lippuIdt.add(lippu.getLippuId());
+            summa = summa.add(lippu.getTapahtumaLipputyyppi().getHinta());
+            tapahtumaIdt.add(lippu.getTapahtumaLipputyyppi().getTapahtuma().getTapahtumaId());
         }
-        return new OstostapahtumaDTO(
-                ostostapahtuma.getOstostapahtumaId(),
-                ostostapahtuma.getMyyntiaika(),
-                ostostapahtuma.getKayttaja().getKayttajaId(),
-                summa,
-                lippuIdt);
+    }
+    OstostapahtumaDTO dto = new OstostapahtumaDTO(
+            ostostapahtuma.getOstostapahtumaId(),
+            ostostapahtuma.getMyyntiaika(),
+            ostostapahtuma.getKayttaja().getKayttajaId(),
+            lippuIdt,
+            summa);
+
+            dto.setTapahtumaIdt(tapahtumaIdt);
+
+            return dto;
     }
 
     // Sallitaan vain ADMIN- ja SALESPERSON-rooleille pääsy tähän endpointiin

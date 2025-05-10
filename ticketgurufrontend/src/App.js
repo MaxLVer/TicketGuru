@@ -27,7 +27,7 @@ const App = () => {
       <Route path="/yhteenveto" element={<YhteenvetOstoskori />} /> 
       <Route path="/kuitti" element={<Kuittisivu />} />
       <Route path="/tapahtumat" element={<TapahtumaLista />} /> 
-      <Route path="/myyntitapahtumat" element={<Myyntitapahtumat />} />
+      <Route path="/myyntitapahtumat/:tapahtumaId" element={<Myyntitapahtumat />} />
       <Route path="/raportti/:tapahtumaId" element={<Myyntiraportti />} />
       <Route path="/liput" element={<LiputLista />}/>
     </Routes>
