@@ -110,6 +110,7 @@ localStorage.getItem("jwtToken")
         </Table>
       </TableContainer>
         <Button onClick={() => navigate("/tapahtumat")}>Palaa</Button>
+        <Button onClick={() => navigate(`/myyntitapahtumat/${tapahtumaId}`)}>Myyntitapahtumat</Button>
     </div>
   );
 }
