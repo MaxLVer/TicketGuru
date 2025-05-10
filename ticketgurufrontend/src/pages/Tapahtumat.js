@@ -6,6 +6,7 @@ import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import TapahtumaLisays from "../components/TapahtumaLisays";
 import TapahtumaMuokkaus from "../components/TapahtumaMuokkaus";
 import { useNavigate } from "react-router-dom";
+import TapahtumanLipputyypit from "../components/TapahtumanLipputyypit";
 
 import "ag-grid-community/styles/ag-theme-material.css";
 import TapahtumaTiedot from "../components/TapahtumaTiedot";
@@ -20,6 +21,8 @@ function TapahtumaLista() {
   const [selectedTapahtumaId, setSelectedTapahtumaId] = useState(null);
   const [tiedotDialogAuki, setTiedotDialogAuki] = useState(false);
   const [tiedotTapahtuma, setTiedotTapahtuma] = useState(null);
+  const [lipputyyppiDialogAuki, setLipputyyppiDialogAuki] = useState(false);
+  const [lipputyyppiTapahtumaId, setLipputyyppiTapahtumaId] = useState(null);
 
   const haeTapahtumat = async () => {
     try {
@@ -67,17 +70,28 @@ function TapahtumaLista() {
         </Button>
       )
     },
-  {
-    field: '_links.self.href',
-    headerName: '',
-    sortable: false,
-    filter: false,
-    cellRenderer: params => (
-    <Button onClick={() => navigate(`/raportti/${params.data.tapahtumaId}`)}>Raportti</Button>
-    )
-},
+    {
+      field: '_links.self.href',
+      headerName: '',
+      sortable: false,
+      filter: false,
+      cellRenderer: params => (
+        <Button onClick={() => handleOpenLipputyyppiDialog(params.data.tapahtumaId)}>
+          Muokkaa Lipputyyppejä
+        </Button>
+      )
+    },
+    {
+      field: '_links.self.href',
+      headerName: '',
+      sortable: false,
+      filter: false,
+      cellRenderer: params => (
+        <Button onClick={() => navigate(`/raportti/${params.data.tapahtumaId}`)}>Raportti</Button>
+      )
+    },
 
-    
+
   ]);
 
   const defaulColDef = {
@@ -93,6 +107,11 @@ function TapahtumaLista() {
   const handleShowDetails = (tapahtuma) => {
     setTiedotTapahtuma(tapahtuma);
     setTiedotDialogAuki(true);
+  };
+
+  const handleOpenLipputyyppiDialog = (tapahtumaId) => {
+    setLipputyyppiTapahtumaId(tapahtumaId);
+    setLipputyyppiDialogAuki(true);
   };
 
   const handleOpenDialog = (tapahtuma) => {
@@ -161,7 +180,29 @@ function TapahtumaLista() {
           {tiedotTapahtuma && <TapahtumaTiedot tapahtuma={tiedotTapahtuma} />}
         </DialogContent>
       </Dialog>
+
+      <Dialog
+        open={lipputyyppiDialogAuki}
+        onClose={() => setLipputyyppiDialogAuki(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Muokkaa lipputyyppejä</DialogTitle>
+        <DialogContent>
+          {lipputyyppiTapahtumaId && (
+            <TapahtumanLipputyypit
+              tapahtumaId={lipputyyppiTapahtumaId}
+              onSuccess={() => {
+                setLipputyyppiDialogAuki(false);
+                haeTapahtumat(); // päivitetään lista jos tarpeen
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
+
+
   );
 }
 

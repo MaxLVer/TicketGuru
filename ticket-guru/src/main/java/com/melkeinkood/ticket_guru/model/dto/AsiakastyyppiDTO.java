@@ -11,13 +11,13 @@ import jakarta.validation.constraints.NotNull;
 @Getter
 @Setter
 public class AsiakastyyppiDTO {
-    private Long asiakastyypiId;
+    private Long asiakastyyppiId;
 
     @NotNull(message = "Asiakastyyppi ei voi olla tyhjä")
     private String asiakastyyppi;
     
     public AsiakastyyppiDTO(Asiakastyyppi asiakasTyyppi) {
-        this.asiakastyypiId = asiakasTyyppi.getAsiakastyyppiId();
+        this.asiakastyyppiId = asiakasTyyppi.getAsiakastyyppiId();
         this.asiakastyyppi = asiakasTyyppi.getAsiakastyyppi();
     }
 
