@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Col } from "react-bootstrap";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -84,6 +85,7 @@ localStorage.getItem("jwtToken")
       <Typography variant="h4" gutterBottom>
         Myyntiraportti – {tapahtumaNimi}
       </Typography>
+      
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -110,6 +112,18 @@ localStorage.getItem("jwtToken")
         </Table>
       </TableContainer>
         <Button onClick={() => navigate("/tapahtumat")}>Palaa</Button>
+        <Col className="d-flex justify-content-end" style={{ gap: '8px' }}>
+        <Button 
+      variant="contained" 
+      color="primary" 
+      onClick={() => navigate("/myyntitapahtumat")}
+      style={{ marginBottom: 16 }}
+    >
+      Ostostapahtumat
+    </Button>
+    </Col>
+        
+
     </div>
   );
 }

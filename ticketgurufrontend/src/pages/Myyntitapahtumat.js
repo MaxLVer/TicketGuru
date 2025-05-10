@@ -3,9 +3,11 @@ import { AgGridReact } from "ag-grid-react";
 import dayjs from "dayjs";
 import axios from "axios";
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+
 
 import "ag-grid-community/styles/ag-theme-material.css";
-
 import NaytaOstostapahtuma from "./NaytaOstostapahtuma";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -14,6 +16,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 function Myyntitapahtumat() {
     const [ostostapahtumat, setOstostapahtumat] = useState([]);
+    const [selectedTransaction, setSelectedTransaction] = useState(null); 
     useEffect(() => {
         const haeOstostapahtumat = async () => {
             try {
