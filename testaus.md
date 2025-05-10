@@ -2,7 +2,7 @@
 
 ## Testauksen tavoite
 
-*\Testauksen tavoitteena varmistaa, että ohjelmisto toimii oikein. Tuotetulla käyttöliittymällä tulisi olla mahdollista myydä, muokata ja tarkistaa lippuja sekä lisätä tapahtumia ja muokata niiden tietoja. Järjestelmään pitää myös pystyä kirjatumaan tietoturvallisesti tunnuksilla\*
+Testauksen tavoitteena varmistaa, että ohjelmisto toimii oikein. Tuotetulla käyttöliittymällä tulisi olla mahdollista myydä, muokata ja tarkistaa lippuja sekä lisätä tapahtumia ja muokata niiden tietoja. Järjestelmään pitää myös pystyä kirjatumaan tietoturvallisesti tunnuksilla
 
 ## Testit
 
@@ -15,22 +15,15 @@
 *\<Varmistaa, että kaikkien ostostapahtumien haku onnistuu, yksittäisen ostostapahtuman haku epäonnistuu jos tapahtumaa ei ole ja uuden ostostapahtuman luominen onnistuu* | *\<Suoritetaan testi OstostapahtumaControllerTest.java käyttämällä Visual Studio Codea. testHaeKaikkiOstostapahtumat_Returns200AndList-testissä mockataan yksi ostostapahtuma. Suoritetaan GET /ostostapahtumat ja odotetaan 200 OK. Varmistetaan, että JSON-vastauksessa ensimmäisen objektin ostostapahtumaId on 1. testHaeOstostapahtuma_EiLoydy_Returns404-testissä simuloidaan tilanne, jossa findById palauttaa tyhjän. Suoritetaan GET /ostostapahtumat/99. Varmistetaan, että status on 404 Not Found ja virheviesti näytetään. testLisaaOstostapahtuma_Onnistuu_Returns201-testissä mockataan käyttäjä ja tallennettava ostostapahtuma. Suoritetaan POST /ostostapahtumat JSON-rungolla, jossa annetaan myyntiaika, käyttäjä-ID ja tyhjä lippulista. Odotetaan 201 Created ja varmistetaan, että vastausrungossa kayttajaId on 1.>*
 *\<Varmistaa, että kirjautuminen onnistuu ja JWT-token saadaan, uuden tapahtuman luonti onnistuu , kaikkien tapahtumien haku onnistuu, tapahtuman haku id:llä onnistuu sekä tapahtuman poistaminen onnistuu* | *\<Suoritetaan testi TapahtumaIntegrationTest.java käyttämällä Visual Studio Codea. @BeforeEach kirjauduSisaan-metodi suorittaa POST /kayttajat/kirjaudu -pyynnön käyttäjätunnuksella kayttaja/testaaja123. Varmistetaan, että status on 200 OK ja JWT-token ei ole null. testLisaaTapahtuma-testissä luodaan uusi tapahtuma POST /tapahtumat -pyynnöllä. Varmistetaan 201 Created ja tulostetaan vastauksen runko. testHaeKaikkiTapahtumat-testissä tehdään GET /tapahtumat -kutsu JWT-tokenin kanssa. Varmistetaan, että status on 200 OK ja vastauksena tulee JSON-lista tapahtumista. testHaeTapahtumaIdlla-testissä tehdään GET /tapahtumat/{id} -kutsu olemassa olevalla ID:llä (2L). Varmistetaan 200 OK ja tulostetaan tapahtuman tiedot. testPoistaTapahtuma-testissä ensin luodaan uusi tapahtuma ja sen jälkeen poistetaan se DELETE /tapahtumat/{id} -kutsulla. Varmistetaan, että poiston HTTP-status on 204 No Content tai 200 OK.>*
 
-Testiloki *\10.5.2025\*
+Testiloki 10.5.2025
 =======================
 
-**Testaaja:*Marjo Ek*
+**Testaaja:Marjo Ek
 
-**Ympäristö:** *\<Testauksen ympäristö, esim. selain, verkkoympäristö\>* |
+**Ympäristö:** Visual Studio Code, Cypress
 
-Löydökset:
+Löydökset: Kaikki testit toimivat 
 ----------
 
 *\<Tämä osa dokumenttia liittyy testauksen suoritukseen. Listaa tähän löytämäsi
 ongelmat ja muut kommenttisi\>*
-
-_Löydetyistä vioista kirjaa selkeästi,_
-1. _mikä vika on_
-2. _miten sen saa aikaan (toistettua)_
-3. _lyhyt kuvaus, miten ohjelmisto toimi väärin: mitä tapahtui, mitä olisi pitänyt tapahtua_
-
-Jos projektissa on käytössä jokin vikojenhallintajärjestelmä, kuten suositeltaa on, kirjaukseksi riittää linkki vikaraporttiin.
