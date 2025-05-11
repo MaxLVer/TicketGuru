@@ -51,7 +51,42 @@ function LiputLista() {
                 { field: "koodi", headerName: "Lipun Koodi" },
                 { field: "status", headerName: "Lipun Status" },
                 { field: 'lippuId', headerName: 'Lipun ID' },
-            
+                {
+                    headerName: "Toiminnot",
+                    cellRenderer: (params) => {
+                      const onClick = async () => {
+                        const lippuId = params.data.lippuId;
+                        const koodi = params.data.koodi
+                        const token = localStorage.getItem("jwtToken");
+                        try {
+                          await axios.patch(
+                            `${API_BASE_URL}/liput/${lippuId}`,
+                            { status: "KÄYTETTY" },
+                            {
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                                "Content-Type": "application/json"
+                              }
+                            }
+                          );
+                          alert(`Lippu ${koodi} merkitty käytetyksi.`);
+                          haeLiput(); 
+                        } catch (error) {
+                          console.error("Lipun päivittäminen epäonnistui:", error);
+                          alert("Virhe lipun päivittämisessä.");
+                        }
+                      };
+                  
+                      return <Button
+                      onClick={onClick}
+                      variant="contained"
+                      size="small"
+                      disabled={params.data.status === "KÄYTETTY"}
+                    >
+                      Merkitse käytetyksi
+                    </Button>
+                    }
+                  }
                 
                 
                 
