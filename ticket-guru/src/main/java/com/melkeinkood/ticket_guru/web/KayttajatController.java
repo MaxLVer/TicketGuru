@@ -88,7 +88,7 @@ public class KayttajatController {
                 kayttaja.getSukunimi());
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+   
     @GetMapping("/kayttajat")
     public ResponseEntity<List<EntityModel<KayttajaDTO>>> haeKaikkiKayttajat() {
         List<Kayttaja> kayttajat = kayttajaRepo.findAll();
