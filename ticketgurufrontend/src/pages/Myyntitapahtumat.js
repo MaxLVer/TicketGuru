@@ -54,7 +54,7 @@ function Myyntitapahtumat() {
                 return dayjs(params.value).format('DD.MM.YYYY hh:mm');
             }
         },
-        { field: "ostostapahtumaId", headerName: "#" },
+        { field: "ostostapahtumaId", headerName: "Yksilöintitunnus" },
         { field: "summa", headerName: "Kokonaishinta (€)" },
         {
             field: '_links.self.href',
