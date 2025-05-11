@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Dialog, DialogTitle, DialogActions, DialogContent, TextField } from "@mui/material";
-import { AgGridReact } from "ag-grid-react";
+import { QRCodeSVG } from 'qrcode.react';
+import { Card, CardContent, Typography } from "@mui/material";
+
+
+
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -34,52 +38,8 @@ export default function NaytaOstotapahtuma({ valittuOstostapahtuma }) {
             }
         };
         haeLiput();
-    }, []);
-    console.log("Tapahtumat:", tapahtumat);
-    const [columnDefs, setColumnDefs] = useState([]);
-    useEffect(() => {
-        if (tapahtumat.length > 0) {
-            setColumnDefs([
-                { field: 'lippuId' },
-                {
-                    headerName: 'Tapahtuma',
-                    field: 'tapahtumaId',
-                    valueGetter: (params) => {
-                        console.log("Row data:", params.data);
-                        const tapahtuma = tapahtumat.find(t => t.tapahtumaId === params.data.tapahtumaId);
-                        return tapahtuma ? tapahtuma.tapahtumaNimi : '-:-';
-                    }
-                },
-                {
-                    headerName: 'Hinta',
-                    field: 'tapahtumaLipputyyppiId',
-                    valueGetter: (params) => {
-                        console.log("Row data:", params.data);
-                        const lipputyyppi = lipputyypit.find(t => t.tapahtumaLipputyyppiId === params.data.tapahtumaLipputyyppiId);
-                        return lipputyyppi ? lipputyyppi.hinta : '-:-';
-                    }
-                },
-                {
-                    headerName: 'Asiakastyyppi',
-                    field: 'tapahtumaLipputyyppiId',
-                    valueGetter: (params) => {
-                        console.log("Row data:", params.data);
-                        const asiakastyyppiId = lipputyypit.find(t => t.tapahtumaLipputyyppiId === params.data.tapahtumaLipputyyppiId);
-                        const asiakastyyppi = asiakastyypit.find(t => t.asiakastyypiId === params.data.tapahtumaLipputyyppiId);
-                        return asiakastyyppi ? asiakastyyppi.asiakastyyppi : '-:-';
-                    }
-                }
-            ]);
-        }
-    }, [tapahtumat]);
-    const defaultColumnDefs = {
-        sortable: true,
-        filter: true
-    };
+    }, [valittuOstostapahtuma]);
 
-    const autoSizeStrategy = {
-        type: 'fitCellContents',
-    }
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -88,6 +48,21 @@ export default function NaytaOstotapahtuma({ valittuOstostapahtuma }) {
         setOpen(false);
     };
 
+    const haeTapahtumaNimi = (tapahtumaId) => {
+        const tapahtuma = tapahtumat.find(t => t.tapahtumaId === tapahtumaId);
+        return tapahtuma ? tapahtuma.tapahtumaNimi : "-";
+    };
+
+    const haeHinta = (tapahtumaLipputyyppiId) => {
+        const tyyppi = lipputyypit.find(t => t.tapahtumaLipputyyppiId === tapahtumaLipputyyppiId);
+        return tyyppi ? tyyppi.hinta : "-";
+    };
+
+    const haeAsiakastyyppi = (tapahtumaLipputyyppiId) => {
+        const lipputyyppi = lipputyypit.find(t => t.tapahtumaLipputyyppiId === tapahtumaLipputyyppiId);
+        const asiakastyyppi = asiakastyypit.find(a => a.asiakastyypiId === lipputyyppi?.asiakastyyppiId);
+        return asiakastyyppi ? asiakastyyppi.asiakastyyppi : "-";
+    };
     return (
         <>
             <button onClick={handleClickOpen}>Näytä</button>
@@ -110,6 +85,7 @@ export default function NaytaOstotapahtuma({ valittuOstostapahtuma }) {
                         fullWidth
                         variant="standard"
                         value={ostostapahtuma.myyntiaika}
+                        margin="dense"
                     />
                     <TextField
                         label="Summa"
@@ -117,14 +93,25 @@ export default function NaytaOstotapahtuma({ valittuOstostapahtuma }) {
                         fullWidth
                         variant="standard"
                         value={ostostapahtuma.summa}
+                        margin="dense"
                     />
-                    <div className="ag-theme-material" style={{ width: "100%", height: 800 }}>
-                        <AgGridReact
-                            rowData={liput}
-                            columnDefs={columnDefs}
-                            defaultColDef={defaultColumnDefs}
-                            autoSizeStrategy={autoSizeStrategy}
-                        />
+                   <div style={{ marginTop: "1rem" }}>
+                        {liput.map((lippu, index) => (
+                            <Card key={index} variant="outlined" style={{ marginBottom: "1rem" }}>
+                                <CardContent>
+                                    <Typography variant="h6">Lippu ID: {lippu.lippuId}</Typography>
+                                    <Typography>Tapahtuma: {haeTapahtumaNimi(lippu.tapahtumaId)}</Typography>
+                                    <Typography>Hinta: {haeHinta(lippu.tapahtumaLipputyyppiId)} €</Typography>
+                                    <Typography>Asiakastyyppi: {haeAsiakastyyppi(lippu.tapahtumaLipputyyppiId)}</Typography>
+                                    <div style={{ marginTop: "1rem" }}>
+                                        <QRCodeSVG
+                                            value={`https://esimerkki.fi/lippu/${lippu.lippuId}`}
+                                            size={128}
+                                        />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
                     </div>
                 </DialogContent>
                 <DialogActions>
