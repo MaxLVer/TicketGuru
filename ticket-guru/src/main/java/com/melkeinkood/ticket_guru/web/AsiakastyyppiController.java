@@ -37,7 +37,7 @@ public class AsiakastyyppiController {
     // Muuntaa DTO:n HATEOAS-yhteensopivaksi EntityModeliksi, johon lisätään linkki kyseiseen resurssiin
     private EntityModel<AsiakastyyppiDTO> toEntityModel(AsiakastyyppiDTO asiakastyyppiDTO) {
         Link selfLink = linkTo(
-                methodOn(AsiakastyyppiController.class).haeAsiakastyyppi(asiakastyyppiDTO.getAsiakastyypiId()))
+                methodOn(AsiakastyyppiController.class).haeAsiakastyyppi(asiakastyyppiDTO.getAsiakastyyppiId()))
                 .withSelfRel(); // Luo itseensä viittaava linkki
 
         return EntityModel.of(asiakastyyppiDTO, selfLink); // Palautetaan DTO + linkki
@@ -45,7 +45,7 @@ public class AsiakastyyppiController {
     // Muuntaa Asiakastyyppi-entiteetin DTO-muotoon
     private AsiakastyyppiDTO convertToDTO(Asiakastyyppi asiakastyyppi) {
         AsiakastyyppiDTO dto = new AsiakastyyppiDTO();
-        dto.setAsiakastyypiId(asiakastyyppi.getAsiakastyyppiId());
+        dto.setAsiakastyyppiId(asiakastyyppi.getAsiakastyyppiId());
         dto.setAsiakastyyppi(asiakastyyppi.getAsiakastyyppi());
         return dto;
     }
@@ -71,9 +71,9 @@ public class AsiakastyyppiController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SALESPERSON')")
     @GetMapping("/asiakastyypit/{id}")
     public ResponseEntity<Object> haeAsiakastyyppi(@PathVariable Long id) {
-        Asiakastyyppi asiakasTyyppi = asiakastyyppiRepository.findById(id).orElse(null);
-        if (asiakasTyyppi != null) {
-            AsiakastyyppiDTO asiakastyyppiDTO = new AsiakastyyppiDTO(asiakasTyyppi); // Muunnetaan DTO:ksi
+        Asiakastyyppi asiakastyyppi = asiakastyyppiRepository.findById(id).orElse(null);
+        if (asiakastyyppi != null) {
+            AsiakastyyppiDTO asiakastyyppiDTO = new AsiakastyyppiDTO(asiakastyyppi); // Muunnetaan DTO:ksi
             return ResponseEntity.ok(toEntityModel(asiakastyyppiDTO)); // Palautetaan DTO ja linkit
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Asiakastyyppiä ei löydy id:llä " + id);
@@ -99,7 +99,7 @@ public class AsiakastyyppiController {
         uusiAsiakastyyppi.setAsiakastyyppi(asiakastyyppiDTO.getAsiakastyyppi());
         asiakastyyppiRepository.save(uusiAsiakastyyppi);
         // Asetetaan tallennetun entiteetin ID takaisin DTO:lle
-        asiakastyyppiDTO.setAsiakastyypiId(uusiAsiakastyyppi.getAsiakastyyppiId());
+        asiakastyyppiDTO.setAsiakastyyppiId(uusiAsiakastyyppi.getAsiakastyyppiId());
         return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(asiakastyyppiDTO));
 
     }
