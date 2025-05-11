@@ -44,7 +44,7 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-            .requestMatchers("/kayttajat/luo", "/kayttajat/kirjaudu", "/kayttajat/uloskirjaudu").permitAll()  // Hyväksy spesifiset endpointit
+            .requestMatchers("/kayttajat/luo", "/kayttajat/kirjaudu", "/kayttajat/uloskirjaudu", "/kayttajat").permitAll()  // Hyväksy spesifiset endpointit
             .anyRequest().authenticated()  // Vaadi autentikointia muissa endpointeissa
         )
         .sessionManagement(session -> 
