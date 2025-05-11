@@ -12,16 +12,20 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 function LiputLista() {
     const [liput, setLiput] = useState([]);
+    const [tapahtumat, setTapahtumat] = useState([]);
+    const [columnDefs, setColumnDefs] = useState([]);
+    
 
     const haeLiput = async () => {
         try {
             const token = localStorage.getItem("jwtToken");
-            const res = await axios.get(`${API_BASE_URL}/liput`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            setLiput(res.data);
+            const [liputRes, tapahtumatRes] = await Promise.all([
+                axios.get(`${API_BASE_URL}/liput`, { headers: { Authorization: `Bearer ${token}` } }),
+                axios.get(`${API_BASE_URL}/tapahtumat`, { headers: { Authorization: `Bearer ${token}` } })
+            ]);
+            setLiput(liputRes.data);
+            setTapahtumat(tapahtumatRes.data);
+            console.log(liputRes.data)
 
         } catch (error) {
             console.error("Lippujen haku epäonnistui: ", error)
@@ -32,34 +36,36 @@ function LiputLista() {
         haeLiput()
     }, []);
 
-    const merkitseKaytetyksi = () => {
-
-    }
-
-    const [columnDefs, setColumnDefs] = useState([
-        { field: "koodi", headername: "Lipun Koodi" },
-        { field: "status", headername: "Lipun Status" },
-        { field: "ostostapahtumaId", headername: "Ostostapahtuman tunnus" },
-        {
-            field: '_links.self.href',
-            headerName: '',
-            sortable: false,
-            filterable: false,
-            cellRenderer: (params) => {
-                <Button onClick={() => merkitseKaytetyksi(params.data)}>
-                    Merkitse Käytetyksi
-                </Button>
-            }
+    
+    useEffect(() => {
+        if (tapahtumat.length > 0) {
+            setColumnDefs([
+                {
+                    headerName: 'Tapahtuma',
+                    field: 'tapahtumaId',
+                    valueGetter: (params) => {
+                        const tapahtuma = tapahtumat.find(t => t.tapahtumaId === params.data.tapahtumaId);
+                        return tapahtuma ? tapahtuma.tapahtumaNimi : '-';
+                    }
+                },
+                { field: "koodi", headerName: "Lipun Koodi" },
+                { field: "status", headerName: "Lipun Status" },
+                { field: 'lippuId', headerName: 'Lipun ID' },
+            
+                
+                
+                
+            ]);
         }
-    ]);
-    const defaulColDef = {
+    }, [tapahtumat]);
+    const defaultColDef = {
         sortable: true,
         filter: true
     };
 
     const autoSizeStrategy = {
         type: 'fitGridWidth',
-        defaultMinWidth: 200,
+        defaultMinWidth: 250,
     };
 
     return (
@@ -68,7 +74,7 @@ function LiputLista() {
                 <AgGridReact
                     rowData={liput}
                     columnDefs={columnDefs}
-                    defaultColDef={defaulColDef}
+                    defaultColDef={defaultColDef}
                     autoSizeStrategy={autoSizeStrategy}
                 />
             </div>

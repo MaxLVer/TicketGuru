@@ -281,7 +281,7 @@ const TicketSaleApp = () => {
                       {tapahtumaLipputyypit.map((lt) => {
                         // Etsitään asiakastyyppi tästä lipputyyppistä
                         const asiakasTyyppi = asiakastyypit.find(
-                          (a) => a.asiakastyypiId === lt.asiakastyyppiId
+                          (a) => a.asiakastyyppiId === lt.asiakastyyppiId
                         );
 
                         return (
