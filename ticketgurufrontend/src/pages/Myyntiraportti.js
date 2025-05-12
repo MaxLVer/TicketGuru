@@ -46,12 +46,20 @@ localStorage.getItem("jwtToken")
         const liput = kaikkiLiput.filter(lippu => lippu.tapahtumaId === parseInt(tapahtumaId));
         const kooste = {};
 
+        
+
+        
+
         liput.forEach((lippu) => {
           const lipputyyppi = lipputyypit.find(lt => lt.tapahtumaLipputyyppiid === lippu.tapahtumaLipputyyppiid);
           if (!lipputyyppi) return;
 
           const asiakastyyppi = asiakastyypit.find(at => at.asiakastyypipid === lipputyyppi.asiakastyypipid);
           const tyyppiNimi = asiakastyyppi ? asiakastyyppi.asiakastyyppi : "Tuntematon";
+
+                console.log("Lippu:", lippu);
+      console.log("Lipputyyppi:", lipputyyppi);
+    
 
           if (!kooste[tyyppiNimi]) {
             kooste[tyyppiNimi] = { kpl: 0, summa: 0, hinta: lipputyyppi.hinta };
@@ -66,11 +74,12 @@ localStorage.getItem("jwtToken")
           kpl: data.kpl,
           summa: data.summa
         }));
-
+console.log("Koottu raportti:", raporttiData);
         setRaportti(raporttiData);
       } catch (err) {
         console.error("Myyntiraportin haku epäonnistui:", err);
       }
+      
     };
 
     haeRaportti();
@@ -78,6 +87,8 @@ localStorage.getItem("jwtToken")
 
   
         const navigate = useNavigate();
+
+      
 
   return (
     <div style={{ padding: 24 }}>
