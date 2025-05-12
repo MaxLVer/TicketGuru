@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../api/auth';
+import { haeKayttajaId } from '../api/haeKayttajaId';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -8,20 +9,24 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const nav = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    login(username, password)
-      .then(result => {
-        if (result.status === 'ok') {
-          nav('/')
-        } else {
-          setError("Väärä käyttäjänimi tai salasana");
+  
+    try {
+      const result = await login(username, password);
+      if (result.status === 'ok') {
+        const kayttajaId = await haeKayttajaId(username);
+        if (kayttajaId) {
+          localStorage.setItem("kayttajaId", kayttajaId);
+          console.log("KayttajaId " + localStorage.getItem("kayttajaId"))
         }
-      })
-      .catch(error => {
-        console.error('Unexpected error:', error);
-      });
+        nav('/');
+      } else {
+        setError("Väärä käyttäjänimi tai salasana");
+      }
+    } catch (error) {
+      console.error('Unexpected error:', error);
+    }
   };
 
   return (

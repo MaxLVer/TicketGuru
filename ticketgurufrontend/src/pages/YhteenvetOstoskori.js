@@ -37,15 +37,12 @@ const CartSummaryPage = () => {
       alert("Kirjaudu sisään uudelleen. Token puuttuu.");
       return;
     }
-    const decoded = jwtDecode(token);
-    const kayttajaId = decoded?.kayttajaId || decoded?.sub;
-    if (!kayttajaId) {
-      throw new Error("Käyttäjä-ID puuttuu tokenista.");
-    }
+    
+    const kayttajaId = localStorage.getItem("kayttajaId");
 
     const payload = {
       myyntiaika: new Date().toISOString(),
-      kayttajaId: 22,
+      kayttajaId: kayttajaId,
     };
 
     const response = await axios.post(
