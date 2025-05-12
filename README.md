@@ -5,18 +5,12 @@ Tiimi: Liisa Davydov, Max Lindqvist, Mikko Vitikka, Ossi Lukkarinen, Marjo Ek
 ## Johdanto
 
 Projektin tarkoituksena on tuottaa asiakkaan tilaama lipunmyyntijärjestelmä.
- Kyseistä järjestelmää hyödynnetään asiakkaan myyntipisteissä, joissa lipunmyyjä myy ja tulostaa asiakkaalle liput.
+ Kyseistä järjestelmää hyödynnetään asiakkaan myyntipisteissä, joissa lipunmyyjä myy, tulostaa ja tarkistaa liput QR-koodilla.
 
 Projekti toteutetaan hyödyntämällä Scrum-mentelmää, minkä avulla tiimi pystyy tuottamaan tasasin väliajoin uusia toiminnallisuuksia sovellukseen.
  Viikottaisten sprinttien avulla tiimi pystyy hyvin kartoittamaan työn etenemistä, ja tunnistamaan mahdolliset ongelmakohdat tuotteen kehittämisessä.
 
 ## Järjestelmän määrittely
-
-### Käytettävät teknologiat
-- Frontend:React
-- Backend: Spring Boot
-- Tietokanat: PostreSQL/MySql
-- Päälaitteet: Tietokone, tabletti, älypuhelin
 
 ### Järjestelmän keskeiset käyttäjät
 -   Lipunmyyjä
@@ -47,11 +41,8 @@ Sivu jolla myyjä pystyy myymään asiakkaalle lippuja ja tulostamaan asiakkaall
 Sivu jolla nähdään aikaisemmin luodut tapahtumat. Jokaiselle hallinta toiminnallisuudet (Uuden luonti, muokkaus).
 
 Toiminnallisuudet
-- Tapahtumien listaus
-- Uuden tapahtuman lisäys
-- Tapahtumien muokkaus
+- Tapahtumien listaus -> uuden tapahtuman lisäys -> tapahtuman muokkaus -> siirtyminen tapahtumakohtaiseen Myyntiraporttiin
 - Lipputyyppien hallinnointi (Ikäluokat, alennukset . . .)
-- Tapahtumaraportti (siirtää sivulle Myyntiraportti)
 
 ### Myyntiraportti
 
@@ -60,7 +51,7 @@ Sivu jolla nähdään tapahtumien kaikki myyntitapahtumat listattuna.
 Tapahtumakohtainen raportti jossa näkyy heti alkuun:
 - Myydyt liput lipputyyppien mukaan ("Aikuiset", Kpl: . . ., Yhteensä: . . .)
 - Totaalinen tuotto lipuista
-- Listaus kaikista myyntitapahtumista (Avaa uuden näkymän)
+- Tapahtumakohtainen Myyntiraportti -> Myyntitapahatumat -> Ostostapahtuma
 
 ## Tietokanta
 
@@ -188,7 +179,6 @@ Kaikki endpointit on kuvattu erillisessä dokumentaatiossa:
 
 ## Testaus
 
-
 Projektin testauksessa hyödynnettiin kolmen tason testejä:
 
 - Yksikkötestaus (Junit): Testasimme backendin logiikkaa yksittäisten metodien ja palvelukomponenttien tasolla varmistaaksemme niiden oikean toiminnan.
@@ -212,7 +202,11 @@ Järjestelmän käyttöä varten suositellaan seuraavia työkaluja asennusta:
 Projektin kloonaaminen GitHubista
 - Asenna Git koneellesi: https://git-scm.com/downloads
 - Avaa komentorivi ja siirry haluamaasi kansioon.
-- Kloonaa projektin repository komennolla: git clone
+- Kloonaa projektin repository komennolla:
+  
+  ``
+git clone <repository-url>
+  ``
 - Siirry projektikansioon ja avaa se koodieditorissa
 
 ## Käynnistys- ja käyttöohje
@@ -220,8 +214,21 @@ Projektin kloonaaminen GitHubista
 Backendin käynnistäminen
 1. Avaa backend-projekti (esim. TicketGuruApplication) Visual Studio Codessa tai muussa IDE:ssä.
 2. Varmista, että PostgreSQL-tietokanta on käynnissä.
-3. Käynnistä Spring Boot -sovellus.
+3. Mavenin asennus
+4. Käynnistä Spring Boot -sovellus.
 
 Frontendin käynnistäminen
 1. Siirry frontendin kansioon
 2. Käynnistä frontend-sovellus: npm start
+
+Tietokannan konfigurointi
+1. Asenna PostgreSQL tietokannan hallintaa varten
+2. Luo uusi tietokanta, joka vastaa tietokannan kaaviota
+3. Tietokannan konfigurointi Spring Bootissa:
+Avaa application.properties tai application.yml -tiedosto projektin src/main/resources -hakemistosta. Täytä tietokannan yhteysasetukset:
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/ticketguru
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+spring.jpa.hibernate.ddl-auto=update
+```
