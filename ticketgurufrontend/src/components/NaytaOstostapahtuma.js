@@ -60,7 +60,7 @@ export default function NaytaOstotapahtuma({ valittuOstostapahtuma }) {
 
     const haeAsiakastyyppi = (tapahtumaLipputyyppiId) => {
         const lipputyyppi = lipputyypit.find(t => t.tapahtumaLipputyyppiId === tapahtumaLipputyyppiId);
-        const asiakastyyppi = asiakastyypit.find(a => a.asiakastyypiId === lipputyyppi?.asiakastyyppiId);
+        const asiakastyyppi = asiakastyypit.find(a => a.asiakastyyppiId === lipputyyppi?.asiakastyyppiId);
         return asiakastyyppi ? asiakastyyppi.asiakastyyppi : "-";
     };
     return (
