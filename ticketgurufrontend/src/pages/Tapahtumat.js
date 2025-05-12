@@ -54,7 +54,7 @@ function TapahtumaLista() {
       sortable: false,
       filter: false,
       cellRenderer: (params) => (
-        <Button onClick={() => handleShowDetails(params.data)}>
+        <Button color="success" onClick={() => handleShowDetails(params.data)}>
           Näytä tiedot
         </Button>
       )
@@ -65,7 +65,7 @@ function TapahtumaLista() {
       sortable: false,
       filter: false,
       cellRenderer: params => (
-        <Button onClick={() => handleOpenDialog(params.data)}>
+        <Button color="success" onClick={() => handleOpenDialog(params.data)}>
           Muokkaa
         </Button>
       )
@@ -76,7 +76,7 @@ function TapahtumaLista() {
       sortable: false,
       filter: false,
       cellRenderer: params => (
-        <Button onClick={() => handleOpenLipputyyppiDialog(params.data.tapahtumaId)}>
+        <Button color="success" onClick={() => handleOpenLipputyyppiDialog(params.data.tapahtumaId)}>
           Muokkaa Lipputyyppejä
         </Button>
       )
@@ -87,7 +87,7 @@ function TapahtumaLista() {
       sortable: false,
       filter: false,
       cellRenderer: params => (
-        <Button onClick={() => navigate(`/raportti/${params.data.tapahtumaId}`)}>Raportti</Button>
+        <Button color="success" onClick={() => navigate(`/raportti/${params.data.tapahtumaId}`)}>Raportti</Button>
       )
     },
 
@@ -142,7 +142,7 @@ function TapahtumaLista() {
 
       <Button
         variant="contained"
-        color="primary"
+        color="success"
         onClick={handleOpenDialog}
         style={{
           position: "fixed",

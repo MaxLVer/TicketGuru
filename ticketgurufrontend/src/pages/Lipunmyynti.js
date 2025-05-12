@@ -191,7 +191,7 @@ const TicketSaleApp = () => {
 
             <div className="cart-actions">
               <Button
-                variant="primary"
+                variant="success"
                 size="sm"
                 onClick={siirryYhteenvetoon}
                 disabled={isLoading}
@@ -222,6 +222,7 @@ const TicketSaleApp = () => {
                       {t.jaljellaOlevaLippumaara} / {t.kokonaislippumaara}
                     </Card.Text>
                     <Button
+                    variant="success"
                       onClick={() => valitseTapahtuma(t)}
                     >
                       Valitse tapahtuma
@@ -311,6 +312,7 @@ const TicketSaleApp = () => {
               </Form.Group>
 
               <Button
+              variant="success"
                 className="me-2"
                 onClick={() => {
                   lisaaOstoskoriin();

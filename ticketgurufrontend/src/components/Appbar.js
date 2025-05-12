@@ -12,6 +12,7 @@ import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom"; // Käytetään useNavigate:ä
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { green } from "@mui/material/colors";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -82,7 +83,7 @@ if (location.pathname === "/login") return null;
   const token = localStorage.getItem("jwtToken");
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: '#4caf50' }}>
     <Toolbar disableGutters>
       <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
       <Typography
