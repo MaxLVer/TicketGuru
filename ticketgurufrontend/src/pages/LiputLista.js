@@ -80,6 +80,7 @@ function LiputLista() {
                       return <Button
                       onClick={onClick}
                       variant="contained"
+                      color="success"
                       size="small"
                       disabled={params.data.status === "KÄYTETTY"}
                     >

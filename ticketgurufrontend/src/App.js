@@ -16,7 +16,12 @@ import LiputLista from './pages/LiputLista';
 
 const App = () => {
   return (
-    <>
+ <div style={{
+      backgroundImage: 'url("/background3.jpg")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      minHeight: '100vh'
+    }}>
     <AppBar />
     <Routes>
       <Route path="/" element={<HomePage />} />
@@ -31,7 +36,7 @@ const App = () => {
       <Route path="/raportti/:tapahtumaId" element={<Myyntiraportti />} />
       <Route path="/liput" element={<LiputLista />}/>
     </Routes>
-    </>
+    </div>
   );
 };
 

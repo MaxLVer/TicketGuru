@@ -147,13 +147,13 @@ const CartSummaryPage = () => {
         </Table>
       )}
       {ostosKori.length > 0 && (
-        <Button variant="primary" onClick={handleOstaKaikki}>
+        <Button variant="success" onClick={handleOstaKaikki}>
           Osta kaikki
         </Button>
       )}
       {ostosKori.length > 0 && (
         <div className="mt-3">
-          <Button variant="primary" onClick={() => navigate("/lipunmyynti", { state: { ostosKori } })}>
+          <Button variant="success" onClick={() => navigate("/lipunmyynti", { state: { ostosKori } })}>
             Takaisin lipunmyyntiin
           </Button>
         </div>

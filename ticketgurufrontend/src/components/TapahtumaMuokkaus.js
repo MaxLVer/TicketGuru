@@ -162,7 +162,7 @@ const TapahtumaMuokkaus = ({ tapahtumaId, onSuccess }) => {
         )}
       </div>
 
-      <button type="submit" className="submit-button">
+      <button  type="submit" className="submit-button">
         Tallenna muutokset
       </button>
     </form>
