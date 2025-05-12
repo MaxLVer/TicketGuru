@@ -45,12 +45,13 @@ localStorage.getItem("jwtToken")
         // Suodata liput tapahtumalle
         const liput = kaikkiLiput.filter(lippu => lippu.tapahtumaId === parseInt(tapahtumaId));
         const kooste = {};
+        
 
         liput.forEach((lippu) => {
-          const lipputyyppi = lipputyypit.find(lt => lt.tapahtumaLipputyyppiid === lippu.tapahtumaLipputyyppiid);
+          const lipputyyppi = lipputyypit.find(lt => lt.tapahtumaLipputyyppiId === lippu.tapahtumaLipputyyppiId);
           if (!lipputyyppi) return;
 
-          const asiakastyyppi = asiakastyypit.find(at => at.asiakastyypipid === lipputyyppi.asiakastyypipid);
+          const asiakastyyppi = asiakastyypit.find(at => at.asiakastyyppiId === lipputyyppi.asiakastyyppiId);
           const tyyppiNimi = asiakastyyppi ? asiakastyyppi.asiakastyyppi : "Tuntematon";
 
           if (!kooste[tyyppiNimi]) {
