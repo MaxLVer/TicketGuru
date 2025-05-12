@@ -190,6 +190,9 @@ Projektin testauksessa hyödynnettiin kolmen tason testejä:
 
 Testejä ajettiin kehityksen eri vaiheissa ja niitä päivitettiin uusien ominaisuuksien myötä. Testien avulla varmistettiin järjestelmän toimivuus ja regressioiden ehkäisy ennen tuotantoon vientiä.
 
+Tarkemmat tiedot tehtyihin testeihin:
+- [Testaus](testaus.md)
+
 ## Asennustiedot
 
 Järjestelmän käyttöä varten suositellaan seuraavia työkaluja asennusta:
