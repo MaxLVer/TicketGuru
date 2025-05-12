@@ -29,6 +29,7 @@ const KuittiPage = () => {
 <p><strong>Asiakas:</strong> {rivi.asiakasNimi}</p>
 <p><strong>Lippuja:</strong> {rivi.lippujenMaara}</p>
 <p><strong>Lipputyyppi-ID:</strong> {rivi.lipputyyppi}</p>
+<p><strong>Lippustatus: Myyty</strong></p>
 <div style={{ marginTop: "1rem" }}>
         <QRCodeSVG value={JSON.stringify(rivi)} size={128} />
       </div>
@@ -36,7 +37,7 @@ const KuittiPage = () => {
           </Card.Body>
         </Card>
       ))}
-      <Button onClick={() => navigate("/")}>Takaisin etusivulle</Button>
+      <Button variant="success" onClick={() => navigate("/")}>Takaisin etusivulle</Button>
     </div>
   );
 };
