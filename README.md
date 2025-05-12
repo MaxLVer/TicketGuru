@@ -141,6 +141,7 @@ Tapahtumakohtainen raportti jossa näkyy heti alkuun:
 > tunniste | varchar(20) | Lipuntarkastus tunniste
 > tapahtuma_lipputyyppi_id | int FK | Tapahtuma Lipputyyppi, viittaus [Tapahtuma Lipputyyppit](#Tapahtuma_Lipputyypit)-tauluun
 > tapahtuma_id | int fk | Tapahtuma, viittaus [Tapahtumat](#Tapahtumat)-tauluun
+> status | varchar | Lipun status, joko MYYTY tai KÄYTETTY
 
 > ### _Asiakastyypit_
 > 
