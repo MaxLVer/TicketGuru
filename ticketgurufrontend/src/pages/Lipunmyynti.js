@@ -218,8 +218,6 @@ const TicketSaleApp = () => {
                       <strong>Aika:</strong>{" "}
                       {new Date(t.tapahtumaAika).toLocaleString()}
                       <br />
-                      <strong>Lippuja jäljellä:</strong>{" "}
-                      {t.jaljellaOlevaLippumaara} / {t.kokonaislippumaara}
                     </Card.Text>
                     <Button
                     variant="success"
