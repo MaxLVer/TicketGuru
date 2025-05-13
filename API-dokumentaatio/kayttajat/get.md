@@ -12,8 +12,6 @@ Toiminto listaa kaikki käyttäjät tai näyttää yhden käyttäjäm
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**
 
 -

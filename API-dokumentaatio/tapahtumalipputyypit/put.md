@@ -8,8 +8,6 @@ Toiminto muokkaa tapahtuma lipputyyppiä.
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**
 - Joko tapahtumaid, asiakatyypin id tai hinnan muokkaaminen.
 

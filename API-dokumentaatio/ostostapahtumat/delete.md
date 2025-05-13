@@ -8,8 +8,6 @@ Toiminto poistaa halutun ostostapahtuman, johon ei liity lippuja.
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Sisältö** : `{}`
 
 ## Onnistunut response

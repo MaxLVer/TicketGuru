@@ -8,8 +8,6 @@ Toiminto muokkaa lippua.
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**
 Lisää lipun tunniste, voimassaoloaika, ostostapahtuman id, tapahtuman id ja tapahtumalipputyypin id
 ```json

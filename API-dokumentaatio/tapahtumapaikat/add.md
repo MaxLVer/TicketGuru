@@ -10,8 +10,6 @@ Toiminto lisää uuden tapahtumapaikan.
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**  
 Lisää uusi tapahtumapaikka, johon sisältyy muun muassa osoite, postinumero, kapasiteetti ja tapahtumapaikan nimi.
 

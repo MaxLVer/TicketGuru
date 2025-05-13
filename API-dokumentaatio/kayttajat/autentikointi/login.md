@@ -8,8 +8,6 @@ Toiminto kirjaa käyttäjän sisään sovellukseen.
 
 **Vaatii tunnistautumisen** : FALSE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**
 Lisää käyttäjänimi, salasana (ja rooliId).
 

@@ -22,8 +22,6 @@ Toiminto listaa kaikki liput tai näyttää yhden lipun
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**
 
 -

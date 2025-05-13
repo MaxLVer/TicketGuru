@@ -8,8 +8,6 @@ Toiminto muokkaa asiakastyyppiä.
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**
 Lisää asiakastyyppi
 ```json

@@ -23,8 +23,6 @@ Tämä toiminto listaa kaikki tapahtumapaikat tai hakee yhden.
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD  
-
 ---
 
 ## Response

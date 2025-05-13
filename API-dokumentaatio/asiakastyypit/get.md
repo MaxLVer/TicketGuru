@@ -22,8 +22,6 @@ Toiminto listaa kaikki asiakastyypit tai näyttää yhden asiakastyypin
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**
 
 -
