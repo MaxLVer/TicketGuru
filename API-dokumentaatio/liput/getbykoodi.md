@@ -13,8 +13,6 @@ Toiminto näyttää lipun koodin perusteella
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**
 
 -

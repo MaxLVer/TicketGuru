@@ -9,9 +9,7 @@ Toiminnon avulla voidaan muokata yhtä tietokannassa olevaa tapahtumaa
 
 **Metodi**: `PUT`
 
-**Vaatii tunnistautumisen** : TBD
-
-**Vaatii hyväksyntää** : TBD
+**Vaatii tunnistautumisen** : TRUE
 
 **Data ehdot**
 

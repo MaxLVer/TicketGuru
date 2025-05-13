@@ -159,7 +159,7 @@ Kaikki endpointit on kuvattu erillisessä dokumentaatiossa:
 ## Tekninen kuvaus
 
 ### Käytettävät teknologiat
-- Frontend: React + Vite
+- Frontend: React
 - Backend: Spring Boot, JWT-autentikointi
 - Tietokanat: PostreSQL
 - Deployment: CSC Rahti(OpenShift pohjainen)
@@ -189,6 +189,9 @@ Projektin testauksessa hyödynnettiin kolmen tason testejä:
 - End-to-End -testaus (Cypress): Testasimme frontendin käyttöliittymän ja backendin toiminnan yhteispeliä simuloimalla käyttäjän toimintoja selainympäristössä.
 
 Testejä ajettiin kehityksen eri vaiheissa ja niitä päivitettiin uusien ominaisuuksien myötä. Testien avulla varmistettiin järjestelmän toimivuus ja regressioiden ehkäisy ennen tuotantoon vientiä.
+
+Tarkemmat tiedot tehtyihin testeihin:
+- [Testaus](testaus.md)
 
 ## Asennustiedot
 

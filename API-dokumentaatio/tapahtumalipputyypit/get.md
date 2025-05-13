@@ -23,8 +23,6 @@ Tämä toiminto listaa kaikki tapahtuma lipputyypit tai hakee yhden tietyn tapah
 
 **Vaatii tunnistautumisen** : TRUE  
 
-**Vaatii hyväksyntää** : TBD  
-
 ---
 
 ## Onnistunut Response

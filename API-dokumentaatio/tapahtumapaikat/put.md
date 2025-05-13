@@ -8,8 +8,6 @@ Tämä toiminto muokkaa valittua tapahtumapaikka-resurssia
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**  
 Päivitä olemassa oleva tapahtumapaikka käyttämällä sen ID:tä.
 

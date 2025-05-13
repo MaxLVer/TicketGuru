@@ -21,8 +21,6 @@ Toiminto listaa kaikki tapahtumat tai näyttää yhden tapahtuman
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 ## Onnistunut response
 
 **Tila** : Yksi tai useampi tapahtuma on näkyvissä käyttäjälle

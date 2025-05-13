@@ -10,8 +10,6 @@ Poistaa Asiakastyypin.
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot** : `{}`
 
 ## Onnistunut response

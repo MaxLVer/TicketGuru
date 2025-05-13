@@ -6,9 +6,7 @@ Toiminto lisää käyttäjän tapahtuman.
 
 **Metodi**: `POST`
 
-**Vaatii tunnistautumisen** : FALSE (Väliaikainen)
-
-**Vaatii hyväksyntää** : TBD
+**Vaatii tunnistautumisen** : FALSE
 
 **Data ehdot**
 Lisää käyttäjän id, roolin id, kayttajanimen, salasanan, etunimen, sukunimen

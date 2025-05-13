@@ -10,8 +10,6 @@ Poistaa tapahtuman.
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data** : `{}`
 
 ## Onnistunut response

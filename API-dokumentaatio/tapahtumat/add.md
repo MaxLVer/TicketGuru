@@ -8,8 +8,6 @@ Toiminto lisää uuden tapahtuman.
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**
 - Lisää tapahtumapaikan id
 - Tapahtuman nimi

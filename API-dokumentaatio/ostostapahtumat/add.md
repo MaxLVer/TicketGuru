@@ -8,8 +8,6 @@ Toiminto lisää uuden ostostapahtuman.
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**
 Lisää käyttäjän id
 ```json

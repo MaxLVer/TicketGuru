@@ -11,8 +11,6 @@ Toiminnon avulla voidaan päivittää lipun status tietokannassa.
 **Metodi**: `PATCH`
 
 **Vaatii tunnistautumisen** : TRUE
-  
-**Vaatii hyväksyntää** : TBD  
 
 **Data ehdot**: `{}`
 

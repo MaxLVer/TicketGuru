@@ -8,7 +8,6 @@ Toiminto kirjaa käyttäjän ulos
 
 **Vaatii tunnistautumisen** : `FALSE`
 
-**Vaatii hyväksyntää** : TBD
 
 ## Onnistunut response
 

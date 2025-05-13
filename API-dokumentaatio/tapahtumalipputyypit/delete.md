@@ -10,8 +10,6 @@ Toiminto poistaa tapahtuma lipputyypin id:llä.
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Sisältö** : `{}`
 
 ## Onnistunut response

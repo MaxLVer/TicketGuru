@@ -11,8 +11,6 @@ Toiminnon avulla voidaan päivittää ostostapahtuman myyntiaika tietokannassa.
 **Metodi**: `PATCH`
 
 **Vaatii tunnistautumisen** : TRUE
-  
-**Vaatii hyväksyntää** : TBD  
 
 **Data ehdot**
 

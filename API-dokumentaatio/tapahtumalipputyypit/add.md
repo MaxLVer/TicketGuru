@@ -8,8 +8,6 @@ Toiminto lisää uuden tapahtuma lipputyypin.
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 **Data ehdot**
 
 - Lisää tapahtuman id

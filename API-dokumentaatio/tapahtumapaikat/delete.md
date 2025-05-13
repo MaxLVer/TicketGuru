@@ -7,8 +7,6 @@ Tämä toiminto poistaa tapahtumapaikan
 
 **Vaatii tunnistautumisen** : TRUE
 
-**Vaatii hyväksyntää** : TBD
-
 ---
 
 ### Onnistunut Response
