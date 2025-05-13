@@ -159,7 +159,7 @@ Kaikki endpointit on kuvattu erillisessä dokumentaatiossa:
 ## Tekninen kuvaus
 
 ### Käytettävät teknologiat
-- Frontend: React + Vite
+- Frontend: React
 - Backend: Spring Boot, JWT-autentikointi
 - Tietokanat: PostreSQL
 - Deployment: CSC Rahti(OpenShift pohjainen)
