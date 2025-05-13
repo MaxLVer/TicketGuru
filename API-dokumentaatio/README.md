@@ -10,7 +10,6 @@ Julkiset endpointit, jotka eivät vaadi tunnistautumista
 
 ### Endpointit jotka vaativat tunnistautumisen
 Suljetut endpointit, jotka vaativat voimassaolevan Tokenin(sisäänkirjautuminen).
-Määräaikaisesti julkiset
 ---
 ### Käyttäjät
 - [Hae käyttäjät / Hae yksi käyttäjä](kayttajat/get.md): GET
